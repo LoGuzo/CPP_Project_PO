@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class E_WeaponType : uint8
 {
 	E_None UMETA(DisplayName = "None"),

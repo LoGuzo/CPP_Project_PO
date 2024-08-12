@@ -15,7 +15,7 @@ void UBaseAnimInstance::NativeInitializeAnimation()
 	Super::NativeInitializeAnimation();
 	if (GetOwningActor())
 	{
-		OwnCharacter = Cast<ABaseCharacter>(GetOwningActor());
+		OwnCharacter = Cast<ACharacter>(GetOwningActor());
 		if (OwnCharacter)
 			MovementComponent = OwnCharacter->GetCharacterMovement();
 	}
@@ -28,11 +28,10 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		OwnerVelocity = OwnCharacter->GetVelocity();
 		GroundSpeed = OwnerVelocity.Size();
-	}
-
-	if (MovementComponent)
-	{
-		ShouldMove = GroundSpeed > 3.f && MovementComponent->GetCurrentAcceleration() != FVector::ZeroVector;
-		IsFalling = MovementComponent->IsFalling();
+		if (MovementComponent)
+		{
+			ShouldMove = GroundSpeed > 3.f && MovementComponent->GetCurrentAcceleration() != FVector::ZeroVector;
+			IsFalling = MovementComponent->IsFalling();
+		}
 	}
 }
