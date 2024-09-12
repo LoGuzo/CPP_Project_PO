@@ -10,7 +10,6 @@ UCLASS()
 class PROJECT_PO_API ABaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
-
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
