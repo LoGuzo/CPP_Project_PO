@@ -33,14 +33,14 @@ private:
 	class UOwlInteractionWidget* OwlInteractionWidget;
 
 private:
+	void SetBoxComponent();
+	void SetWidgetComponent();
+	void SetOwlInteraction();
+
 	UFUNCTION()
 	void BeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION()
 	void EndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-
-	void SetBoxComponent();
-	void SetWidgetComponent();
-	void SetOwlInteraction();
 
 public:
 	virtual void Interact(class APlayerCharacter* PlayerCharacter) override;

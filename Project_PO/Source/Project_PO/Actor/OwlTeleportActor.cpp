@@ -41,7 +41,6 @@ void AOwlTeleportActor::SetWidgetComponent()
 {
 	if (GetInteractionWidget())
 	{
-		GetInteractionWidget()->SetDrawSize(FVector2D(100.f, 100.f));
 		GetInteractionWidget()->SetRelativeLocation(FVector(0.f, 50.f, 0.f));
 	}
 }

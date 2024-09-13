@@ -58,7 +58,7 @@ void AInteractActor::EndOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 void AInteractActor::SetBoxComponent()
 {
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
-	BoxCollision->SetBoxExtent(FVector(200.0f, 200.0f, 100.0f));
+	BoxCollision->SetBoxExtent(FVector(200.0f, 100.0f, 100.0f));
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &AInteractActor::BeginOverlap);
 	BoxCollision->OnComponentEndOverlap.AddDynamic(this, &AInteractActor::EndOverlap);
 	RootComponent = BoxCollision;
@@ -71,7 +71,8 @@ void AInteractActor::SetWidgetComponent()
 	{
 		InteractionWidget->SetWidgetSpace(EWidgetSpace::Screen);
 		InteractionWidget->SetupAttachment(RootComponent);
-		
+		InteractionWidget->SetDrawSize(FVector2D(100.f, 100.f));
+
 		static ConstructorHelpers::FClassFinder<UUserWidget>UW(TEXT("/Game/ThirdPerson/Blueprints/Widget/Interaction/BP_OwlInteractionWidget.BP_OwlInteractionWidget_C"));
 		if (UW.Succeeded())
 		{

@@ -34,7 +34,7 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds);
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type, Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type)
 	E_WeaponType WeaponType;
 
 	UPROPERTY()
