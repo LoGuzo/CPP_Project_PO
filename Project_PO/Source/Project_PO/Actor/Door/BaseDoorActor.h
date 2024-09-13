@@ -37,8 +37,14 @@ private:
 	class UCurveFloat* DoorCurve;
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Type", meta = (AllowPrivateAccess = "true"))
 	E_DoorType DoorType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effect", meta = (AllowPrivateAccess = "true"))
+	class UParticleSystemComponent* ParticleComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = "Audio")
+	UAudioComponent* AudioComponent;
 
 protected:
 	virtual void BeginPlay() override;

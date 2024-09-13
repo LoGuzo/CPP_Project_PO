@@ -2,23 +2,34 @@
 
 
 #include "BaseDoorActor.h"
+#include "Components/AudioComponent.h"
 #include "Curves/CurveFloat.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
 ABaseDoorActor::ABaseDoorActor()
-	: DoorType(E_DoorType::E_None)
-	, bIsOpened(false)
+	: bIsOpened(false)
+	, DoorType(E_DoorType::E_None)
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	DoorTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("DoorTimeline"));
 
-	const ConstructorHelpers::FObjectFinder<UCurveFloat> CurveFloat(TEXT("/Game/TimeCurve/DoorCurve.DoorCurve"));
+	ParticleComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
+	ParticleComponent->SetRelativeLocation(FVector(0.f, 0.f, -90.f));
+	ParticleComponent->SetRelativeRotation(FRotator(0.f, -90.f, 0.f));
+	ParticleComponent->bAutoActivate = false;
+	ParticleComponent->SetupAttachment(RootComponent);
 
+	const ConstructorHelpers::FObjectFinder<UCurveFloat> CurveFloat(TEXT("/Game/TimeCurve/DoorCurve.DoorCurve"));
 	if (CurveFloat.Succeeded())
 		DoorCurve = CurveFloat.Object;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bAutoActivate = false;
 }
 
 void ABaseDoorActor::BeginPlay()
@@ -48,6 +59,12 @@ void ABaseDoorActor::Interact(APlayerCharacter* PlayerCharacter)
 {
 	if (!bIsOpened)
 	{
+		if (ParticleComponent)
+			ParticleComponent->Activate(true);
+
+		if (AudioComponent)
+			AudioComponent->Play();
+
 		DoorTimeline->Play();
 		bIsOpened = true;
 	}
