@@ -4,7 +4,6 @@
 #include "InteractActor.h"
 #include "Components/BoxComponent.h"
 #include "Components/WidgetComponent.h"
-#include "Engine/StaticMesh.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Widget/Interaction/OwlInteractionWidget.h"
 
@@ -32,7 +31,7 @@ void AInteractActor::PostInitializeComponents()
 void AInteractActor::SetBoxComponent()
 {
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
-	BoxCollision->SetBoxExtent(FVector(200.0f, 100.0f, 100.0f));
+	BoxCollision->SetBoxExtent(FVector(200.f, 100.f, 100.f));
 	BoxCollision->SetCollisionProfileName(TEXT("InteractObject"));
 	RootComponent = BoxCollision;
 }

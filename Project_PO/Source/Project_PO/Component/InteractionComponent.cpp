@@ -114,9 +114,7 @@ AActor* UInteractionComponent::GetInteractableInRange()
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, CameraLocation, End, ECC_GameTraceChannel1, Params);
 
 	if (bHit && HitResult.GetActor())
-	{
 		return HitResult.GetActor();
-	}
 
 	return nullptr;
 }

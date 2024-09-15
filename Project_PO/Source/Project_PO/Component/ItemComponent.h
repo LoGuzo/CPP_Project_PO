@@ -51,4 +51,5 @@ private:
 
 public:
 	void SetItem(int32 _ItemID);
+	TSoftObjectPtr<UStreamableRenderAsset> GetMesh() { return ItemMesh; }
 };
