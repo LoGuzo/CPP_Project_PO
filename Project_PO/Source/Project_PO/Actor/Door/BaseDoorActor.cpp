@@ -55,7 +55,7 @@ void ABaseDoorActor::Tick(float DeltaTime)
 		DoorTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, nullptr);
 }
 
-void ABaseDoorActor::Interact(APlayerCharacter* PlayerCharacter)
+void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 {
 	if (!bIsOpened)
 	{

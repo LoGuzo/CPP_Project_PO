@@ -17,7 +17,4 @@ public:
 protected:
 	// To add mapping context
 	virtual void BeginPlay() override;
-
-protected:
-	virtual void SetCharacterMesh() {};
 };

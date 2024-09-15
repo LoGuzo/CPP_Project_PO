@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "InteractActor.h"
+#include "../Interface/Interactable.h"
 #include "OwlTeleportActor.generated.h"
 
 UCLASS()
-class PROJECT_PO_API AOwlTeleportActor : public AInteractActor
+class PROJECT_PO_API AOwlTeleportActor : public AInteractActor, public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -25,10 +26,10 @@ private:
 private:
 	void SetBoxComponent();
 	void SetActorMesh();
-	void SetWidgetComponent();
+
 
 public:
-	virtual void Interact(class APlayerCharacter* PlayerCharacter) override;
+	virtual void Interact(class AActor* PlayerCharacter) override;
 
 	class UStaticMeshComponent* GetMesh() { return Mesh; }
 };

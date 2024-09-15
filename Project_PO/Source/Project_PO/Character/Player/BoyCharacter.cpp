@@ -3,6 +3,7 @@
 
 #include "BoyCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 ABoyCharacter::ABoyCharacter()
 {
@@ -23,7 +24,12 @@ void ABoyCharacter::SetCharacterMesh()
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Boy/Animations/ABP_Boy.ABP_Boy_C"));
 	if (ANIM.Succeeded())
+	{
 		GetMesh()->SetAnimInstanceClass(ANIM.Class);
+		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+			AnimInstance->SetOwnCharacter(this);
+	}
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainAsset(TEXT("/Game/Characters/Boy/Meshes/boy_scene1.boy_scene1"));
 	if (MainAsset.Succeeded())

@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "../Interface/Interactable.h"
 #include "InteractActor.generated.h"
 
 UCLASS()
-class PROJECT_PO_API AInteractActor : public AActor, public IInteractable
+class PROJECT_PO_API AInteractActor : public AActor
 {
 	GENERATED_BODY()
 	
@@ -23,28 +22,13 @@ protected:
 	virtual void PostInitializeComponents() override;
 
 private:
-	UPROPERTY()
-	class UBoxComponent* BoxCollision;
-
 	UPROPERTY(VisibleAnywhere)
-	class UWidgetComponent* InteractionWidget;
-
-	UPROPERTY()
-	class UOwlInteractionWidget* OwlInteractionWidget;
+	class UBoxComponent* BoxCollision;
 
 private:
 	void SetBoxComponent();
-	void SetWidgetComponent();
-	void SetOwlInteraction();
-
-	UFUNCTION()
-	void BeginOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION()
-	void EndOverlap(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
 public:
-	virtual void Interact(class APlayerCharacter* PlayerCharacter) override;
-
 	class UBoxComponent* GetBoxComponent() { return BoxCollision; }
-	class UWidgetComponent* GetInteractionWidget() { return InteractionWidget; }
+
 };

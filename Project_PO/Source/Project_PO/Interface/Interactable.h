@@ -22,5 +22,5 @@ class PROJECT_PO_API IInteractable
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void Interact(class APlayerCharacter* PlayerCharacter) = 0;
+	virtual void Interact(class AActor* PlayerCharacter) = 0;
 };

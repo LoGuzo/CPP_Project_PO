@@ -15,6 +15,7 @@ class PROJECT_PO_API UBaseAnimInstance : public UAnimInstance
 {
 	GENERATED_BODY()
 	
+public:
 	UBaseAnimInstance();
 
 private:
@@ -30,13 +31,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = MovementData, Meta = (AllowPrivateAccess = true))
 	FVector OwnerVelocity;
 
-	virtual void NativeInitializeAnimation();
-	virtual void NativeUpdateAnimation(float DeltaSeconds);
+protected:
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type)
-	E_WeaponType WeaponType;
-
+private:
 	UPROPERTY()
 	class ACharacter* OwnCharacter;
+
+public:
+	UFUNCTION()
+	void SetOwnCharacter(class ACharacter* _OwnCharacter) { OwnCharacter = _OwnCharacter; }
 };

@@ -17,6 +17,6 @@ class PROJECT_PO_API AGirlCharacter : public APlayerCharacter
 public:
 	AGirlCharacter();
 
-protected:
-	virtual void SetCharacterMesh() override;
+private:
+	void SetCharacterMesh();
 };

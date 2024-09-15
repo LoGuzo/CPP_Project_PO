@@ -26,3 +26,28 @@ enum class E_WidgetType : uint8
 	E_Etc UMETA(DisplayName = "Etc"),
 	E_CharWidget UMETA(DisplayName = "CharWidget"),
 };
+
+UENUM(BlueprintType)
+enum class E_ObjectiveType : uint8
+{
+	E_Collect UMETA(DisplayName = "Collect"),
+	E_Kill UMETA(DisplayName = "Kill"),
+	E_Interact UMETA(DisplayName = "Interact"),
+	E_ReachLocation UMETA(DisplayName = "Reach Location"),
+};
+
+UENUM(BlueprintType)
+enum class E_QuestState : uint8
+{
+	E_NotStarted UMETA(DisplayName = "NotStarted"),
+	E_InProgress UMETA(DisplayName = "InProgress"),
+	E_Completed UMETA(DisplayName = "Completed"),
+};
+
+UENUM(BlueprintType)
+enum class E_ItemType : uint8
+{
+	E_Equip UMETA(DisplayName = "Equip"),
+	E_Cunsumalbe UMETA(DisplayName = "Cunsum"),
+	E_Etc UMETA(DisplayName = "Etc"),
+};

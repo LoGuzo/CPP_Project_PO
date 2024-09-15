@@ -12,12 +12,17 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "../../Component/InteractionComponent.h"
 #include "../../Interface/Interactable.h"
 
 APlayerCharacter::APlayerCharacter()
 	: InteractActor(nullptr)
 {
 	BindInputAction();
+
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
+
+	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

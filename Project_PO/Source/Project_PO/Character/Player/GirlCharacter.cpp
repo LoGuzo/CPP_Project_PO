@@ -3,6 +3,7 @@
 
 #include "GirlCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 AGirlCharacter::AGirlCharacter()
 {
@@ -18,7 +19,12 @@ void AGirlCharacter::SetCharacterMesh()
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Girl/Animations/ABP_Girl.ABP_Girl_C"));
 	if (ANIM.Succeeded())
+	{
 		GetMesh()->SetAnimInstanceClass(ANIM.Class);
+		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+			AnimInstance->SetOwnCharacter(this);
+	}
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainAsset(TEXT("/Game/Characters/Girl/Meshes/arm_Tari_MRArm_dmx_MESH_001_ValveBiped_Bip01_Root.arm_Tari_MRArm_dmx_MESH_001_ValveBiped_Bip01_Root"));
 	if (MainAsset.Succeeded())

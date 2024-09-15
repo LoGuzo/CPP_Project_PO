@@ -17,12 +17,11 @@ AOwlTeleportActor::AOwlTeleportActor()
 
 	SetBoxComponent();
 	SetActorMesh();
-	SetWidgetComponent();
 }
 
 void AOwlTeleportActor::SetBoxComponent()
 {
-	GetBoxComponent()->SetBoxExtent(FVector(200.0f, 200.0f, 100.0f));
+	GetBoxComponent()->SetBoxExtent(FVector(100.f, 100.f, 100.f));
 }
 
 void AOwlTeleportActor::SetActorMesh()
@@ -37,18 +36,12 @@ void AOwlTeleportActor::SetActorMesh()
 	}
 }
 
-void AOwlTeleportActor::SetWidgetComponent()
-{
-	if (GetInteractionWidget())
-	{
-		GetInteractionWidget()->SetRelativeLocation(FVector(0.f, 50.f, 0.f));
-	}
-}
 
-
-void AOwlTeleportActor::Interact(APlayerCharacter* PlayerCharacter)
+void AOwlTeleportActor::Interact(AActor* PlayerCharacter)
 {
 	if (PlayerCharacter)
+	{
 		PlayerCharacter->SetActorLocation(TeleportLocation);
+	}
 }
 

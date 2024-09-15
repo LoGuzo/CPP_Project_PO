@@ -5,9 +5,9 @@
 #include "../Character/BaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-UBaseAnimInstance::UBaseAnimInstance() : OwnCharacter(nullptr)
+UBaseAnimInstance::UBaseAnimInstance() 
+	: OwnCharacter(nullptr)
 {
-	WeaponType = E_WeaponType::E_None;
 }
 
 void UBaseAnimInstance::NativeInitializeAnimation()

@@ -3,6 +3,7 @@
 
 #include "CatCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 ACatCharacter::ACatCharacter()
 {
@@ -18,7 +19,12 @@ void ACatCharacter::SetCharacterMesh()
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Cat/Animations/ABP_Cat.ABP_Cat_C"));
 	if (ANIM.Succeeded())
+	{
 		GetMesh()->SetAnimInstanceClass(ANIM.Class);
+		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+			AnimInstance->SetOwnCharacter(this);
+	}
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainAsset(TEXT("/Game/Characters/Cat/Meshes/cat_08080404571.cat_08080404571"));
 	if (MainAsset.Succeeded())

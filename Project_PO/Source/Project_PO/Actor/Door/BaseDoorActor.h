@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "../InteractActor.h"
 #include "Components/TimelineComponent.h"
+#include "../../Interface/Interactable.h"
 #include "BaseDoorActor.generated.h"
 
 
@@ -17,7 +18,7 @@ enum class E_DoorType : uint8
 };
 
 UCLASS()
-class PROJECT_PO_API ABaseDoorActor : public AInteractActor
+class PROJECT_PO_API ABaseDoorActor : public AInteractActor, public IInteractable
 {
 	GENERATED_BODY()
 	
@@ -55,5 +56,5 @@ protected:
 	virtual void OpenDoor(float Value) {};
 
 public:
-	virtual void Interact(class APlayerCharacter* PlayerCharacter) override;
+	virtual void Interact(class AActor* PlayerCharacter) override;
 };

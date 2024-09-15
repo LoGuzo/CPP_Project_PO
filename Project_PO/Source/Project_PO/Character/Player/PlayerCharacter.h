@@ -15,7 +15,6 @@ class PROJECT_PO_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
-
 public:
 	APlayerCharacter();
 
@@ -48,6 +47,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
+protected:
+	UPROPERTY()
+	class UBasePlayerAnimInstance* AnimInstance;
+
+	UPROPERTY()
+	class UInteractionComponent* InteractionComponent;
+
 	UPROPERTY()
 	class AActor* InteractActor;
 
@@ -76,6 +82,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-	
-	void SetInteractActer(class AActor* _InteractActor) { InteractActor = _InteractActor; }
+
+	void SetInteractActor(class AActor* _InteractActor) { InteractActor = _InteractActor; }
 };
