@@ -65,7 +65,9 @@ void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 		if (AudioComponent)
 			AudioComponent->Play();
 
-		DoorTimeline->Play();
+		if(DoorTimeline)
+			DoorTimeline->Play();
+
 		bIsOpened = true;
 	}
 }

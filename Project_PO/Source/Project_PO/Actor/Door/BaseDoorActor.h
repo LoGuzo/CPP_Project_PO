@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../InteractActor.h"
 #include "Components/TimelineComponent.h"
+#include "../InteractActor.h"
 #include "../../Interface/Interactable.h"
 #include "BaseDoorActor.generated.h"
 
@@ -26,9 +26,15 @@ public:
 	// Sets default values for this actor's properties
 	ABaseDoorActor();
 
+protected:
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+
 private:
 	bool bIsOpened;
 
+private:
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* DoorTimeline;
 
@@ -48,10 +54,6 @@ protected:
 	UAudioComponent* AudioComponent;
 
 protected:
-	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaTime) override;
-
 	UFUNCTION()
 	virtual void OpenDoor(float Value) {};
 

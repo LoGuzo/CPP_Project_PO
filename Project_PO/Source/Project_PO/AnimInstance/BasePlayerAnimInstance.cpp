@@ -23,7 +23,11 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		{
 			bIsArmed = Player->GetIsArmed();
 			bIsAiming = Player->GetIsAiming();
+			bIsSprint = Player->GetIsSprint();
 			Pitch = Player->GetBaseAimRotation().Pitch;
+
+			FRotator Rotation = Player->GetActorRotation();
+			PlayerRotation = CalculateDirection(OwnerVelocity, Rotation);
 		}
 	}
 }

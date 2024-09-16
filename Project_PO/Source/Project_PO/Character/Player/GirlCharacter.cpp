@@ -2,14 +2,22 @@
 
 
 #include "GirlCharacter.h"
-#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 AGirlCharacter::AGirlCharacter()
 {
 	SetCharacterMesh();
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 66.0f);
+
+	GetCameraBoom()->SocketOffset = FVector(0.f, 40.f, 40.f);
+	GetCameraBoom()->TargetArmLength = 200.0f;
+}
+
+void AGirlCharacter::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void AGirlCharacter::SetCharacterMesh()

@@ -2,12 +2,17 @@
 
 
 #include "CatCharacter.h"
-#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 ACatCharacter::ACatCharacter()
 {
 	SetCharacterMesh();
+}
+
+void ACatCharacter::BeginPlay()
+{
+	Super::BeginPlay();
 }
 
 void ACatCharacter::SetCharacterMesh()

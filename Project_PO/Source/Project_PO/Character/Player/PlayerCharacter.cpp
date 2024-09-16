@@ -9,9 +9,11 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
+#include "Curves/CurveFloat.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
 #include "../../Interface/Interactable.h"
 
@@ -24,19 +26,22 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
 
+	CameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraTimeline"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->SocketOffset = FVector(0.f, 110.f, 70.f);
-	CameraBoom->TargetArmLength = 250.0f;
+	CameraBoom->SocketOffset = FVector(0.f, 60.f, 70.f);
+	CameraBoom->TargetArmLength = 300.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+
+	SetupCurve();
 }
 
 void APlayerCharacter::BeginPlay()
@@ -52,6 +57,36 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	if (CameraCurve)
+	{
+		InterpFunction.BindUFunction(this, FName("Zoom"));
+		if (CameraTimeline)
+		{
+			CameraTimeline->AddInterpFloat(CameraCurve, InterpFunction);
+			CameraTimeline->SetLooping(false);
+		}
+	}
+
+	InitailZoomLocation = GetCameraBoom()->SocketOffset;
+	InitalSpringLength = GetCameraBoom()->TargetArmLength;
+
+	TargetZoomLocation = InitailZoomLocation + FVector(0.f, 15.f, 0.f);
+	TargetSpringLength = InitalSpringLength / 2;
+}
+
+void APlayerCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (CameraTimeline)
+		CameraTimeline->TickComponent(DeltaTime, ELevelTick::LEVELTICK_TimeOnly, nullptr);
+}
+
+void APlayerCharacter::Jump()
+{
+	Super::Jump();
+	bIsSprint = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -65,7 +100,7 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		//Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 
 		//Moving
@@ -81,6 +116,11 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TriggeredAiming);
 		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Canceled, this, &APlayerCharacter::CanceledAiming);
 		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Completed, this, &APlayerCharacter::CompletedAiming);
+
+		//Sprint
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TriggeredSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &APlayerCharacter::CanceledSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &APlayerCharacter::CompletedSprint);
 	}
 
 }
@@ -89,6 +129,16 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 {
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (MovementVector.Y == -1.f)
+	{
+		bIsSprint = false;
+		bIsMoveBack = true;
+	}
+	else
+	{
+		bIsMoveBack = false;
+	}
 
 	if (Controller != nullptr)
 	{
@@ -137,6 +187,9 @@ void APlayerCharacter::TriggeredAiming(const FInputActionValue& Value)
 	{
 		bIsAiming = true;
 		GetCharacterMovement()->bOrientRotationToMovement = false;
+
+		if (CameraTimeline)
+			CameraTimeline->Play();
 	}
 }
 
@@ -150,6 +203,36 @@ void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
 {
 	bIsAiming = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	if (CameraTimeline)
+		CameraTimeline->Reverse();
+}
+
+void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
+{
+	if (GetCharacterMovement()->IsFalling() || bIsMoveBack)
+		return;
+
+	bIsSprint = true;
+	GetCharacterMovement()->MaxWalkSpeed = 700.f;
+	if (bIsAiming)
+	{
+		bIsAiming = false;
+		if (CameraTimeline)
+			CameraTimeline->Reverse();
+	}
+}
+
+void APlayerCharacter::CanceledSprint(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	bIsSprint = false;
+}
+
+void APlayerCharacter::CompletedSprint(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = 500.f;
+	bIsSprint = false;
 }
 
 void APlayerCharacter::BindInputAction()
@@ -183,4 +266,24 @@ void APlayerCharacter::BindInputAction()
 	static ConstructorHelpers::FObjectFinder<UInputAction> AimingActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Aiming.IA_Aiming"));
 	if (AimingActionObject.Succeeded())
 		AimingAction = AimingActionObject.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> SprintActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Sprint.IA_Sprint"));
+	if (SprintActionObject.Succeeded())
+		SprintAction = SprintActionObject.Object;
+}
+
+void APlayerCharacter::SetupCurve()
+{
+	const ConstructorHelpers::FObjectFinder<UCurveFloat> CurveFloat(TEXT("/Game/TimeCurve/CameraCurve.CameraCurve"));
+	if (CurveFloat.Succeeded())
+		CameraCurve = CurveFloat.Object;
+}
+
+void APlayerCharacter::Zoom(float Value)
+{
+	FVector ZoomLocation = FMath::Lerp(InitailZoomLocation, TargetZoomLocation, Value);
+	CameraBoom->SocketOffset = ZoomLocation;
+
+	float ArmLength = FMath::Lerp(InitalSpringLength, TargetSpringLength, Value);
+	CameraBoom->TargetArmLength = ArmLength;
 }

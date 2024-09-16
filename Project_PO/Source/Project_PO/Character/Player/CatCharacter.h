@@ -17,6 +17,9 @@ class PROJECT_PO_API ACatCharacter : public APlayerCharacter
 public:
 	ACatCharacter();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	void SetCharacterMesh();
 };

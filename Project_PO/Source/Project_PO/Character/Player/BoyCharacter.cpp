@@ -2,7 +2,7 @@
 
 
 #include "BoyCharacter.h"
-#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 ABoyCharacter::ABoyCharacter()

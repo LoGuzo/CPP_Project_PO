@@ -3,8 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../BaseCharacter.h"
 #include "InputActionValue.h"
+#include "Components/TimelineComponent.h"
+#include "../BaseCharacter.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -25,6 +26,10 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	// Tick
+	virtual void Tick(float DeltaTime) override;
+
+	virtual void Jump() override;
 private:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -54,9 +59,30 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
-	/** Interact Input Action */
+	/** Aiming Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* AimingAction;
+
+	/** Sprint Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* SprintAction;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* CameraTimeline;
+
+	UPROPERTY(VisibleAnywhere)
+	FOnTimelineFloat InterpFunction;
+
+	UPROPERTY()
+	class UCurveFloat* CameraCurve;
+
+protected:
+	FVector InitailZoomLocation;
+	FVector TargetZoomLocation;
+
+	float InitalSpringLength;
+	float TargetSpringLength;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
@@ -64,6 +90,12 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsArmed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsSprint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsMoveBack;
 
 	UPROPERTY()
 	class UBasePlayerAnimInstance* AnimInstance;
@@ -89,10 +121,18 @@ protected:
 	void CanceledAiming(const FInputActionValue& Value);
 	void CompletedAiming(const FInputActionValue& Value);
 
+	/** Called for Sprint input */
+	void TriggeredSprint(const FInputActionValue& Value);
+	void CanceledSprint(const FInputActionValue& Value);
+	void CompletedSprint(const FInputActionValue& Value);
+
 private:
 	void BindInputAction();
 
+	void SetupCurve();
 
+	UFUNCTION()
+	void Zoom(float Value);
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
@@ -106,4 +146,7 @@ public:
 
 	bool GetIsAiming() { return bIsAiming; }
 	void SetIsAiming(bool _bIsAiming) { bIsAiming = _bIsAiming; }
+
+	bool GetIsSprint() { return bIsSprint; }
+	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
 };

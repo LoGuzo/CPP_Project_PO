@@ -28,7 +28,13 @@ protected:
 	bool bIsAiming;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsSprint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	float Pitch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	float PlayerRotation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type, meta = (AllowPrivateAccess = "true"))
 	E_WeaponType WeaponType;
@@ -39,4 +45,12 @@ public:
 
 	bool GetIsAiming() { return bIsAiming; }
 	void SetIsAiming(bool _bIsAiming) { bIsAiming = _bIsAiming; }
+
+	bool GetIsSprint() { return bIsSprint; }
+	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
+
+	E_WeaponType GetWeaponType(){ return WeaponType; }
+	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
+
+	
 };
