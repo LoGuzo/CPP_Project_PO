@@ -17,7 +17,26 @@ class PROJECT_PO_API UBasePlayerAnimInstance : public UBaseAnimInstance
 public:
 	UBasePlayerAnimInstance();
 
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type)
+protected:
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	bool bIsArmed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	bool bIsAiming;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	float Pitch;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type, meta = (AllowPrivateAccess = "true"))
 	E_WeaponType WeaponType;
+
+public:
+	bool GetIsArmed() { return bIsArmed; }
+	void SetIsArmed(bool _bIsArmed) { bIsArmed = _bIsArmed; }
+
+	bool GetIsAiming() { return bIsAiming; }
+	void SetIsAiming(bool _bIsAiming) { bIsAiming = _bIsAiming; }
 };

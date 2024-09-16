@@ -18,6 +18,13 @@ class PROJECT_PO_API APlayerCharacter : public ABaseCharacter
 public:
 	APlayerCharacter();
 
+protected:
+	// APawn interface
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	// To add mapping context
+	virtual void BeginPlay();
+
 private:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -47,7 +54,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InteractAction;
 
+	/** Interact Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* AimingAction;
+
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsAiming;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsArmed;
+
 	UPROPERTY()
 	class UBasePlayerAnimInstance* AnimInstance;
 
@@ -67,15 +84,14 @@ protected:
 	/** Called for Interact input */
 	void Interact(const FInputActionValue& Value);
 
+	/** Called for Aiming input */
+	void TriggeredAiming(const FInputActionValue& Value);
+	void CanceledAiming(const FInputActionValue& Value);
+	void CompletedAiming(const FInputActionValue& Value);
+
 private:
 	void BindInputAction();
 
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	// To add mapping context
-	virtual void BeginPlay();
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -84,4 +100,10 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	void SetInteractActor(class AActor* _InteractActor) { InteractActor = _InteractActor; }
+
+	bool GetIsArmed() { return bIsArmed; }
+	void SetIsArmed(bool _bIsArmed) { bIsArmed = _bIsArmed; }
+
+	bool GetIsAiming() { return bIsAiming; }
+	void SetIsAiming(bool _bIsAiming) { bIsAiming = _bIsAiming; }
 };

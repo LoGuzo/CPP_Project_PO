@@ -23,7 +23,7 @@ private:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = MovementData, Meta = (AllowPrivateAccess = true))
-	bool IsFalling;
+	bool bIsFalling;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = MovementData, Meta = (AllowPrivateAccess = true))
 	bool ShouldMove;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = MovementData, Meta = (AllowPrivateAccess = true))
@@ -42,4 +42,7 @@ private:
 public:
 	UFUNCTION()
 	void SetOwnCharacter(class ACharacter* _OwnCharacter) { OwnCharacter = _OwnCharacter; }
+
+	UFUNCTION()
+	class ACharacter* GetOwnCharacter() { return OwnCharacter; }
 };

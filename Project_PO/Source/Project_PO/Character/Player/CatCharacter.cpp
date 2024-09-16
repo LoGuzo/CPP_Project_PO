@@ -8,9 +8,6 @@
 ACatCharacter::ACatCharacter()
 {
 	SetCharacterMesh();
-
-	// Set FollowCamera
-	GetFollowCamera()->SetRelativeLocation(FVector(140.f, 70.f, 70.f));
 }
 
 void ACatCharacter::SetCharacterMesh()

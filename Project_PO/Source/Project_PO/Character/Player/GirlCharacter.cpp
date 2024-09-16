@@ -3,19 +3,18 @@
 
 #include "GirlCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 
 AGirlCharacter::AGirlCharacter()
 {
 	SetCharacterMesh();
-
-	// Set FollowCamera
-	GetFollowCamera()->SetRelativeLocation(FVector(250.f, 70.f, 0.f));
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 66.0f);
 }
 
 void AGirlCharacter::SetCharacterMesh()
 {
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -67.f), FRotator(0.f, -90.f, 0.f));
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Girl/Animations/ABP_Girl.ABP_Girl_C"));
 	if (ANIM.Succeeded())

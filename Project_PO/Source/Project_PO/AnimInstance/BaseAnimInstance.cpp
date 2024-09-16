@@ -5,8 +5,12 @@
 #include "../Character/BaseCharacter.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-UBaseAnimInstance::UBaseAnimInstance() 
-	: OwnCharacter(nullptr)
+UBaseAnimInstance::UBaseAnimInstance()
+	: bIsFalling(false)
+	, ShouldMove(false)
+	, GroundSpeed(0.f)
+	, OwnerVelocity(FVector::ZeroVector)
+	, OwnCharacter(nullptr)
 {
 }
 
@@ -27,11 +31,17 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (OwnCharacter)
 	{
 		OwnerVelocity = OwnCharacter->GetVelocity();
-		GroundSpeed = OwnerVelocity.Size();
+		
 		if (MovementComponent)
 		{
+			bIsFalling = MovementComponent->IsFalling();
+
+			if (bIsFalling)
+				GroundSpeed = 0.f;
+			else
+				GroundSpeed = OwnerVelocity.Size();
+
 			ShouldMove = GroundSpeed > 3.f && MovementComponent->GetCurrentAcceleration() != FVector::ZeroVector;
-			IsFalling = MovementComponent->IsFalling();
 		}
 	}
 }

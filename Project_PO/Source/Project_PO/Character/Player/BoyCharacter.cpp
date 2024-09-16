@@ -8,9 +8,6 @@
 ABoyCharacter::ABoyCharacter()
 {
 	SetCharacterMesh();
-
-	// Set FollowCamera
-	GetFollowCamera()->SetRelativeLocation(FVector(140.f, 70.f, 70.f));
 }
 
 void ABoyCharacter::BeginPlay()

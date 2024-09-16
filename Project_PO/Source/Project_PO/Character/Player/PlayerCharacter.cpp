@@ -17,6 +17,8 @@
 
 APlayerCharacter::APlayerCharacter()
 	: InteractActor(nullptr)
+	, bIsAiming(false)
+	, bIsArmed(false)
 {
 	BindInputAction();
 
@@ -27,7 +29,8 @@ APlayerCharacter::APlayerCharacter()
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
 	CameraBoom->SetupAttachment(RootComponent);
-	CameraBoom->TargetArmLength = 400.0f;
+	CameraBoom->SocketOffset = FVector(0.f, 110.f, 70.f);
+	CameraBoom->TargetArmLength = 250.0f;
 	CameraBoom->bUsePawnControlRotation = true;
 
 	// Create a follow camera
@@ -73,6 +76,11 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 		//Interact
 		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Interact);
+
+		//Aiming
+		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TriggeredAiming);
+		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Canceled, this, &APlayerCharacter::CanceledAiming);
+		EnhancedInputComponent->BindAction(AimingAction, ETriggerEvent::Completed, this, &APlayerCharacter::CompletedAiming);
 	}
 
 }
@@ -123,6 +131,27 @@ void APlayerCharacter::Interact(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::TriggeredAiming(const FInputActionValue& Value)
+{
+	if (bIsArmed)
+	{
+		bIsAiming = true;
+		GetCharacterMovement()->bOrientRotationToMovement = false;
+	}
+}
+
+void APlayerCharacter::CanceledAiming(const FInputActionValue& Value)
+{
+	bIsAiming = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
+void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
+{
+	bIsAiming = false;
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
 void APlayerCharacter::BindInputAction()
 {
 	// Input Asset Load
@@ -149,4 +178,9 @@ void APlayerCharacter::BindInputAction()
 	static ConstructorHelpers::FObjectFinder<UInputAction> InteractActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Interact.IA_Interact"));
 	if (InteractActionObject.Succeeded())
 		InteractAction = InteractActionObject.Object;
+
+	// Interact Action Asset Load
+	static ConstructorHelpers::FObjectFinder<UInputAction> AimingActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Aiming.IA_Aiming"));
+	if (AimingActionObject.Succeeded())
+		AimingAction = AimingActionObject.Object;
 }

@@ -24,6 +24,6 @@ protected:
 public:
 	E_WeaponType GetWeaponType() { return WeaponType; }
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);
 };
