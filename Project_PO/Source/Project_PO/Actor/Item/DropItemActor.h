@@ -31,7 +31,10 @@ public:
 	void SetState(bool NowState);
 
 	virtual void AfterDropItem() override;
+
+protected:
+	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh) override;
+
 private:
 	void SetBoxComponent();
-	void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
 };

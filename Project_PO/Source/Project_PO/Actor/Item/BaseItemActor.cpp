@@ -15,6 +15,29 @@ ABaseItemActor::ABaseItemActor()
 	SkeletalMesh->SetupAttachment(RootComponent);
 }
 
+void ABaseItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh)
+{
+	UStaticMesh* staticMesh = Cast<UStaticMesh>(Mesh.LoadSynchronous());
+	if (staticMesh)
+	{
+		GetStaticMesh()->SetStaticMesh(staticMesh);
+	}
+	else
+	{
+		USkeletalMesh* skeletalMesh = Cast<USkeletalMesh>(Mesh.LoadSynchronous());
+		if (skeletalMesh)
+		{
+			GetSkeletalMesh()->SetSkeletalMesh(skeletalMesh);
+		}
+	}
+}
+
+void ABaseItemActor::SetItem(int32 _ID)
+{
+	ItemComponent->SetItem(_ID);
+	SetMeshComponent(ItemComponent->GetMesh());
+}
+
 void ABaseItemActor::AfterDropItem()
 {
 	ItemComponent = nullptr;

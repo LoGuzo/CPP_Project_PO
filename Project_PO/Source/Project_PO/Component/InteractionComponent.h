@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "../Component/BaseActorComponent.h"
 #include "InteractionComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class PROJECT_PO_API UInteractionComponent : public UActorComponent
+class PROJECT_PO_API UInteractionComponent : public UBaseActorComponent
 {
 	GENERATED_BODY()
 
@@ -37,8 +37,7 @@ private:
 private:
 	AActor* GetInteractableInRange();
 
-	void ShowInteractWidget();
-	void HideInteractWidget();
+	void ShowAndHideInteractWidget();
 
 	void CheckInteraction();
 

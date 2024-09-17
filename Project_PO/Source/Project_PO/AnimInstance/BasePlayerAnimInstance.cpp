@@ -5,10 +5,10 @@
 #include "../Character/Player/PlayerCharacter.h"
 
 UBasePlayerAnimInstance::UBasePlayerAnimInstance()
-	: WeaponType(E_WeaponType::E_None)
-	, bIsArmed(false)
+	: bIsArmed(false)
 	, bIsAiming(false)
 	, Pitch(0.f)
+	, WeaponType(E_WeaponType::E_None)
 {
 }
 
@@ -25,6 +25,7 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			bIsAiming = Player->GetIsAiming();
 			bIsSprint = Player->GetIsSprint();
 			Pitch = Player->GetBaseAimRotation().Pitch;
+			WeaponType = Player->GetWeaponType();
 
 			FRotator Rotation = Player->GetActorRotation();
 			PlayerRotation = CalculateDirection(OwnerVelocity, Rotation);

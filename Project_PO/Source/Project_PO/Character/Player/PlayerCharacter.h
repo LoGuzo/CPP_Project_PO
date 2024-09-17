@@ -6,6 +6,7 @@
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
 #include "../BaseCharacter.h"
+#include "../../MyEnumClass.h"
 #include "PlayerCharacter.generated.h"
 
 /**
@@ -77,6 +78,8 @@ private:
 	UPROPERTY()
 	class UCurveFloat* CameraCurve;
 
+	E_WeaponType WeaponType;
+
 protected:
 	FVector InitailZoomLocation;
 	FVector TargetZoomLocation;
@@ -102,6 +105,9 @@ protected:
 
 	UPROPERTY()
 	class UInteractionComponent* InteractionComponent;
+
+	UPROPERTY(BlueprintReadWrite)
+	class UEquipComponent* EquipComponent;
 
 	UPROPERTY()
 	class AActor* InteractActor;
@@ -149,4 +155,7 @@ public:
 
 	bool GetIsSprint() { return bIsSprint; }
 	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
+
+	E_WeaponType GetWeaponType() { return WeaponType; }
+	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
 };

@@ -22,34 +22,53 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	int32 ItemID;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    int32 ItemID;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	FText ItemName;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    FText ItemName;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	FText ItemDescription;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    FText ItemDescription;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	TSoftObjectPtr<UTexture2D> ItemImage;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    TSoftObjectPtr<UTexture2D> ItemImage;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	int32 ItemStackSize;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    int32 ItemStackSize;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	TEnumAsByte <E_ItemType> ItemType;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    TEnumAsByte <E_ItemType> ItemType;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	int32 ItemAmount;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    float DropChance;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	float DropChance;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
+    TSoftObjectPtr<UStreamableRenderAsset> ItemMesh;
 
-	UPROPERTY(EditAnywhere, Category = Item, Meta = (AllowPrivateAccess = true))
-	TSoftObjectPtr<UStreamableRenderAsset> ItemMesh;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment", Meta = (AllowPrivateAccess = true))
+    TEnumAsByte <E_EquipType> EquipType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment", Meta = (AllowPrivateAccess = true))
+    TEnumAsByte <E_WeaponType> WeaponType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment", Meta = (AllowPrivateAccess = true))
+    float AttackPower;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment", Meta = (AllowPrivateAccess = true))
+    float DefensePower;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable", Meta = (AllowPrivateAccess = true))
+    float RestoreAmount;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable", Meta = (AllowPrivateAccess = true))
+    float Duration;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable", Meta = (AllowPrivateAccess = true))
+    float Cooltime;
 
 public:
+    int32 GetItemID() { return ItemID; }
 	void SetItem(int32 _ItemID);
 	TSoftObjectPtr<UStreamableRenderAsset> GetMesh() { return ItemMesh; }
 };

@@ -8,6 +8,9 @@
 ABoyCharacter::ABoyCharacter()
 {
 	SetCharacterMesh();
+
+	GetCameraBoom()->SocketOffset = FVector(0.f, 45.f, 70.f);
+	GetCameraBoom()->TargetArmLength = 250.0f;
 }
 
 void ABoyCharacter::BeginPlay()

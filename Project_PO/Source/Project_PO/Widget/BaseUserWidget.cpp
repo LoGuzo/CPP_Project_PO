@@ -9,3 +9,23 @@ UBaseUserWidget::UBaseUserWidget(const FObjectInitializer& ObjectInitializer)
 {
 
 }
+
+void UBaseUserWidget::InitializeWidget()
+{
+}
+
+void UBaseUserWidget::SetShowHidden()
+{
+	if (GetVisibility() == ESlateVisibility::Visible)
+		SetVisibility(ESlateVisibility::Hidden);
+	else
+		SetVisibility(ESlateVisibility::Visible);
+}
+
+void UBaseUserWidget::SetAddRemove()
+{
+	if (IsInViewport())
+		RemoveFromParent();
+	else
+		AddToViewport();
+}

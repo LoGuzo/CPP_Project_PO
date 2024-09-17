@@ -18,12 +18,28 @@ enum class E_WidgetType : uint8
 {
 	E_HUD UMETA(DisplayName = "HUD"),
 	E_MainMenu UMETA(DisplayName = "MainMenu"),
-	E_InGame UMETA(DisplayName = "InGame"),
 	E_PopUp UMETA(DisplayName = "PopUp"),
 	E_Interaction UMETA(DisplayName = "Interaction"),
 	E_Loading UMETA(DisplayName = "Loading"),
 	E_Etc UMETA(DisplayName = "Etc"),
-	E_CharWidget UMETA(DisplayName = "CharWidget"),
+	E_None UMETA(DisplayName = "None"),
+};
+
+UENUM(BlueprintType)
+enum class E_ManagerType : uint8
+{
+	E_WidgetManager UMETA(DisplayName = "WidgetManager"),
+	E_ItemDatabaseManager UMETA(DisplayName = "ItemDatabaseManager"),
+};
+
+UENUM(BlueprintType)
+enum class E_EquipType : uint8
+{
+	E_Weapon UMETA(DisplayName = "Weapon"),
+	E_Hat UMETA(DisplayName = "Hat"),
+	E_Shoes UMETA(DisplayName = "Shoes"),
+	E_Chest UMETA(DisplayName = "Chest"),
+	E_Gloves UMETA(DisplayName = "Gloves"),
 	E_None UMETA(DisplayName = "None"),
 };
 

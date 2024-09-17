@@ -15,6 +15,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
+#include "../../Component/EquipComponent.h"
 #include "../../Interface/Interactable.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -28,6 +29,7 @@ APlayerCharacter::APlayerCharacter()
 
 	CameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraTimeline"));
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
+	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -71,7 +73,7 @@ void APlayerCharacter::BeginPlay()
 	InitailZoomLocation = GetCameraBoom()->SocketOffset;
 	InitalSpringLength = GetCameraBoom()->TargetArmLength;
 
-	TargetZoomLocation = InitailZoomLocation + FVector(0.f, 15.f, 0.f);
+	TargetZoomLocation = FVector(InitailZoomLocation.X, InitailZoomLocation.Y * 2, InitailZoomLocation.Z);
 	TargetSpringLength = InitalSpringLength / 2;
 }
 

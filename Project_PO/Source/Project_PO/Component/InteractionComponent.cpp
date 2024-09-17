@@ -4,11 +4,15 @@
 #include "InteractionComponent.h"
 #include "DrawDebugHelpers.h"
 #include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Interface/Interactable.h"
+#include "../Manager/BaseGameInstance.h"
+#include "../Manager/WidgetManager.h"
 #include "../Widget/Interaction/OwlInteractionWidget.h"
+
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
@@ -30,6 +34,16 @@ void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyGameInstance)
+	{
+		if (InteractWidget)
+		{
+			UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			if (WidgetManager)
+				WidgetManager->CreateAndAddWidget<UOwlInteractionWidget>(GetWorld(), TEXT("Interaction"), InteractWidget);
+		}
+	}
 }
 
 void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -50,7 +64,7 @@ void UInteractionComponent::CheckInteraction()
 			if (!bIsWidgetVisible)
 			{
 				PlayerCharacter->SetInteractActor(PotentialInteractActor);
-				ShowInteractWidget();
+				ShowAndHideInteractWidget();
 				bIsWidgetVisible = true;
 			}
 		}
@@ -59,32 +73,25 @@ void UInteractionComponent::CheckInteraction()
 			if (bIsWidgetVisible)
 			{
 				PlayerCharacter->SetInteractActor(nullptr);
-				HideInteractWidget();
+				ShowAndHideInteractWidget();
 				bIsWidgetVisible = false;
 			}
 		}
 	}
 }
 
-void UInteractionComponent::ShowInteractWidget()
+void UInteractionComponent::ShowAndHideInteractWidget()
 {
-	if (InteractWidget)
+	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyGameInstance)
 	{
-		if (!InteractUI)
+		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
 		{
-			InteractUI = CreateWidget<UOwlInteractionWidget>(GetWorld(), InteractWidget);
-			if(InteractUI)
-				InteractUI->AddToViewport();
+			UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Interaction"));
+			if (NowWidget)
+				NowWidget->SetAddRemove();
 		}
-	}
-}
-
-void UInteractionComponent::HideInteractWidget()
-{
-	if (InteractUI)
-	{
-		InteractUI->RemoveFromParent();
-		InteractUI = nullptr;
 	}
 }
 

@@ -20,4 +20,9 @@ public:
 
 protected:
 	E_WidgetType Type;
+
+public:
+	virtual void InitializeWidget();
+	void SetShowHidden();
+	void SetAddRemove();
 };

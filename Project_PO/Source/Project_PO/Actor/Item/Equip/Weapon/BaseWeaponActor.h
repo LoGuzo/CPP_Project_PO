@@ -21,9 +21,15 @@ public:
 protected:
 	E_WeaponType WeaponType;
 
-public:
-	E_WeaponType GetWeaponType() { return WeaponType; }
+	UPROPERTY(VisibleAnywhere, Category = Widget)
+	TSubclassOf<class UCrosshairEtcWidget> CrosshairWidget;
 
+public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);
+
+	UFUNCTION(BlueprintCallable)
+	TSubclassOf<class UCrosshairEtcWidget> GetCrosshairWdiget() const { return CrosshairWidget; }
+
+	E_WeaponType GetWeaponType() { return WeaponType; }
 };

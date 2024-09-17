@@ -27,10 +27,14 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* SkeletalMesh;
 
+protected:
+	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
+
 public:
 	class UItemComponent* GetItemComponent() { return ItemComponent; }
 	class UStaticMeshComponent* GetStaticMesh() { return StaticMesh; }
 	class USkeletalMeshComponent* GetSkeletalMesh() { return SkeletalMesh; }
 
+	void SetItem(int32 _ID);
 	virtual void AfterDropItem();
 };

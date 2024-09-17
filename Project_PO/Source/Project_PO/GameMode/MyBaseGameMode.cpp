@@ -1,8 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MyBaseGameMode.h"
-#include "../Character/Player/PlayerCharacter.h"
 #include "UObject/ConstructorHelpers.h"
+#include "../Character/Player/PlayerCharacter.h"
+#include "../Manager/BaseGameInstance.h"
+#include "../Manager/DatabaseManager/ItemDatabaseManager.h"
 
 AMyBaseGameMode::AMyBaseGameMode()
 {
@@ -11,6 +13,17 @@ AMyBaseGameMode::AMyBaseGameMode()
 	if (PlayerPawnBPClass.Succeeded())
 	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
+	}
+}
+
+void AMyBaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	auto MyInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (MyInstance)
+	{
+		DatabaseMap.Emplace(E_ManagerType::E_ItemDatabaseManager, MyInstance->GetManager<UItemDatabaseManager>(E_ManagerType::E_ItemDatabaseManager)->GetDataMap());
 	}
 }
 

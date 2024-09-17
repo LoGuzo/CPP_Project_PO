@@ -110,4 +110,25 @@ struct FItemData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     TSoftObjectPtr<UStreamableRenderAsset> ItemMesh;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    TEnumAsByte <E_EquipType> EquipType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    TEnumAsByte <E_WeaponType> WeaponType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    float AttackPower;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    float DefensePower;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
+    float RestoreAmount;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
+    float Duration;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
+    float Cooltime;
 };
