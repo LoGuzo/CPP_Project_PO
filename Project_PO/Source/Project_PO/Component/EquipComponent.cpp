@@ -2,13 +2,19 @@
 
 
 #include "EquipComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
+#include "../Actor/Item/Equip/Weapon/Pistol/BasePistolWeaponActor.h"
 #include "../Actor/Item/Equip/Weapon/Rifle/BaseRifleWeaponActor.h"
 #include "../Actor/Item/Equip/Weapon/Shotgun/BaseShotgunWeaponActor.h"
 #include "../Character/Player/PlayerCharacter.h"
+#include "../Manager/BaseGameInstance.h"
+#include "../Manager/WidgetManager.h"
+#include "../Widget/Etc/CrosshairEtcWidget.h"
 
 // Sets default values for this component's properties
 UEquipComponent::UEquipComponent()
+	: CurrentWeapon(nullptr)
 {
 	PrimaryComponentTick.bCanEverTick = false;
 }
@@ -25,43 +31,65 @@ void UEquipComponent::BeginPlay()
 
 void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 DataID)
 {
-	ABaseWeaponActor* Weapon = nullptr;
 	FName SocketName;
+
+	if (CurrentWeapon)
+		CurrentWeapon->Destroy();
 
 	switch (WeaponType)
 	{
 	case E_WeaponType::E_Pistol:
-		
+		CurrentWeapon = GetWorld()->SpawnActor<ABasePistolWeaponActor>(ABasePistolWeaponActor::StaticClass());
 		SocketName = FName(TEXT("pistol_socket"));
 		break;
 	case E_WeaponType::E_Rifle:
-		Weapon = GetWorld()->SpawnActor<ABaseRifleWeaponActor>(ABaseRifleWeaponActor::StaticClass());
+		CurrentWeapon = GetWorld()->SpawnActor<ABaseRifleWeaponActor>(ABaseRifleWeaponActor::StaticClass());
 		SocketName = FName(TEXT("rifle_socket"));
 		break;
 	case E_WeaponType::E_Shotgun:
-		Weapon = GetWorld()->SpawnActor<ABaseShotgunWeaponActor>(ABaseShotgunWeaponActor::StaticClass());
+		CurrentWeapon = GetWorld()->SpawnActor<ABaseShotgunWeaponActor>(ABaseShotgunWeaponActor::StaticClass());
 		SocketName = FName(TEXT("shotgun_socket"));
 		break;
 	default:
 		break;
 	}
+
 	if (OwnPlayer)
 	{
 		OwnPlayer->SetWeaponType(WeaponType);
-		if (Weapon)
+		if (CurrentWeapon)
 		{
-			Weapon->SetItem(DataID);
-			Weapon->AttachToComponent(OwnPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+			CurrentWeapon->SetItem(DataID);
+			CurrentWeapon->SetOwner(OwnPlayer);
+			CurrentWeapon->AttachToComponent(OwnPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+			auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+			if (MyGameInstance)
+			{
+				if (CurrentWeapon->GetCrosshairWdiget())
+				{
+					UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+					if (WidgetManager)
+					{
+						UBaseUserWidget* CrossWidget = WidgetManager->CreateAndAddWidget<UCrosshairEtcWidget>(
+							GetWorld(), TEXT("CrosshairWidget"),
+							CurrentWeapon->GetCrosshairWdiget()
+						);
+						if (CrossWidget)
+							CrossWidget->SetAddRemove();
+					}
+				}
+			}
 		}
 	}
 }
 
-void UEquipComponent::SetEquipment(const E_EquipType EquipType, const int32 DataID)
+void UEquipComponent::SetEquipment(const E_EquipType EquipType, const FItemData ItemData)
 {
+	EquipMap.Emplace(EquipType, ItemData);
 	switch (EquipType)
 	{
 	case E_EquipType::E_Weapon:
-		SpawnWeapon(E_WeaponType::E_Shotgun, DataID);
+		SpawnWeapon(ItemData.WeaponType, ItemData.ItemID);
 		break;
 	case E_EquipType::E_Hat:
 		break;

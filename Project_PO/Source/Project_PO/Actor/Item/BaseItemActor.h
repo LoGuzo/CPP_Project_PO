@@ -27,6 +27,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* SkeletalMesh;
 
+	UPROPERTY(VisibleAnywhere)
+	class APlayerCharacter* OwnerCharacter;
+
 protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
 

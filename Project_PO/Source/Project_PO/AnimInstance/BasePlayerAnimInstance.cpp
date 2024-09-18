@@ -10,6 +10,7 @@ UBasePlayerAnimInstance::UBasePlayerAnimInstance()
 	, Pitch(0.f)
 	, WeaponType(E_WeaponType::E_None)
 {
+	//JointTargetLocation = FVector(0.f, 0.f, 0.f);
 }
 
 void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -26,6 +27,8 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			bIsSprint = Player->GetIsSprint();
 			Pitch = Player->GetBaseAimRotation().Pitch;
 			WeaponType = Player->GetWeaponType();
+			//LeftHandSocketTransform = Player->GetLeftHandSocketTransform();
+			//JointTargetLocation = Player->JointTargetLocation;
 
 			FRotator Rotation = Player->GetActorRotation();
 			PlayerRotation = CalculateDirection(OwnerVelocity, Rotation);

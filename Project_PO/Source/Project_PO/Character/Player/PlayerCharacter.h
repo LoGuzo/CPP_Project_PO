@@ -139,7 +139,13 @@ private:
 
 	UFUNCTION()
 	void Zoom(float Value);
+
+	void DisplayCrosshair();
+
 public:
+	UPROPERTY(EditAnywhere)
+	FVector JointTargetLocation;
+
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
@@ -158,4 +164,6 @@ public:
 
 	E_WeaponType GetWeaponType() { return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
+
+	FTransform GetLeftHandSocketTransform();
 };

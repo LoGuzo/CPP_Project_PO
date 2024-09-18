@@ -6,4 +6,5 @@
 UCrosshairEtcWidget::UCrosshairEtcWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	SetVisibility(ESlateVisibility::Hidden);
 }

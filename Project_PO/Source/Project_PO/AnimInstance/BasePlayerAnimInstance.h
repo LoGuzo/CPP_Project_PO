@@ -39,6 +39,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Type, meta = (AllowPrivateAccess = "true"))
 	E_WeaponType WeaponType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = IK, meta = (AllowPrivateAccess = "true"))
+	FTransform LeftHandSocketTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = IK, meta = (AllowPrivateAccess = "true"))
+	FTransform RightHandSocketTransform;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = IK, meta = (AllowPrivateAccess = "true"))
+	FVector JointTargetLocation;
 public:
 	bool GetIsArmed() { return bIsArmed; }
 	void SetIsArmed(bool _bIsArmed) { bIsArmed = _bIsArmed; }
@@ -51,6 +59,4 @@ public:
 
 	E_WeaponType GetWeaponType(){ return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
-
-	
 };

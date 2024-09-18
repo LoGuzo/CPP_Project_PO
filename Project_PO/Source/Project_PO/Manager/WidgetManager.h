@@ -27,13 +27,21 @@ public:
 
         if (Widgets.Contains(WidgetKey))
         {
-            return Cast<T>(Widgets[WidgetKey]);
+            UUserWidget* ExistingWidget = Widgets[WidgetKey];
+
+            if (ExistingWidget)
+            {
+                ExistingWidget->RemoveFromParent();
+
+                ExistingWidget->MarkAsGarbage();
+            }
+            Widgets.Remove(WidgetKey);
         }
 
         T* NewWidget = CreateWidget<T>(World, WidgetClass);
         if (NewWidget)
         {
-            Widgets.Add(WidgetKey, NewWidget);
+            Widgets.Emplace(WidgetKey, NewWidget);
         }
         return NewWidget;
     }

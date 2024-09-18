@@ -16,5 +16,6 @@ ABaseRifleWeaponActor::ABaseRifleWeaponActor()
 
 void ABaseRifleWeaponActor::Fire()
 {
+	//GetWorld()->LineTraceSingleByChannel();
 	UE_LOG(LogTemp, Warning, TEXT("Rifle"));
 }

@@ -26,9 +26,14 @@ private:
 	UPROPERTY()
 	TMap<E_EquipType, FItemData> EquipMap;
 
+	UPROPERTY()
+	class ABaseWeaponActor* CurrentWeapon;
+
 public:
 	void SpawnWeapon(const E_WeaponType WeaponType, const int32 DataID);
 
 	UFUNCTION(BlueprintCallable)
-	void SetEquipment(const E_EquipType EquipType, const int32 DataID);
+	void SetEquipment(const E_EquipType EquipType, const FItemData ItemData);
+
+	class ABaseWeaponActor* GetCurrentWeapon() { return CurrentWeapon; }
 };

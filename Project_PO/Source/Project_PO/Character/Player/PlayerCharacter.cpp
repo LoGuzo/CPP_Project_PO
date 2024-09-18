@@ -13,10 +13,15 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "../../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
 #include "../../Component/EquipComponent.h"
 #include "../../Interface/Interactable.h"
+#include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/WidgetManager.h"
+#include "../../Widget/Etc/CrosshairEtcWidget.h"
 
 APlayerCharacter::APlayerCharacter()
 	: InteractActor(nullptr)
@@ -187,33 +192,54 @@ void APlayerCharacter::TriggeredAiming(const FInputActionValue& Value)
 {
 	if (bIsArmed)
 	{
-		bIsAiming = true;
-		GetCharacterMovement()->bOrientRotationToMovement = false;
+		if (bIsSprint)
+			return;
+		if (!bIsAiming)
+		{
+			bIsAiming = true;
+			GetCharacterMovement()->bOrientRotationToMovement = false;
 
-		if (CameraTimeline)
-			CameraTimeline->Play();
+			if (CameraTimeline)
+				CameraTimeline->Play();
+			DisplayCrosshair();
+		}
 	}
 }
 
 void APlayerCharacter::CanceledAiming(const FInputActionValue& Value)
 {
-	bIsAiming = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	if (bIsAiming)
+	{
+		bIsAiming = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+
+		if (CameraTimeline)
+			CameraTimeline->Reverse();
+		DisplayCrosshair();
+	}
 }
 
 void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
 {
-	bIsAiming = false;
-	GetCharacterMovement()->bOrientRotationToMovement = true;
+	if (bIsAiming)
+	{
+		bIsAiming = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
 
-	if (CameraTimeline)
-		CameraTimeline->Reverse();
+		if (CameraTimeline)
+			CameraTimeline->Reverse();
+		DisplayCrosshair();
+	}
 }
 
 void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 {
 	if (GetCharacterMovement()->IsFalling() || bIsMoveBack)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 500.f;
+		bIsSprint = false;
 		return;
+	}
 
 	bIsSprint = true;
 	GetCharacterMovement()->MaxWalkSpeed = 700.f;
@@ -222,6 +248,7 @@ void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 		bIsAiming = false;
 		if (CameraTimeline)
 			CameraTimeline->Reverse();
+		DisplayCrosshair();
 	}
 }
 
@@ -288,4 +315,40 @@ void APlayerCharacter::Zoom(float Value)
 
 	float ArmLength = FMath::Lerp(InitalSpringLength, TargetSpringLength, Value);
 	CameraBoom->TargetArmLength = ArmLength;
+}
+
+void APlayerCharacter::DisplayCrosshair()
+{
+	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (MyGameInstance)
+	{
+		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UBaseUserWidget* CrossWidget = WidgetManager->GetWidget<UCrosshairEtcWidget>(TEXT("CrosshairWidget"));
+			if (CrossWidget)
+				CrossWidget->SetShowHidden();
+		}
+	}
+}
+
+FTransform APlayerCharacter::GetLeftHandSocketTransform()
+{
+	FTransform OutPutTransform;
+	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
+	if (Weapon)
+	{
+		FVector OutputLocation = OutPutTransform.GetLocation();
+		FRotator OutputRotation = OutPutTransform.GetRotation().Rotator();
+
+		FTransform WeaponTransform = Weapon->GetSkeletalMesh()->GetSocketTransform(TEXT("LeftHandIK"));
+		GetMesh()->TransformFromBoneSpace(TEXT("hand_r")
+			, WeaponTransform.GetLocation(), WeaponTransform.GetRotation().Rotator()
+			, OutputLocation, OutputRotation
+		);
+
+		OutPutTransform.SetLocation(OutputLocation);
+		OutPutTransform.SetRotation(FQuat(OutputRotation));
+	}
+	return OutPutTransform;
 }

@@ -11,7 +11,7 @@ AGirlCharacter::AGirlCharacter()
 	SetCharacterMesh();
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 66.0f);
 
-	GetCameraBoom()->SocketOffset = FVector(0.f, 40.f, 40.f);
+	GetCameraBoom()->SocketOffset = FVector(0.f, 40.f, 45.f);
 	GetCameraBoom()->TargetArmLength = 200.0f;
 }
 
