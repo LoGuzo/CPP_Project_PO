@@ -2,6 +2,7 @@
 
 
 #include "BaseShotgunWeaponActor.h"
+#include "../../../../../Character/Player/PlayerCharacter.h"
 #include "../../../../../Widget/Etc/CrosshairEtcWidget.h"
 
 ABaseShotgunWeaponActor::ABaseShotgunWeaponActor()
@@ -15,5 +16,59 @@ ABaseShotgunWeaponActor::ABaseShotgunWeaponActor()
 
 void ABaseShotgunWeaponActor::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Shotgun"));
+    FCollisionQueryParams CollisionParams;
+    CollisionParams.AddIgnoredActor(this);
+
+    if (!GetOwner())
+        return;
+    CollisionParams.AddIgnoredActor(GetOwner());
+
+    APlayerCharacter* OwnerCharacter = Cast<APlayerCharacter>(GetOwner());
+    if (!OwnerCharacter)
+        return;
+
+    FVector HitVector = LineTraceFromCamera();
+
+    FVector Start = GetSkeletalMesh()->GetSocketLocation(TEXT("Muzzle"));
+
+    FVector Direction = (HitVector - Start).GetSafeNormal();
+
+    float SpreadAngle = 10.f;
+    int32 NumPellets = 9;
+
+    for (int32 i = 0; i < NumPellets; i++)
+    {
+        FRotator SpreadRotation = Direction.Rotation();
+        SpreadRotation.Pitch += FMath::RandRange(-SpreadAngle, SpreadAngle);
+        SpreadRotation.Yaw += FMath::RandRange(-SpreadAngle, SpreadAngle);
+
+        FVector End = Start + (SpreadRotation.Vector() * 2000.0f);
+
+        FHitResult HitResult;
+        bool bHit = GetWorld()->LineTraceSingleByChannel(
+            HitResult,
+            Start,
+            End,
+            ECC_GameTraceChannel3,
+            CollisionParams
+        );
+
+        if (bHit)
+        {
+            // 적을 타격한 경우
+            FHitResult ObstacleHitResult;
+            bool bObstacleHit = GetWorld()->LineTraceSingleByChannel(
+                ObstacleHitResult,
+                Start,
+                HitResult.ImpactPoint,
+                ECC_Visibility,
+                CollisionParams
+            );
+
+            if (bObstacleHit)
+                DrawDebugLine(GetWorld(), Start, ObstacleHitResult.ImpactPoint, FColor::Red, false, 1.f, 0, 1.0f);
+            else
+                DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
+        }
+    }
 }

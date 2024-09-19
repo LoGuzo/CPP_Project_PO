@@ -51,7 +51,7 @@ FVector ABaseWeaponActor::LineTraceFromCamera()
     if (bHit)
         HitValue = HitResult.ImpactPoint;
     else
-        HitValue = InvalidLocation;
+        HitValue = End;
 
     return HitValue;
 }

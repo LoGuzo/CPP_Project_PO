@@ -6,12 +6,12 @@
 
 ABossEnemyCharacter::ABossEnemyCharacter()
 {
-	SetUpArmCollision();
-	SetUpLegCollision();
 }
 
 void ABossEnemyCharacter::SetUpArmCollision()
 {
+	Super::SetUpArmCollision();
+
 	RightArmCollision = CreateDefaultSubobject<UCapsuleComponent>("RightArmCollision");
 	RightArmCollision->SetupAttachment(GetMesh(), TEXT("upperarm_r"));
 	RightArmCollision->SetCollisionProfileName(TEXT("Enemy"));
@@ -25,6 +25,8 @@ void ABossEnemyCharacter::SetUpArmCollision()
 
 void ABossEnemyCharacter::SetUpLegCollision()
 {
+	Super::SetUpLegCollision();
+
 	RightLegCollision = CreateDefaultSubobject<UCapsuleComponent>("RightLegCollision");
 	RightLegCollision->SetupAttachment(GetMesh(), TEXT("thigh_r"));
 	RightLegCollision->SetCollisionProfileName(TEXT("Enemy"));

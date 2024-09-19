@@ -7,15 +7,16 @@
 
 AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 {
-	SetCharacterMesh();
+	GetCapsuleComponent()->InitCapsuleSize(42.f, 70.f);
+
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -68.f, 0.f));
+
+	SetUpCharacter();
 }
 
 void AMummyNormalEnemyCharacter::SetCharacterMesh()
 {
-	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 70.f);
-
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -68.f, 0.f));
+	Super::SetCharacterMesh();
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Mummy/Animation/ABP_Mummy.ABP_Mummy_C"));
 	if (ANIM.Succeeded())
@@ -29,13 +30,22 @@ void AMummyNormalEnemyCharacter::SetCharacterMesh()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainAsset(TEXT("/Game/Characters/Mummy/Meshs/Mummy_Base.Mummy_Base"));
 	if (MainAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MainAsset.Object);
-
-	SetUpHeadCollision();
 }
 
 void AMummyNormalEnemyCharacter::SetUpHeadCollision()
 {
+	Super::SetUpHeadCollision();
+
 	HeadCollision->SetCapsuleHalfHeight(30.0);
 	HeadCollision->SetRelativeLocation(FVector(15.f, 0.f, 0.f));
 	HeadCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+}
+
+void AMummyNormalEnemyCharacter::SetUpBodyCollision()
+{
+	Super::SetUpBodyCollision();
+
+	BodyCollision->InitCapsuleSize(30.f, 50.f);
+	BodyCollision->SetRelativeLocation(FVector(-5.f, -5.f, 0.f));
+	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 }

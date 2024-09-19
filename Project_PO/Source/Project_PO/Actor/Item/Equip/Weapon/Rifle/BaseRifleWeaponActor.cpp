@@ -30,11 +30,8 @@ void ABaseRifleWeaponActor::Fire()
 
     FVector HitVector = LineTraceFromCamera();
 
-    if (HitVector == InvalidLocation)
-        return;
-
     FVector Start = GetSkeletalMesh()->GetSocketLocation(TEXT("Muzzle"));
-    FVector End = Start + (LineTraceFromCamera() - Start).GetSafeNormal() * 2000.f;
+    FVector End = Start + (HitVector - Start).GetSafeNormal() * 2000.f;
 
     FHitResult AttackHitResult;
     bool bHit = GetWorld()->LineTraceSingleByChannel(

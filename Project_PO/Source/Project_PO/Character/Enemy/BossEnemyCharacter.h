@@ -17,9 +17,6 @@ class PROJECT_PO_API ABossEnemyCharacter : public AEnemyCharacter
 public:
 	ABossEnemyCharacter();
 
-private:
-	int32 MonsterID;
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* RightArmCollision;
@@ -33,7 +30,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* LeftLegCollision;
 
-private:
-	void SetUpArmCollision();
-	void SetUpLegCollision();
+protected:
+	virtual void SetUpArmCollision() override;
+	virtual void SetUpLegCollision() override;
 };

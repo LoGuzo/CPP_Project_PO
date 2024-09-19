@@ -18,6 +18,7 @@ public:
 	AMummyNormalEnemyCharacter();
 
 private:
-	void SetCharacterMesh();
-	void SetUpHeadCollision();
+	virtual void SetCharacterMesh() override;
+	virtual void SetUpHeadCollision() override;
+	virtual void SetUpBodyCollision() override;
 };

@@ -22,8 +22,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Widget)
 	TSubclassOf<class UCrosshairEtcWidget> CrosshairWidget;
 
-	const FVector InvalidLocation = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
-
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);

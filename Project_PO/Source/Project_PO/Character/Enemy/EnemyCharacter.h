@@ -18,12 +18,24 @@ public:
 	AEnemyCharacter();
 
 protected:
+	virtual void BeginPlay() override;
+
+	int32 MonsterID;
+protected:
 	UPROPERTY()
 	class UBaseEnemyAnimInstance* AnimInstance;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* HeadCollision;
 
-private:
-	void SetUpHeadCollision();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
+	class UCapsuleComponent* BodyCollision;
+
+protected:
+	void SetUpCharacter();
+	virtual void SetCharacterMesh() {};
+	virtual void SetUpHeadCollision();
+	virtual void SetUpBodyCollision();
+	virtual void SetUpArmCollision() {};
+	virtual void SetUpLegCollision() {};
 };

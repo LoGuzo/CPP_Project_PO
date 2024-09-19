@@ -7,9 +7,21 @@
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
 {
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Enemy"));
 
+}
+
+void AEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AEnemyCharacter::SetUpCharacter()
+{
+	SetCharacterMesh();
 	SetUpHeadCollision();
+	SetUpBodyCollision();
+	SetUpArmCollision();
+	SetUpLegCollision();
 }
 
 void AEnemyCharacter::SetUpHeadCollision()
@@ -18,4 +30,12 @@ void AEnemyCharacter::SetUpHeadCollision()
 	HeadCollision->SetupAttachment(GetMesh(), TEXT("head"));
 	HeadCollision->SetCollisionProfileName(TEXT("Enemy"));
 	HeadCollision->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_Owner;
+}
+
+void AEnemyCharacter::SetUpBodyCollision()
+{
+	BodyCollision = CreateDefaultSubobject<UCapsuleComponent>("BodyCollision");
+	BodyCollision->SetupAttachment(GetMesh(), TEXT("pelvis"));
+	BodyCollision->SetCollisionProfileName(TEXT("Enemy"));
+	BodyCollision->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_Owner;
 }

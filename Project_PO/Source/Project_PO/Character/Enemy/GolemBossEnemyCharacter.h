@@ -18,8 +18,9 @@ public:
 	AGolemBossEnemyCharacter();
 
 private:
-	void SetCharacterMesh();
-	void SetUpHeadCollision();
-	void SetUpArmCollision();
-	void SetUpLegCollision();
+	virtual void SetCharacterMesh() override;
+	virtual void SetUpHeadCollision() override;
+	virtual void SetUpArmCollision() override;
+	virtual void SetUpLegCollision() override;
+	virtual void SetUpBodyCollision() override;
 };

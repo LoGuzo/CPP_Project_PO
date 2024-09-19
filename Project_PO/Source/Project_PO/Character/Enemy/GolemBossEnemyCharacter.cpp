@@ -7,14 +7,16 @@
 
 AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 {
-	SetCharacterMesh();
+	SetActorRelativeScale3D(FVector(3.f, 3.f, 3.f));
+
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
+
+	SetUpCharacter();
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()
 {
-	SetActorRelativeScale3D(FVector(3.f, 3.f, 3.f));
-
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
+	Super::SetCharacterMesh();
 
 	static ConstructorHelpers::FClassFinder<UAnimInstance>ANIM(TEXT("/Game/Characters/Golem/Animations/ABP_Golem.ABP_Golem_C"));
 	if (ANIM.Succeeded())
@@ -28,20 +30,20 @@ void AGolemBossEnemyCharacter::SetCharacterMesh()
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> MainAsset(TEXT("/Game/Characters/Golem/Mesh/SK_Golem.SK_Golem"));
 	if (MainAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MainAsset.Object);
-
-	SetUpHeadCollision();
-	SetUpArmCollision();
-	SetUpLegCollision();
 }
 
 void AGolemBossEnemyCharacter::SetUpHeadCollision()
 {
+	Super::SetUpHeadCollision();
+
 	HeadCollision->SetCapsuleHalfHeight(22.0);
 	HeadCollision->SetRelativeLocation(FVector(10.f, 13.f, 0.f));
 }
 
 void AGolemBossEnemyCharacter::SetUpArmCollision()
 {
+	Super::SetUpArmCollision();
+
 	RightArmCollision->SetCapsuleHalfHeight(80.0);
 	RightArmCollision->SetRelativeLocation(FVector(-60.f, -30.f, 0.f));
 	RightArmCollision->SetRelativeRotation(FRotator(90.f, 90.f, 60.f));
@@ -53,10 +55,21 @@ void AGolemBossEnemyCharacter::SetUpArmCollision()
 
 void AGolemBossEnemyCharacter::SetUpLegCollision()
 {
+	Super::SetUpLegCollision();
+
 	RightLegCollision->SetRelativeLocation(FVector(30.f, 0.f, 0.f));
 	RightLegCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 
 
 	LeftLegCollision->SetRelativeLocation(FVector(-30.f, 0.f, 0.f));
 	LeftLegCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+}
+
+void AGolemBossEnemyCharacter::SetUpBodyCollision()
+{
+	Super::SetUpBodyCollision();
+
+	BodyCollision->InitCapsuleSize(30.f,50.f);
+	BodyCollision->SetRelativeLocation(FVector(32.f, 4.f, 0.f));
+	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, -11.f));
 }
