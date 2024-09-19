@@ -4,9 +4,12 @@
 #include "BossEnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 
+
 ABossEnemyCharacter::ABossEnemyCharacter()
 {
 }
+
+
 
 void ABossEnemyCharacter::SetUpArmCollision()
 {

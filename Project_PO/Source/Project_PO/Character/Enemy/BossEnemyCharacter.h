@@ -18,6 +18,8 @@ public:
 	ABossEnemyCharacter();
 
 protected:
+
+protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* RightArmCollision;
 

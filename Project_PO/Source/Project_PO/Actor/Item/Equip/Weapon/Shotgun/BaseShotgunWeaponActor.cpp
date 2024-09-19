@@ -2,6 +2,7 @@
 
 
 #include "BaseShotgunWeaponActor.h"
+#include "Kismet/GameplayStatics.h"
 #include "../../../../../Character/Player/PlayerCharacter.h"
 #include "../../../../../Widget/Etc/CrosshairEtcWidget.h"
 
@@ -41,7 +42,7 @@ void ABaseShotgunWeaponActor::Fire()
         FRotator SpreadRotation = Direction.Rotation();
         SpreadRotation.Pitch += FMath::RandRange(-SpreadAngle, SpreadAngle);
         SpreadRotation.Yaw += FMath::RandRange(-SpreadAngle, SpreadAngle);
-
+        FVector TargetDirection = SpreadRotation.Vector();
         FVector End = Start + (SpreadRotation.Vector() * 2000.0f);
 
         FHitResult HitResult;
@@ -68,7 +69,15 @@ void ABaseShotgunWeaponActor::Fire()
             if (bObstacleHit)
                 DrawDebugLine(GetWorld(), Start, ObstacleHitResult.ImpactPoint, FColor::Red, false, 1.f, 0, 1.0f);
             else
+            {
+                UGameplayStatics::ApplyPointDamage(
+                    HitResult.GetActor(), 10.f,
+                    TargetDirection, HitResult,
+                    OwnerCharacter->GetController(),
+                    this, UDamageType::StaticClass()
+                );
                 DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
+            }
         }
     }
 }

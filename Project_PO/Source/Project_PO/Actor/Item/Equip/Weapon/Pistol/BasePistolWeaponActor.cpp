@@ -2,6 +2,7 @@
 
 
 #include "BasePistolWeaponActor.h"
+#include "Kismet/GameplayStatics.h"
 #include "../../../../../Character/Player/PlayerCharacter.h"
 #include "../../../../../Widget/Etc/CrosshairEtcWidget.h"
 
@@ -30,7 +31,8 @@ void ABasePistolWeaponActor::Fire()
 	FVector HitVector = LineTraceFromCamera();
 
 	FVector Start = GetSkeletalMesh()->GetSocketLocation(TEXT("Muzzle"));
-	FVector End = Start + (HitVector - Start).GetSafeNormal() * 2000.f;
+	FVector TargetDirection = (HitVector - Start).GetSafeNormal();
+	FVector End = Start + TargetDirection * 2000.f;
 
 	FHitResult AttackHitResult;
 	bool bHit = GetWorld()->LineTraceSingleByChannel(
@@ -57,6 +59,12 @@ void ABasePistolWeaponActor::Fire()
 			return;
 		}
 
+		UGameplayStatics::ApplyPointDamage(
+			AttackHitResult.GetActor(), 10.f,
+			TargetDirection, AttackHitResult,
+			OwnerCharacter->GetController(),
+			this, UDamageType::StaticClass()
+		);
 		DrawDebugLine(GetWorld(), Start, AttackHitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
 	}
 }

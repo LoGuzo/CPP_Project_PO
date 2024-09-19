@@ -3,6 +3,7 @@
 
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Engine/DamageEvents.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
@@ -13,6 +14,40 @@ AEnemyCharacter::AEnemyCharacter()
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+    {
+        FHitResult HitResult;
+        const FPointDamageEvent& PointDamageEvent = static_cast<const FPointDamageEvent&>(DamageEvent);
+        HitResult = PointDamageEvent.HitInfo;
+
+        if (HitResult.GetComponent())
+        {
+            FString ComponentName = HitResult.GetComponent()->GetName();
+            
+            if (ComponentName == "HeadCollision")
+            {
+                DamageAmount *= 1.8f;
+            }
+            else if (ComponentName == "BodyCollision")
+            {
+                DamageAmount *= 1.0f;
+            }
+            else if (ComponentName == "RightArmCollision" || ComponentName == "LeftArmCollision")
+            {
+                DamageAmount *= 0.8f;
+            }
+            else if (ComponentName == "RightLegCollision" || ComponentName == "LeftLegCollision")
+            {
+                DamageAmount *= 0.5f;
+            }
+        }
+    }
+
+    return  Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
 }
 
 void AEnemyCharacter::SetUpCharacter()
