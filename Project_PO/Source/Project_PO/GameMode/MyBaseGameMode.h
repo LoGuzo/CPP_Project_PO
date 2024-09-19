@@ -20,16 +20,6 @@ public:
 
 protected:
     virtual void BeginPlay() override;
-	
-private:
-	TMap<E_ManagerType, TMap<int32, TSharedPtr<FTableRowBase>>> DatabaseMap;
-
-public:
-	template<typename T>
-	TSharedPtr<T> GetDatabaseMap(E_ManagerType Type, int32 ID)
-	{
-		return StaticCastSharedPtr<T>(*DatabaseMap.Find(Type)->Find(ID));
-	}
 };
 
 

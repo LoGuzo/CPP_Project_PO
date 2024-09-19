@@ -8,9 +8,6 @@ ABaseWeaponActor::ABaseWeaponActor()
 	: WeaponType(E_WeaponType::E_None)
 {
 	EquipType = E_EquipType::E_Weapon;
-
-	GetSkeletalMesh()->SetCollisionProfileName(TEXT("NoCollision"));
-	RootComponent = GetSkeletalMesh();
 }
 
 FVector ABaseWeaponActor::LineTraceFromCamera()

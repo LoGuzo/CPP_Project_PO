@@ -179,4 +179,11 @@ public:
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
 
 	FTransform GetLeftHandSocketTransform();
+
+public:
+	UFUNCTION(BlueprintCallable)
+	void SetWeapon();
+	int32 ItemID;
+
+	void AttackCheck();
 };

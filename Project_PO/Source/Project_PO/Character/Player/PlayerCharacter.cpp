@@ -47,7 +47,7 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-
+	ItemID = 1000;
 	SetupCurve();
 }
 
@@ -275,9 +275,14 @@ void APlayerCharacter::Attack(const FInputActionValue& Value)
 	if (!bIsAiming)
 		return;
 
-	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
-	if (Weapon)
-		Weapon->Fire();
+	if (EquipComponent->GetCurrentWeapon())
+	{
+		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
+		{
+			AnimInstance->OnAttackPlayAM();
+		}
+	}
 }
 
 void APlayerCharacter::UseSkill(const FInputActionValue& Value)
@@ -379,4 +384,27 @@ FTransform APlayerCharacter::GetLeftHandSocketTransform()
 		OutPutTransform.SetRotation(FQuat(OutputRotation));
 	}
 	return OutPutTransform;
+}
+
+void APlayerCharacter::SetWeapon()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		TWeakPtr<FEquipItemData> ItemData = GameInstance->GetDatabaseMap<FEquipItemData>(E_ManagerType::E_ItemDatabaseManager, ItemID);
+		if (ItemData.IsValid())
+		{
+			FEquipItemData equipData = *ItemData.Pin();
+			EquipComponent->SetEquipment(E_EquipType::E_Weapon, equipData);
+		}
+	}
+
+	ItemID = 1000 + (ItemID - 1000 + 1) % 3;
+}
+
+void APlayerCharacter::AttackCheck()
+{
+	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
+	if (Weapon)
+		Weapon->Fire();
 }

@@ -19,12 +19,6 @@ AMyBaseGameMode::AMyBaseGameMode()
 void AMyBaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
-
-	auto MyInstance = Cast<UBaseGameInstance>(GetGameInstance());
-	if (MyInstance)
-	{
-		DatabaseMap.Emplace(E_ManagerType::E_ItemDatabaseManager, MyInstance->GetManager<UItemDatabaseManager>(E_ManagerType::E_ItemDatabaseManager)->GetDataMap());
-	}
 }
 
 

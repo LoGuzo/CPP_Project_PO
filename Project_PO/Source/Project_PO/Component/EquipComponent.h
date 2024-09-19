@@ -23,8 +23,7 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY()
-	TMap<E_EquipType, FItemData> EquipMap;
+	TMap<E_EquipType, FEquipItemData> EquipMap;
 
 	UPROPERTY()
 	class ABaseWeaponActor* CurrentWeapon;
@@ -32,8 +31,7 @@ private:
 public:
 	void SpawnWeapon(const E_WeaponType WeaponType, const int32 DataID);
 
-	UFUNCTION(BlueprintCallable)
-	void SetEquipment(const E_EquipType EquipType, const FItemData ItemData);
+	void SetEquipment(const E_EquipType EquipType, const FEquipItemData ItemData);
 
 	class ABaseWeaponActor* GetCurrentWeapon() { return CurrentWeapon; }
 };

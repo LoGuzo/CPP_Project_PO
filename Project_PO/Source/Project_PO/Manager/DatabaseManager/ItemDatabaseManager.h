@@ -17,6 +17,4 @@ class PROJECT_PO_API UItemDatabaseManager : public UDatabaseManager
 public:
 	UItemDatabaseManager();
 	virtual ~UItemDatabaseManager();
-
-	virtual TMap<int32, TSharedPtr<FTableRowBase>> GetDataMap() override;
 };

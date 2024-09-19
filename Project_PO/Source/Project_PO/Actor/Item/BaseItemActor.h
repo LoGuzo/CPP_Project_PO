@@ -19,22 +19,28 @@ public:
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UItemComponent* ItemComponent;
-
-	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* StaticMesh;
 	
 	UPROPERTY(VisibleAnywhere)
 	class USkeletalMeshComponent* SkeletalMesh;
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	class UItemComponent* ItemComponent;
+
+protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
 
 public:
-	class UItemComponent* GetItemComponent() { return ItemComponent; }
+	template<typename T>
+	T* GetItemComponent()
+	{
+		return Cast<T>(ItemComponent);
+	}
+
 	class UStaticMeshComponent* GetStaticMesh() { return StaticMesh; }
 	class USkeletalMeshComponent* GetSkeletalMesh() { return SkeletalMesh; }
 
-	void SetItem(int32 _ID);
+	virtual void SetItem(int32 _ID);
 	virtual void AfterDropItem();
 };

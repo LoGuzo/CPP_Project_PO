@@ -17,7 +17,7 @@ struct FQuestObjective : public FTableRowBase
     int32 ObjectiveID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
-    TEnumAsByte<E_ObjectiveType> ObjectiveType;
+    E_ObjectiveType ObjectiveType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     FText ObjectiveDescription;
@@ -79,7 +79,7 @@ struct FQuestData : public FTableRowBase
     int32 RewardID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
-    TEnumAsByte<E_QuestState> QuestState;
+    E_QuestState QuestState;
 };
 
 USTRUCT(BlueprintType)
@@ -103,25 +103,37 @@ struct FItemData : public FTableRowBase
     int32 ItemStackSize;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-    TEnumAsByte <E_ItemType> ItemType;
+    E_ItemType ItemType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     float DropChance;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     TSoftObjectPtr<UStreamableRenderAsset> ItemMesh;
+};
+
+USTRUCT(BlueprintType)
+struct FEquipItemData : public FItemData
+{
+    GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-    TEnumAsByte <E_EquipType> EquipType;
+    E_EquipType EquipType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-    TEnumAsByte <E_WeaponType> WeaponType;
+    E_WeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
     float AttackPower;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
     float DefensePower;
+};
+
+USTRUCT(BlueprintType)
+struct FCunsumItemData : public FItemData
+{
+    GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
     float RestoreAmount;

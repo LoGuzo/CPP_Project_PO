@@ -8,11 +8,6 @@
 #include "EquipItemActor.generated.h"
 
 
-
-
-/**
- * 
- */
 UCLASS()
 class PROJECT_PO_API AEquipItemActor : public ABaseItemActor
 {
@@ -26,4 +21,6 @@ protected:
 
 public:
 	E_EquipType GetEquipType() { return EquipType; }
+
+	virtual void SetItem(int32 _ID);
 };

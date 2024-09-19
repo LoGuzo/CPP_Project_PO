@@ -2,17 +2,16 @@
 
 
 #include "BaseItemActor.h"
-#include "../../Component/ItemComponent.h"
+#include "../../Component/ItemComponent/ItemComponent.h"
 
 ABaseItemActor::ABaseItemActor()
 {
-	ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
-
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
-	StaticMesh->SetupAttachment(RootComponent);
+	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
+	RootComponent = StaticMesh;
 
 	SkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>("SkeletalMesh");
-	SkeletalMesh->SetupAttachment(RootComponent);
+	SkeletalMesh->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
 void ABaseItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh)
@@ -34,8 +33,11 @@ void ABaseItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mes
 
 void ABaseItemActor::SetItem(int32 _ID)
 {
-	ItemComponent->SetItem(_ID);
-	SetMeshComponent(ItemComponent->GetMesh());
+	if (ItemComponent)
+	{
+		ItemComponent->SetItem(_ID);
+		SetMeshComponent(ItemComponent->GetMesh());
+	}
 }
 
 void ABaseItemActor::AfterDropItem()

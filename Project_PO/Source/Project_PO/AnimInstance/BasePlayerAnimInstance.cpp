@@ -35,3 +35,20 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		}
 	}
 }
+
+void UBasePlayerAnimInstance::OnAttackPlayAM()
+{
+	if (!Montage_IsPlaying(AttackMontage))
+	{
+		Montage_Play(AttackMontage, 1.f);
+	}
+}
+
+void UBasePlayerAnimInstance::AnimNotify_AttackHit()
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
+	if (Player)
+	{
+		Player->AttackCheck();
+	}
+}

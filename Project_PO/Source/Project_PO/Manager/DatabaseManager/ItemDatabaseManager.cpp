@@ -12,26 +12,4 @@ UItemDatabaseManager::UItemDatabaseManager()
 
 UItemDatabaseManager::~UItemDatabaseManager()
 {
-	if (MySharedData != nullptr)
-		MySharedData.Reset();
-}
-
-TMap<int32, TSharedPtr<FTableRowBase>> UItemDatabaseManager::GetDataMap()
-{
-	const TArray<FName> row = MyData->GetRowNames();
-	TMap<int32, TSharedPtr<FTableRowBase>> DataMap;
-
-	for (int32 i = 0; i < row.Num(); i++)
-	{
-		const auto data = MyData->FindRow<FItemData>(row[i], row[i].ToString(), false);
-		if (data)
-		{
-			MySharedData = MakeShared<FItemData>(*data);
-			DataMap.Emplace(data->ItemID, MySharedData);
-		}
-		else
-			MySharedData.Reset();
-	}
-
-	return DataMap;
 }

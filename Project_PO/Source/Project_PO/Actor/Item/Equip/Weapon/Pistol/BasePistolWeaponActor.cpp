@@ -4,6 +4,7 @@
 #include "BasePistolWeaponActor.h"
 #include "Kismet/GameplayStatics.h"
 #include "../../../../../Character/Player/PlayerCharacter.h"
+#include "../../../../../Component/ItemComponent/EquipItemComponent.h"
 #include "../../../../../Widget/Etc/CrosshairEtcWidget.h"
 
 ABasePistolWeaponActor::ABasePistolWeaponActor()
@@ -60,7 +61,8 @@ void ABasePistolWeaponActor::Fire()
 		}
 
 		UGameplayStatics::ApplyPointDamage(
-			AttackHitResult.GetActor(), 10.f,
+			AttackHitResult.GetActor(), 
+			GetItemComponent<UEquipItemComponent>()->GetAttackPower(),
 			TargetDirection, AttackHitResult,
 			OwnerCharacter->GetController(),
 			this, UDamageType::StaticClass()

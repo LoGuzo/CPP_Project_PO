@@ -16,14 +16,35 @@ class PROJECT_PO_API UDatabaseManager : public UObject
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY()
-	class UDataTable* MyData;
+	static UDataTable* MyData;
 
-	TSharedPtr<FTableRowBase> MySharedData;
+	static TSharedPtr<FTableRowBase> MySharedData;
 
 public:
 	UDatabaseManager() {};
-	virtual ~UDatabaseManager() {};
+	virtual ~UDatabaseManager();
 
-	virtual TMap<int32, TSharedPtr<FTableRowBase>> GetDataMap() PURE_VIRTUAL(UDatabaseManager::GetDataMap(), return TMap<int32, TSharedPtr<FTableRowBase>>(););
+	template<typename T>
+	static TMap<int32, TSharedPtr<FTableRowBase>>GetDataMap()
+	{
+		if(!MyData)
+			return TMap<int32, TSharedPtr<FTableRowBase>>();
+
+		const TArray<FName> row = MyData->GetRowNames();
+		TMap<int32, TSharedPtr<FTableRowBase>> DataMap;
+
+		for (int32 i = 0; i < row.Num(); i++)
+		{
+			const T* data = MyData->FindRow<T>(row[i], row[i].ToString(), false);
+			if (data)
+			{
+				MySharedData = MakeShared<T>(*data);
+				DataMap.Emplace(data->ItemID, MySharedData);
+			}
+			else
+				MySharedData.Reset();
+		}
+		return DataMap;
+	}
 };
+

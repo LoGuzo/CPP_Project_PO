@@ -6,9 +6,11 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/SkeletalMesh.h"
 #include "../../Character/Player/PlayerCharacter.h"
+#include "../../Component/ItemComponent/ItemComponent.h"
 
 ADropItemActor::ADropItemActor()
 {
+	ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
 	SetBoxComponent();
 }
 
