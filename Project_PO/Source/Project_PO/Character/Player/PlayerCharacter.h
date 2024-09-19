@@ -68,6 +68,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* SprintAction;
 
+	/** Attack Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* AttackAction;
+
+	/** Skill Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* UseSkillAction;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CameraTimeline;
@@ -132,6 +140,11 @@ protected:
 	void CanceledSprint(const FInputActionValue& Value);
 	void CompletedSprint(const FInputActionValue& Value);
 
+	/** Called for Attack input */
+	void Attack(const FInputActionValue& Value);
+
+	/** Called for Attack input */
+	void UseSkill(const FInputActionValue& Value);
 private:
 	void BindInputAction();
 

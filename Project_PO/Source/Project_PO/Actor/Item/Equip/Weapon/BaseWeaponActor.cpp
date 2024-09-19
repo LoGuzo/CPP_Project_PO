@@ -2,6 +2,7 @@
 
 
 #include "BaseWeaponActor.h"
+#include "../../../../Character/Player/PlayerCharacter.h"
 
 ABaseWeaponActor::ABaseWeaponActor()
 	: WeaponType(E_WeaponType::E_None)
@@ -9,6 +10,48 @@ ABaseWeaponActor::ABaseWeaponActor()
 	EquipType = E_EquipType::E_Weapon;
 
 	GetSkeletalMesh()->SetCollisionProfileName(TEXT("NoCollision"));
-
 	RootComponent = GetSkeletalMesh();
+}
+
+FVector ABaseWeaponActor::LineTraceFromCamera()
+{
+    FHitResult HitResult;
+    FCollisionQueryParams CollisionParams;
+    CollisionParams.AddIgnoredActor(this);
+    
+    if (!GetOwner())
+        return FVector();
+    CollisionParams.AddIgnoredActor(GetOwner());
+
+    APlayerCharacter* OwnerCharacter = Cast<APlayerCharacter>(GetOwner());
+    if (!OwnerCharacter)
+        return FVector();
+
+    APlayerController* PlayerController = Cast<APlayerController>(GetOwner()->GetInstigatorController());
+    if (!PlayerController)
+        return FVector();
+
+    FVector CameraLocation;
+    FRotator CameraRotation;
+
+    PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
+    FVector Start = CameraLocation;
+    FVector End = Start + CameraRotation.Vector() * 2000.f;
+
+    bool bHit = GetWorld()->LineTraceSingleByChannel(
+        HitResult,
+        Start,
+        End,
+        ECC_GameTraceChannel3,
+        CollisionParams
+    );
+
+    FVector HitValue;
+    if (bHit)
+        HitValue = HitResult.ImpactPoint;
+    else
+        HitValue = InvalidLocation;
+
+    return HitValue;
 }

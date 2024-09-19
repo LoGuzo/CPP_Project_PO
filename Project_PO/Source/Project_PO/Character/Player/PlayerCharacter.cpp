@@ -24,9 +24,9 @@
 #include "../../Widget/Etc/CrosshairEtcWidget.h"
 
 APlayerCharacter::APlayerCharacter()
-	: InteractActor(nullptr)
-	, bIsAiming(false)
+	: bIsAiming(false)
 	, bIsArmed(false)
+	, InteractActor(nullptr)
 {
 	BindInputAction();
 
@@ -128,6 +128,12 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APlayerCharacter::TriggeredSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Canceled, this, &APlayerCharacter::CanceledSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &APlayerCharacter::CompletedSprint);
+
+		//Attack
+		EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &APlayerCharacter::Attack);
+
+		//Skill
+		EnhancedInputComponent->BindAction(UseSkillAction, ETriggerEvent::Triggered, this, &APlayerCharacter::UseSkill);
 	}
 
 }
@@ -264,6 +270,20 @@ void APlayerCharacter::CompletedSprint(const FInputActionValue& Value)
 	bIsSprint = false;
 }
 
+void APlayerCharacter::Attack(const FInputActionValue& Value)
+{
+	if (!bIsAiming)
+		return;
+
+	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
+	if (Weapon)
+		Weapon->Fire();
+}
+
+void APlayerCharacter::UseSkill(const FInputActionValue& Value)
+{
+}
+
 void APlayerCharacter::BindInputAction()
 {
 	// Input Asset Load
@@ -299,6 +319,14 @@ void APlayerCharacter::BindInputAction()
 	static ConstructorHelpers::FObjectFinder<UInputAction> SprintActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Sprint.IA_Sprint"));
 	if (SprintActionObject.Succeeded())
 		SprintAction = SprintActionObject.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> AttackActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Attack.IA_Attack"));
+	if (AttackActionObject.Succeeded())
+		AttackAction = AttackActionObject.Object;
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> SkillActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_UserSkill.IA_UserSkill"));
+	if (SkillActionObject.Succeeded())
+		UseSkillAction = SkillActionObject.Object;
 }
 
 void APlayerCharacter::SetupCurve()

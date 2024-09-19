@@ -7,9 +7,7 @@
 #include "../../../../MyEnumClass.h"
 #include "BaseWeaponActor.generated.h"
 
-/**
- * 
- */
+
 UCLASS(Abstract)
 class PROJECT_PO_API ABaseWeaponActor : public AEquipItemActor
 {
@@ -24,12 +22,15 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Widget)
 	TSubclassOf<class UCrosshairEtcWidget> CrosshairWidget;
 
+	const FVector InvalidLocation = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
+
 public:
 	UFUNCTION(BlueprintCallable)
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);
 
 	UFUNCTION(BlueprintCallable)
 	TSubclassOf<class UCrosshairEtcWidget> GetCrosshairWdiget() const { return CrosshairWidget; }
-
 	E_WeaponType GetWeaponType() { return WeaponType; }
+
+	FVector LineTraceFromCamera();
 };
