@@ -35,7 +35,7 @@ void ABaseShotgunWeaponActor::Fire()
 
     FVector Direction = (HitVector - Start).GetSafeNormal();
 
-    float SpreadAngle = 10.f;
+    float SpreadAngle = 5.f;
     int32 NumPellets = 9;
 
     for (int32 i = 0; i < NumPellets; i++)

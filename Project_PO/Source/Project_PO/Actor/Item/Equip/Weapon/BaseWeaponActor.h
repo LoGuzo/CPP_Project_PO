@@ -23,10 +23,8 @@ protected:
 	TSubclassOf<class UCrosshairEtcWidget> CrosshairWidget;
 
 public:
-	UFUNCTION(BlueprintCallable)
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);
 
-	UFUNCTION(BlueprintCallable)
 	TSubclassOf<class UCrosshairEtcWidget> GetCrosshairWdiget() const { return CrosshairWidget; }
 	E_WeaponType GetWeaponType() { return WeaponType; }
 
