@@ -143,14 +143,14 @@ void APlayerCharacter::Move(const FInputActionValue& Value)
 	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (MovementVector.Y == -1.f)
+	if (MovementVector.Y == 1.f)
 	{
-		bIsSprint = false;
-		bIsMoveBack = true;
+		bIsMoveFront = true;
 	}
 	else
 	{
-		bIsMoveBack = false;
+		bIsSprint = false;
+		bIsMoveFront = false;
 	}
 
 	if (Controller != nullptr)
@@ -240,7 +240,7 @@ void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
 
 void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement()->IsFalling() || bIsMoveBack)
+	if (GetCharacterMovement()->IsFalling() || !bIsMoveFront)
 	{
 		GetCharacterMovement()->MaxWalkSpeed = 500.f;
 		bIsSprint = false;
@@ -272,16 +272,16 @@ void APlayerCharacter::CompletedSprint(const FInputActionValue& Value)
 
 void APlayerCharacter::Attack(const FInputActionValue& Value)
 {
-	if (!bIsAiming)
+	if (!bIsAiming || bIsAttack)
 		return;
+
+	bIsAttack = true;
 
 	if (EquipComponent->GetCurrentWeapon())
 	{
 		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
 		if (AnimInstance)
-		{
 			AnimInstance->OnAttackPlayAM();
-		}
 	}
 }
 

@@ -36,11 +36,35 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
+void UBasePlayerAnimInstance::NativeInitializeAnimation()
+{
+	Super::NativeInitializeAnimation();
+	
+}
+
 void UBasePlayerAnimInstance::OnAttackPlayAM()
 {
 	if (!Montage_IsPlaying(AttackMontage))
 	{
-		Montage_Play(AttackMontage, 1.f);
+		Montage_Play(AttackMontage);
+		if (AttackMontage)
+		{
+			FOnMontageEnded OnMontageEndedDelegate;
+			OnMontageEndedDelegate.BindUObject(this, &UBasePlayerAnimInstance::OnAttackMontageEnded);
+			Montage_SetEndDelegate(OnMontageEndedDelegate, AttackMontage);
+		}
+	}
+}
+
+void UBasePlayerAnimInstance::OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted)
+{
+	if (Montage == AttackMontage)
+	{
+		APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
+		if (Player)
+		{
+			Player->SetIsAttack(false);
+		}
 	}
 }
 

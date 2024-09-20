@@ -19,7 +19,7 @@ public:
 
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
+	virtual void NativeInitializeAnimation() override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	bool bIsArmed;
@@ -67,5 +67,9 @@ public:
 	void OnAttackPlayAM();
 
 	UFUNCTION()
+	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
+
+	UFUNCTION()
 	void AnimNotify_AttackHit();
+
 };
