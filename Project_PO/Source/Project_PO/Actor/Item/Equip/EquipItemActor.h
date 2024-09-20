@@ -22,5 +22,5 @@ protected:
 public:
 	E_EquipType GetEquipType() { return EquipType; }
 
-	virtual void SetItem(int32 _ID);
+	virtual void SetItem(int32 _ID) override;
 };

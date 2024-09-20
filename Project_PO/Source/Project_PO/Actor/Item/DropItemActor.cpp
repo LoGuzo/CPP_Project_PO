@@ -19,10 +19,8 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 	APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
 	if (playerCharacter)
 	{
-
-		AfterDropItem();
+		ResetItem();
 	}
-
 }
 
 void ADropItemActor::BeginPlay()
@@ -30,15 +28,9 @@ void ADropItemActor::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ADropItemActor::SetState(bool NowState)
+void ADropItemActor::ResetItem()
 {
-	SetActorHiddenInGame(!NowState);
-	SetActorEnableCollision(NowState);
-}
-
-void ADropItemActor::AfterDropItem()
-{
-	Super::AfterDropItem();
+	Super::ResetItem();
 
 	BoxCollision = nullptr;
 }

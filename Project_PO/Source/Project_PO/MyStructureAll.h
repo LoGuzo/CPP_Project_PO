@@ -128,6 +128,9 @@ struct FEquipItemData : public FItemData
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
     float DefensePower;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    TSubclassOf<UAnimInstance> AnimInstance;
 };
 
 USTRUCT(BlueprintType)

@@ -20,8 +20,8 @@ public:
 
 	virtual void Init() override;
     virtual void Shutdown() override;
+
 private:
-    UPROPERTY()
 	TMap<E_ManagerType, UObject*> ManagerMap;
 
     TMap<E_ManagerType, TMap<int32, TSharedPtr<FTableRowBase>>> DatabaseMap;

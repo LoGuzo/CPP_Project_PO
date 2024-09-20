@@ -39,14 +39,13 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 void UBasePlayerAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
-	
 }
 
 void UBasePlayerAnimInstance::OnAttackPlayAM()
 {
 	if (!Montage_IsPlaying(AttackMontage))
 	{
-		Montage_Play(AttackMontage);
+		Montage_Play(AttackMontage, 1.f);
 		if (AttackMontage)
 		{
 			FOnMontageEnded OnMontageEndedDelegate;

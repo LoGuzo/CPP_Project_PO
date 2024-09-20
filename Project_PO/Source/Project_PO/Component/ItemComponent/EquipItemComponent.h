@@ -30,6 +30,9 @@ protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment", Meta = (AllowPrivateAccess = true))
     float DefensePower;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
+    TSubclassOf<UAnimInstance> WeaponAnimInstance;
+
 public:
     virtual void SetItem(int32 _ItemID) override;
 
@@ -37,4 +40,5 @@ public:
     E_WeaponType GetWeaponType() { return WeaponType; }
     float GetAttackPower() { return AttackPower; }
     float GetDefensePower() { return DefensePower; }
+    TSubclassOf<UAnimInstance> GetWeaponAnimInstance() { return WeaponAnimInstance; }
 };

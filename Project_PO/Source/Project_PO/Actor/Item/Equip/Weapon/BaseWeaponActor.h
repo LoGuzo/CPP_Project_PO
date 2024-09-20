@@ -22,11 +22,17 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = Widget)
 	TSubclassOf<class UCrosshairEtcWidget> CrosshairWidget;
 
+	UPROPERTY(VisibleAnywhere)
+	class UBaseGunAnimInstance* AnimInstance;
+
 public:
 	virtual void Fire() PURE_VIRTUAL(ABaseWeaponActor::Fire, ;);
 
 	TSubclassOf<class UCrosshairEtcWidget> GetCrosshairWdiget() const { return CrosshairWidget; }
 	E_WeaponType GetWeaponType() { return WeaponType; }
+	class UBaseGunAnimInstance* GetAnimInstance() { return AnimInstance; }
 
 	FVector LineTraceFromCamera();
+
+	virtual void SetItem(int32 _ID) override;
 };

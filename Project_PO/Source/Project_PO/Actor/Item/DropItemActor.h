@@ -28,9 +28,7 @@ private:
 public:
 	virtual void Interact(class AActor* PlayerCharacter) override;
 
-	void SetState(bool NowState);
-
-	virtual void AfterDropItem() override;
+	virtual void ResetItem() override;
 
 protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh) override;

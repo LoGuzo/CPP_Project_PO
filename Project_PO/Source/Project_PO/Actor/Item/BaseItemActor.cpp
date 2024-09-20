@@ -31,6 +31,12 @@ void ABaseItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mes
 	}
 }
 
+void ABaseItemActor::SetState(bool NowState)
+{
+	SetActorHiddenInGame(!NowState);
+	SetActorEnableCollision(NowState);
+}
+
 void ABaseItemActor::SetItem(int32 _ID)
 {
 	if (ItemComponent)
@@ -40,7 +46,7 @@ void ABaseItemActor::SetItem(int32 _ID)
 	}
 }
 
-void ABaseItemActor::AfterDropItem()
+void ABaseItemActor::ResetItem()
 {
 	ItemComponent = nullptr;
 	StaticMesh = nullptr;

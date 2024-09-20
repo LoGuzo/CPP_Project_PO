@@ -2,7 +2,9 @@
 
 
 #include "BaseWeaponActor.h"
+#include "../../../../AnimInstance/BaseGunAnimInstance.h"
 #include "../../../../Character/Player/PlayerCharacter.h"
+#include "../../../../Component/ItemComponent/EquipItemComponent.h"
 
 ABaseWeaponActor::ABaseWeaponActor()
 	: WeaponType(E_WeaponType::E_None)
@@ -51,4 +53,19 @@ FVector ABaseWeaponActor::LineTraceFromCamera()
         HitValue = End;
 
     return HitValue;
+}
+
+void ABaseWeaponActor::SetItem(int32 _ID)
+{
+    AEquipItemActor::SetItem(_ID);
+
+    if (ItemComponent)
+    {
+        UEquipItemComponent* EquipItemComponent = GetItemComponent<UEquipItemComponent>();
+        if (EquipItemComponent)
+        {
+            GetSkeletalMesh()->SetAnimInstanceClass(EquipItemComponent->GetWeaponAnimInstance());
+            AnimInstance = Cast<UBaseGunAnimInstance>(GetSkeletalMesh()->GetAnimInstance());
+        }
+    }
 }

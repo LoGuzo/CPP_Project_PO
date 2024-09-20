@@ -28,6 +28,7 @@ void UEquipItemComponent::SetItem(int32 _ItemID)
 			WeaponType = ItemData.Pin()->WeaponType;
 			AttackPower = ItemData.Pin()->AttackPower;
 			DefensePower = ItemData.Pin()->DefensePower;
+			WeaponAnimInstance = ItemData.Pin()->AnimInstance;
 		}
 	}
 }

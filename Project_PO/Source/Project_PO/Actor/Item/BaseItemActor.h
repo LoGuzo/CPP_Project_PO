@@ -31,6 +31,8 @@ protected:
 protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
 
+	void SetState(bool NowState);
+
 public:
 	template<typename T>
 	T* GetItemComponent()
@@ -42,5 +44,5 @@ public:
 	class USkeletalMeshComponent* GetSkeletalMesh() { return SkeletalMesh; }
 
 	virtual void SetItem(int32 _ID);
-	virtual void AfterDropItem();
+	virtual void ResetItem();
 };
