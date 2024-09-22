@@ -19,6 +19,16 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 	APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
 	if (playerCharacter)
 	{
+		if (!ItemComponent)
+			return;
+
+		E_ItemType ItemType = ItemComponent->GetItemType();
+		if (ItemType == E_ItemType::E_Equip)
+			playerCharacter->SetWeapon(ItemComponent->GetItemID());
+		else
+		{
+
+		}
 		ResetItem();
 	}
 }
@@ -49,11 +59,23 @@ void ADropItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mes
 	if (staticMesh)
 	{
 		GetStaticMesh()->SetStaticMesh(staticMesh);
-		GetStaticMesh()->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		GetStaticMesh()->SetRelativeLocation(FVector(0.f, 0.f, -20.f));
+		GetStaticMesh()->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-		UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(GetStaticMesh()->GetMaterial(0), this);
-		MaterialInstance->SetScalarParameterValue(TEXT("IsDropped"), 1.0f);
-		GetStaticMesh()->SetMaterial(0, MaterialInstance);
+		int32 NumMaterials = GetStaticMesh()->GetNumMaterials();
+		for (int32 i = 0; i < NumMaterials; i++)
+		{
+			UMaterialInterface* BaseMaterial = GetStaticMesh()->GetMaterial(i);
+			if (BaseMaterial)
+			{
+				UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+				if (MaterialInstance)
+				{
+					MaterialInstance->SetScalarParameterValue(TEXT("IsDropped"), 1.0f);
+					GetStaticMesh()->SetMaterial(i, MaterialInstance);
+				}
+			}
+		}
 
 		return;
 	}
@@ -62,12 +84,23 @@ void ADropItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mes
 	if (skeletalMesh)
 	{
 		GetSkeletalMesh()->SetSkeletalMesh(skeletalMesh);
-		GetSkeletalMesh()->SetRelativeLocation(FVector(0.f, 0.f, -40.f));
+		GetSkeletalMesh()->SetRelativeLocation(FVector(0.f, 0.f, -20.f));
+		GetSkeletalMesh()->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 
-		UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(GetSkeletalMesh()->GetMaterial(0), this);
-		MaterialInstance->SetScalarParameterValue(TEXT("IsDropped"), 1.0f);
-		GetSkeletalMesh()->SetMaterial(0, MaterialInstance);
-
+		int32 NumMaterials = GetSkeletalMesh()->GetNumMaterials();
+		for (int32 i = 0; i < NumMaterials; i++)
+		{
+			UMaterialInterface* BaseMaterial = GetSkeletalMesh()->GetMaterial(i);
+			if (BaseMaterial)
+			{
+				UMaterialInstanceDynamic* MaterialInstance = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+				if (MaterialInstance)
+				{
+					MaterialInstance->SetScalarParameterValue(TEXT("IsDropped"), 1.0f);
+					GetSkeletalMesh()->SetMaterial(i, MaterialInstance);
+				}
+			}
+		}
 		return;
 	}
 }

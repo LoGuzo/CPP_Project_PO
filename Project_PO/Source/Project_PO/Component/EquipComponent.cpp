@@ -34,7 +34,10 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 	FName SocketName;
 
 	if (CurrentWeapon)
+	{
 		CurrentWeapon->Destroy();
+		CurrentWeapon = nullptr;
+	}
 
 	switch (WeaponType)
 	{

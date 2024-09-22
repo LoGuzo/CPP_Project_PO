@@ -47,7 +47,6 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-	ItemID = 1000;
 	SetupCurve();
 }
 
@@ -277,12 +276,7 @@ void APlayerCharacter::Attack(const FInputActionValue& Value)
 
 	bIsAttack = true;
 
-	if (EquipComponent->GetCurrentWeapon())
-	{
-		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
-		if (AnimInstance)
-			AnimInstance->OnAttackPlayAM();
-	}
+	AttackMontage();
 }
 
 void APlayerCharacter::UseSkill(const FInputActionValue& Value)
@@ -316,19 +310,22 @@ void APlayerCharacter::BindInputAction()
 	if (InteractActionObject.Succeeded())
 		InteractAction = InteractActionObject.Object;
 
-	// Interact Action Asset Load
+	// Aiming Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> AimingActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Aiming.IA_Aiming"));
 	if (AimingActionObject.Succeeded())
 		AimingAction = AimingActionObject.Object;
 
+	// Sprint Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> SprintActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Sprint.IA_Sprint"));
 	if (SprintActionObject.Succeeded())
 		SprintAction = SprintActionObject.Object;
 
+	// Attack Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> AttackActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Attack.IA_Attack"));
 	if (AttackActionObject.Succeeded())
 		AttackAction = AttackActionObject.Object;
 
+	// UseSkill Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> SkillActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_UserSkill.IA_UserSkill"));
 	if (SkillActionObject.Succeeded())
 		UseSkillAction = SkillActionObject.Object;
@@ -365,6 +362,29 @@ void APlayerCharacter::DisplayCrosshair()
 	}
 }
 
+void APlayerCharacter::AttackMontage()
+{
+	ABaseWeaponActor* CurrentWeapon = EquipComponent->GetCurrentWeapon();
+  	if (CurrentWeapon)
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
+			AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+			if (AnimInstance)
+			{
+				int32 MontageID = *AttackMontageMap.Find(WeaponType);
+				TWeakPtr<FMontageData> Data = GameInstance->GetDatabaseMap<FMontageData>(E_ManagerType::E_MontageDatabaseManager, MontageID);
+				if (Data.IsValid())
+				{
+					FMontageData montageData = *Data.Pin();
+					AnimInstance->PlayMontage(montageData.Montage, 1.f);
+				}
+			}
+		}
+	}
+}
+
 FTransform APlayerCharacter::GetLeftHandSocketTransform()
 {
 	FTransform OutPutTransform;
@@ -386,7 +406,7 @@ FTransform APlayerCharacter::GetLeftHandSocketTransform()
 	return OutPutTransform;
 }
 
-void APlayerCharacter::SetWeapon()
+void APlayerCharacter::SetWeapon(int32 ItemID)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
@@ -396,10 +416,9 @@ void APlayerCharacter::SetWeapon()
 		{
 			FEquipItemData equipData = *ItemData.Pin();
 			EquipComponent->SetEquipment(E_EquipType::E_Weapon, equipData);
+			SetIsArmed(true);
 		}
 	}
-
-	ItemID = 1000 + (ItemID - 1000 + 1) % 3;
 }
 
 void APlayerCharacter::AttackCheck()

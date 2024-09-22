@@ -25,7 +25,6 @@ protected:
 private:
 	TMap<E_EquipType, FEquipItemData> EquipMap;
 
-	UPROPERTY()
 	class ABaseWeaponActor* CurrentWeapon;
 
 public:

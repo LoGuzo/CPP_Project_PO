@@ -13,6 +13,10 @@ AGirlCharacter::AGirlCharacter()
 
 	GetCameraBoom()->SocketOffset = FVector(0.f, 40.f, 45.f);
 	GetCameraBoom()->TargetArmLength = 200.0f;
+
+	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5007);
+	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5008);
+	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5009);
 }
 
 void AGirlCharacter::BeginPlay()

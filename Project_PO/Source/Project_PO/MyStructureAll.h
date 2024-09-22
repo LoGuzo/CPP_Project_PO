@@ -147,3 +147,18 @@ struct FCunsumItemData : public FItemData
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
     float Cooltime;
 };
+
+USTRUCT(BlueprintType)
+struct FMontageData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+    int32 ItemID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+    FName MontageName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
+    TSoftObjectPtr<UAnimMontage> Montage;
+};

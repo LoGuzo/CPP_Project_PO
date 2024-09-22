@@ -58,6 +58,9 @@ void UInteractionComponent::CheckInteraction()
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
 	if (PlayerCharacter)
 	{
+		if (PlayerCharacter->GetIsAiming())
+			return;
+
 		AActor* PotentialInteractActor = GetInteractableInRange();
 		if (PotentialInteractActor)
 		{

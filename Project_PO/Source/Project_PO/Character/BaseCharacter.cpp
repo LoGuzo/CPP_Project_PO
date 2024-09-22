@@ -42,4 +42,10 @@ void ABaseCharacter::BeginPlay()
 
 }
 
+void ABaseCharacter::SetState(bool NowState)
+{
+	SetActorHiddenInGame(!NowState);
+	SetActorEnableCollision(NowState);
+}
+
 

@@ -61,9 +61,7 @@ void UBasePlayerAnimInstance::OnAttackMontageEnded(UAnimMontage* Montage, bool b
 	{
 		APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
 		if (Player)
-		{
 			Player->SetIsAttack(false);
-		}
 	}
 }
 
@@ -71,7 +69,5 @@ void UBasePlayerAnimInstance::AnimNotify_AttackHit()
 {
 	APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
 	if (Player)
-	{
 		Player->AttackCheck();
-	}
 }

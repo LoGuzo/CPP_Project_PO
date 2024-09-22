@@ -43,6 +43,7 @@ public:
 	class UStaticMeshComponent* GetStaticMesh() { return StaticMesh; }
 	class USkeletalMeshComponent* GetSkeletalMesh() { return SkeletalMesh; }
 
+	UFUNCTION(BlueprintCallable)
 	virtual void SetItem(int32 _ID);
 	virtual void ResetItem();
 };

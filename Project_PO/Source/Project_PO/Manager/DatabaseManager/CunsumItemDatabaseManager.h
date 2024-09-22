@@ -17,4 +17,7 @@ class PROJECT_PO_API UCunsumItemDatabaseManager : public UItemDatabaseManager
 public:
 	UCunsumItemDatabaseManager();
 	virtual ~UCunsumItemDatabaseManager();
+
+protected:
+	virtual void GetMyData() override;
 };

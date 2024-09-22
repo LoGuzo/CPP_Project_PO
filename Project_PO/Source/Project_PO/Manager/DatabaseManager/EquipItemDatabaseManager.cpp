@@ -5,11 +5,14 @@
 
 UEquipItemDatabaseManager::UEquipItemDatabaseManager()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable>DATA(TEXT("/Game/DataTable/DT_EquipItemData.DT_EquipItemData"));
-
-	MyData = DATA.Object;
 }
 
 UEquipItemDatabaseManager::~UEquipItemDatabaseManager()
 {
 }
+
+void UEquipItemDatabaseManager::GetMyData()
+{
+	MyData = LoadObject<UDataTable>(nullptr, TEXT("/Game/DataTable/DT_EquipItemData.DT_EquipItemData"));
+}
+

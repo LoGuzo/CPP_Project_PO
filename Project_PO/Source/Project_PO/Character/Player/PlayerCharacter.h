@@ -108,9 +108,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsMoveFront;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
-	bool bIsAttack;
-
 	UPROPERTY()
 	class UBasePlayerAnimInstance* AnimInstance;
 
@@ -122,6 +119,9 @@ protected:
 
 	UPROPERTY()
 	class AActor* InteractActor;
+
+	UPROPERTY()
+	TMap<E_WeaponType, int32> AttackMontageMap;
 
 protected:
 	/** Called for movement input */
@@ -148,6 +148,7 @@ protected:
 
 	/** Called for Attack input */
 	void UseSkill(const FInputActionValue& Value);
+
 private:
 	void BindInputAction();
 
@@ -157,6 +158,8 @@ private:
 	void Zoom(float Value);
 
 	void DisplayCrosshair();
+
+	void AttackMontage();
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -178,20 +181,13 @@ public:
 	bool GetIsSprint() { return bIsSprint; }
 	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
 
-	bool GetIsAttack() { return bIsAttack; }
-	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
-
 	E_WeaponType GetWeaponType() { return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
 
 	FTransform GetLeftHandSocketTransform();
 
 public:
-
-	// 확인용 더미 함수, 변수
-	UFUNCTION(BlueprintCallable)
-	void SetWeapon();
-	int32 ItemID;
+	void SetWeapon(int32 ItemID);
 
 	void AttackCheck();
 };

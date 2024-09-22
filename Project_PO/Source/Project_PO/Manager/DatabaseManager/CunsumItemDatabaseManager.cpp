@@ -5,11 +5,13 @@
 
 UCunsumItemDatabaseManager::UCunsumItemDatabaseManager()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable>DATA(TEXT("/Game/DataTable/DT_CunsumItemData.DT_CunsumItemData"));
-
-	MyData = DATA.Object;
 }
 
 UCunsumItemDatabaseManager::~UCunsumItemDatabaseManager()
 {
+}
+
+void UCunsumItemDatabaseManager::GetMyData()
+{
+	MyData = LoadObject<UDataTable>(nullptr, TEXT("/Game/DataTable/DT_CunsumItemData.DT_CunsumItemData"));
 }

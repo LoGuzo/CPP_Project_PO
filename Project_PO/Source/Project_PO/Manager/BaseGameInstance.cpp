@@ -3,9 +3,11 @@
 
 #include "BaseGameInstance.h"
 #include "WidgetManager.h"
+#include "SingletonManager.h"
+#include "DatabaseManager/CunsumItemDatabaseManager.h"
 #include "DatabaseManager/ItemDatabaseManager.h"
 #include "DatabaseManager/EquipItemDatabaseManager.h"
-#include "DatabaseManager/CunsumItemDatabaseManager.h"
+#include "DatabaseManager/MontageDatabaseManager.h"
 
 UBaseGameInstance::UBaseGameInstance()
 {
@@ -14,9 +16,10 @@ UBaseGameInstance::UBaseGameInstance()
 void UBaseGameInstance::Init()
 {
 	ManagerMap.Emplace(E_ManagerType::E_WidgetManager, NewObject<UWidgetManager>());
-    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, UItemDatabaseManager::GetDataMap<FItemData>());
-    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, UEquipItemDatabaseManager::GetDataMap<FEquipItemData>());
-    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, UCunsumItemDatabaseManager::GetDataMap<FCunsumItemData>());
+    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UItemDatabaseManager>()->GetDataMap<FItemData>());
+    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UEquipItemDatabaseManager>()->GetDataMap<FEquipItemData>());
+    AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UCunsumItemDatabaseManager>()->GetDataMap<FCunsumItemData>());
+    AddDataToDatabase(E_ManagerType::E_MontageDatabaseManager, SingletonManager::GetInstance<UMontageDatabaseManager>()->GetDataMap<FMontageData>());
 }
 
 void UBaseGameInstance::Shutdown()

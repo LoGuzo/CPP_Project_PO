@@ -5,11 +5,14 @@
 
 UItemDatabaseManager::UItemDatabaseManager()
 {
-	static ConstructorHelpers::FObjectFinder<UDataTable>DATA(TEXT("/Game/DataTable/DT_ItemData.DT_ItemData"));
 
-	MyData = DATA.Object;
 }
 
 UItemDatabaseManager::~UItemDatabaseManager()
 {
+}
+
+void UItemDatabaseManager::GetMyData()
+{
+	MyData = LoadObject<UDataTable>(nullptr, TEXT("/Game/DataTable/DT_ItemData.DT_ItemData"));
 }

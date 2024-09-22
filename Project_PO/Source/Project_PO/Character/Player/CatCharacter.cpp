@@ -8,6 +8,10 @@
 ACatCharacter::ACatCharacter()
 {
 	SetCharacterMesh();
+
+	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5004);
+	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5005);
+	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5006);
 }
 
 void ACatCharacter::BeginPlay()

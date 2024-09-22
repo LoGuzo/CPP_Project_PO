@@ -15,18 +15,26 @@ class PROJECT_PO_API UDatabaseManager : public UObject
 {
 	GENERATED_BODY()
 	
-protected:
-	static UDataTable* MyData;
-
-	static TSharedPtr<FTableRowBase> MySharedData;
-
 public:
 	UDatabaseManager() {};
 	virtual ~UDatabaseManager();
 
+protected:
+	UPROPERTY()
+	UDataTable* MyData;
+
+	TSharedPtr<FTableRowBase> MySharedData;
+
+
+protected:
+	virtual void GetMyData() PURE_VIRTUAL(UDatabaseManager::GetMyData, ;);
+
+public:
 	template<typename T>
-	static TMap<int32, TSharedPtr<FTableRowBase>>GetDataMap()
+	TMap<int32, TSharedPtr<FTableRowBase>>GetDataMap()
 	{
+		GetMyData();
+
 		if(!MyData)
 			return TMap<int32, TSharedPtr<FTableRowBase>>();
 

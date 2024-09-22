@@ -17,4 +17,7 @@ class PROJECT_PO_API UEquipItemDatabaseManager : public UItemDatabaseManager
 public:
 	UEquipItemDatabaseManager();
 	virtual ~UEquipItemDatabaseManager();
+
+protected:
+	virtual void GetMyData() override;
 };

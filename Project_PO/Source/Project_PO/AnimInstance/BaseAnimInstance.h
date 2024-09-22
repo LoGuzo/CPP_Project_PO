@@ -45,4 +45,9 @@ public:
 
 	UFUNCTION()
 	class ACharacter* GetOwnCharacter() { return OwnCharacter; }
+
+	void PlayMontage(TSoftObjectPtr<UAnimMontage> Montage, float AttackSpeed);
+
+	UFUNCTION()
+	void AnimNotify_AttackEnd();
 };

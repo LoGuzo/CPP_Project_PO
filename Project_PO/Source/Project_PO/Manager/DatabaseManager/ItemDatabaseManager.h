@@ -17,4 +17,7 @@ class PROJECT_PO_API UItemDatabaseManager : public UDatabaseManager
 public:
 	UItemDatabaseManager();
 	virtual ~UItemDatabaseManager();
+
+protected:
+	virtual void GetMyData() override;
 };

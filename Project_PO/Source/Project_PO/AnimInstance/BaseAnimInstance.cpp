@@ -45,3 +45,17 @@ void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		}
 	}
 }
+
+void UBaseAnimInstance::PlayMontage(TSoftObjectPtr<UAnimMontage> Montage, float AttackSpeed)
+{
+	UAnimMontage* AnimMontage = Montage.LoadSynchronous();
+	if (!Montage_IsPlaying(AnimMontage))
+		Montage_Play(AnimMontage, 1.f * AttackSpeed);
+}
+
+void UBaseAnimInstance::AnimNotify_AttackEnd()
+{
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetOwnCharacter());
+	if (BaseCharacter)
+		BaseCharacter->SetIsAttack(false);
+}

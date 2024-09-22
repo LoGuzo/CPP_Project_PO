@@ -18,4 +18,13 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay() override;
 
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsAttack;
+
+public:
+	bool GetIsAttack() { return bIsAttack; }
+	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
+
+	void SetState(bool NowState);
 };
