@@ -2,8 +2,9 @@
 
 
 #include "BaseGameInstance.h"
-#include "WidgetManager.h"
 #include "SingletonManager.h"
+#include "WidgetManager.h"
+#include "ObjectPoolManager.h"
 #include "DatabaseManager/CunsumItemDatabaseManager.h"
 #include "DatabaseManager/ItemDatabaseManager.h"
 #include "DatabaseManager/EquipItemDatabaseManager.h"
@@ -16,6 +17,7 @@ UBaseGameInstance::UBaseGameInstance()
 void UBaseGameInstance::Init()
 {
 	ManagerMap.Emplace(E_ManagerType::E_WidgetManager, NewObject<UWidgetManager>());
+	ManagerMap.Emplace(E_ManagerType::E_ObjectPoolManager, NewObject<UObjectPoolManager>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UItemDatabaseManager>()->GetDataMap<FItemData>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UEquipItemDatabaseManager>()->GetDataMap<FEquipItemData>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UCunsumItemDatabaseManager>()->GetDataMap<FCunsumItemData>());

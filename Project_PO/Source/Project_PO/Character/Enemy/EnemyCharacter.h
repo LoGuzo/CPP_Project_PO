@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../BaseCharacter.h"
+#include "../../MyEnumClass.h"
 #include "EnemyCharacter.generated.h"
 
 /**
@@ -25,6 +26,8 @@ protected:
 protected:
 	int32 MonsterID;
 
+	E_MonsterType MonsterType;
+
 	UPROPERTY()
 	class UBaseEnemyAnimInstance* AnimInstance;
 
@@ -41,4 +44,7 @@ protected:
 	virtual void SetUpBodyCollision();
 	virtual void SetUpArmCollision() {};
 	virtual void SetUpLegCollision() {};
+
+public:
+	E_MonsterType GetMonsterType() { return MonsterType; }
 };

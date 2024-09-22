@@ -4,7 +4,7 @@
 #include "UObject/ConstructorHelpers.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Manager/BaseGameInstance.h"
-#include "../Manager/DatabaseManager/ItemDatabaseManager.h"
+#include "../Manager/ObjectPoolManager.h"
 
 AMyBaseGameMode::AMyBaseGameMode()
 {
@@ -25,4 +25,15 @@ void AMyBaseGameMode::InitGame(const FString& MapName, const FString& Options, F
 void AMyBaseGameMode::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		auto ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
+		if (ObjectPoolManager)
+		{
+			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, FVector(-670.f, -15369.f, -512.f));
+			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, FVector(-750.f, -16129.f, -730.f));
+		}
+	}
 }

@@ -29,6 +29,7 @@ UENUM(BlueprintType)
 enum class E_ManagerType : uint8
 {
 	E_WidgetManager UMETA(DisplayName = "WidgetManager"),
+	E_ObjectPoolManager UMETA(DisplayName = "ObjectMonager"),
 	E_ItemDatabaseManager UMETA(DisplayName = "ItemDatabaseManager"),
 	E_MontageDatabaseManager UMETA(DisplayName = "MontageDatabaseManager"),
 };

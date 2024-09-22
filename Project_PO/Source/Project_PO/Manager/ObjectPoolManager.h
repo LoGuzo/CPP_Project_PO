@@ -17,13 +17,18 @@ class PROJECT_PO_API UObjectPoolManager : public UObject
 	
 private:
 	TArray<class AEnemyCharacter*> AvailableMonsters;
+	TArray<class AEnemyCharacter*> InUseMonsters;
 
-	// AActor -> ABaseItem
-	TArray<AActor*> AvailableItems;
+	TArray<class ABaseItemActor*> AvailableItems;
+	TArray<class ABaseItemActor*> InUseItems;
 
 public:
-	class AEnemyCharacter* GetMonster(E_MonsterType Type);
-	void ReleaseMonster(AEnemyCharacter* Monster);
+	class AEnemyCharacter* GetMonster(UWorld* World, E_MonsterType Type
+		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator);
+	void ReleaseMonster(class AEnemyCharacter* Monster);
 
-	// ItemPooling도 만들어야함
+	class ABaseItemActor* GetItem(UWorld* World, E_ItemType Type
+		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator
+		, E_EquipType EquipType = E_EquipType::E_None, E_WeaponType WeaponType = E_WeaponType::E_None);
+	void ReleaseItem(class ABaseItemActor* Item);
 };

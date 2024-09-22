@@ -31,8 +31,6 @@ protected:
 protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
 
-	void SetState(bool NowState);
-
 public:
 	template<typename T>
 	T* GetItemComponent()
@@ -46,4 +44,5 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void SetItem(int32 _ID);
 	virtual void ResetItem();
+	void SetState(bool NowState);
 };
