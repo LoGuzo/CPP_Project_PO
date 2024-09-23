@@ -50,9 +50,6 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 			}
 
 			FSpawnItemType Type = FSpawnItemType(E_ItemType::E_Equip, E_EquipType::E_Weapon, WeaponType);
-			FActorSpawnParameters SpawnParmeters;
-			SpawnParmeters.Name = *FString::FromInt(DataID);
-			SpawnParmeters.Owner = OwnPlayer;
 
 			FName SocketName;
 
@@ -71,7 +68,7 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 				break;
 			}
 
-			CurrentWeapon = Cast<ABaseWeaponActor>(ObjectPoolManager->GetItem(GetWorld(), Type, FTransform(), SpawnParmeters));
+			CurrentWeapon = Cast<ABaseWeaponActor>(ObjectPoolManager->GetItem(GetWorld(), Type, FTransform()));
 			if (CurrentWeapon)
 			{
 				CurrentWeapon->SetItem(DataID);

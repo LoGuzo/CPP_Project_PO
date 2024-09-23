@@ -17,6 +17,9 @@ class PROJECT_PO_API ABaseItemActor : public AActor
 public:
 	ABaseItemActor();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* StaticMesh;

@@ -14,6 +14,11 @@ ABaseItemActor::ABaseItemActor()
 	SkeletalMesh->SetCollisionProfileName(TEXT("NoCollision"));
 }
 
+void ABaseItemActor::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
 void ABaseItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh)
 {
 	UStaticMesh* staticMesh = Cast<UStaticMesh>(Mesh.LoadSynchronous());

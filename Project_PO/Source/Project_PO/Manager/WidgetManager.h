@@ -15,6 +15,7 @@ class PROJECT_PO_API UWidgetManager : public UObject
 	GENERATED_BODY()
 
 private:
+    UPROPERTY()
 	TMap<FString, class UBaseUserWidget*> Widgets;
 
 public:
