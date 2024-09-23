@@ -8,7 +8,7 @@
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Component/ItemComponent/EquipItemComponent.h"
 
-AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType Type, FVector Location, FRotator Rotation)
+AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
@@ -24,7 +24,7 @@ AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType Typ
 			return Monster;
 		}
 	}
-	AEnemyCharacter* NewMonster = SingletonManager::GetInstance<UFactoryManager>()->MonsterFactory(World, Type, Location, Rotation);
+	AEnemyCharacter* NewMonster = SingletonManager::GetInstance<UFactoryManager>()->MonsterFactory(World, Type, Transform, SpawnParameters);
 	InUseMonsters.Add(NewMonster);
 
 	return NewMonster;
@@ -40,7 +40,7 @@ void UObjectPoolManager::ReleaseMonster(AEnemyCharacter* Monster)
 	}
 }
 
-ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, E_ItemType Type, FVector Location, FRotator Rotation , E_EquipType EquipType, E_WeaponType WeaponType)
+ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
@@ -51,13 +51,13 @@ ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, E_ItemType Type, FVec
 		{
 			ABaseItemActor* Item = AvailableItems[i];
 
-			if (Type == E_ItemType::E_Equip)
+			if (Type.ItemType == E_ItemType::E_Equip)
 			{
 				UEquipItemComponent* ItemComponent = Item->GetItemComponent<UEquipItemComponent>();
-				if (ItemComponent->GetEquipType() != EquipType)
+				if (ItemComponent->GetEquipType() != Type.EquipType)
 					continue;
 
-				if (EquipType == E_EquipType::E_Weapon && ItemComponent->GetWeaponType() != WeaponType)
+				if (Type.EquipType == E_EquipType::E_Weapon && ItemComponent->GetWeaponType() != Type.WeaponType)
 					continue;
 			}
 
@@ -68,9 +68,9 @@ ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, E_ItemType Type, FVec
 		}
 	}
 
-	ABaseItemActor* Item = SingletonManager::GetInstance<UFactoryManager>()->ItemFactory(World, Type, Location, Rotation, EquipType, WeaponType);
-	InUseItems.Add(Item);
-	return Item;
+	ABaseItemActor* NewItem = SingletonManager::GetInstance<UFactoryManager>()->ItemFactory(World, Type, Transform, SpawnParameters);
+	InUseItems.Add(NewItem);
+	return NewItem;
 }
 
 void UObjectPoolManager::ReleaseItem(ABaseItemActor* Item)

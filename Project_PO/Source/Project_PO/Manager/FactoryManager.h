@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "../MyEnumClass.h"
+#include "../MyStructureAll.h"
 #include "FactoryManager.generated.h"
 
 /**
@@ -16,16 +16,24 @@ class PROJECT_PO_API UFactoryManager : public UObject
 	GENERATED_BODY()
 	
 private:
-	class ABaseItemActor* EquipFactory(UWorld* World, E_EquipType EquipType
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator
-		, E_WeaponType WeaponType = E_WeaponType::E_None);
-	class ABaseItemActor* WeaponFactory(UWorld* World, E_WeaponType WeaponType
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator);
+	class ABaseItemActor* EquipFactory(UWorld* World, FSpawnItemType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
+
+	class ABaseItemActor* WeaponFactory(UWorld* World, FSpawnItemType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
 
 public:
-	class AEnemyCharacter* MonsterFactory(UWorld* World, E_MonsterType Type
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator);
-	class ABaseItemActor* ItemFactory(UWorld* World, E_ItemType Type
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator
-		, E_EquipType EquipType = E_EquipType::E_None, E_WeaponType WeaponType = E_WeaponType::E_None);
+	class AEnemyCharacter* MonsterFactory(UWorld* World, E_MonsterType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
+
+	class ABaseItemActor* ItemFactory(UWorld* World, FSpawnItemType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
 };

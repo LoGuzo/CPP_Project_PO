@@ -32,8 +32,11 @@ void AMyBaseGameMode::BeginPlay()
 		auto ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
 		if (ObjectPoolManager)
 		{
-			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, FVector(-670.f, -15369.f, -512.f));
-			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, FVector(-750.f, -16129.f, -730.f));
+			FTransform Transform = FTransform();
+			Transform.SetLocation(FVector(-670.f, -15369.f, -512.f));
+			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
+			Transform.SetLocation(FVector(-750.f, -16129.f, -730.f));
+			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
 		}
 	}
 }

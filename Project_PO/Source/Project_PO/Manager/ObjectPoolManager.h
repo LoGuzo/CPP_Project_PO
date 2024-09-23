@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
-#include "../MyEnumClass.h"
+#include "../MyStructureAll.h"
 #include "ObjectPoolManager.generated.h"
 
 /**
@@ -23,12 +23,15 @@ private:
 	TArray<class ABaseItemActor*> InUseItems;
 
 public:
-	class AEnemyCharacter* GetMonster(UWorld* World, E_MonsterType Type
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator);
+	class AEnemyCharacter* GetMonster(UWorld* World, E_MonsterType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
 	void ReleaseMonster(class AEnemyCharacter* Monster);
 
-	class ABaseItemActor* GetItem(UWorld* World, E_ItemType Type
-		, FVector Location = FVector::ZeroVector, FRotator Rotation = FRotator::ZeroRotator
-		, E_EquipType EquipType = E_EquipType::E_None, E_WeaponType WeaponType = E_WeaponType::E_None);
+	class ABaseItemActor* GetItem(UWorld* World, FSpawnItemType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
 	void ReleaseItem(class ABaseItemActor* Item);
 };

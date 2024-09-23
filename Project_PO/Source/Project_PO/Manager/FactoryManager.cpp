@@ -13,17 +13,17 @@
 #include "../Character/Enemy/MummyNormalEnemyCharacter.h"
 
 
-ABaseItemActor* UFactoryManager::EquipFactory(UWorld* World, E_EquipType EquipType, FVector Location, FRotator Rotation, E_WeaponType WeaponType)
+ABaseItemActor* UFactoryManager::EquipFactory(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
 
 	ABaseItemActor* Item = nullptr;
 
-	switch (EquipType)
+	switch (Type.EquipType)
 	{
 	case E_EquipType::E_Weapon:
-		Item = WeaponFactory(World, WeaponType, Location, Rotation);
+		Item = WeaponFactory(World, Type, Transform, SpawnParameters);
 		break;
 	case E_EquipType::E_Hat:
 		break;
@@ -41,23 +41,23 @@ ABaseItemActor* UFactoryManager::EquipFactory(UWorld* World, E_EquipType EquipTy
 	return Item;
 }
 
-ABaseItemActor* UFactoryManager::WeaponFactory(UWorld* World, E_WeaponType WeaponType, FVector Location, FRotator Rotation)
+ABaseItemActor* UFactoryManager::WeaponFactory(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
 
 	ABaseItemActor* Item = nullptr;
 
-	switch (WeaponType)
+	switch (Type.WeaponType)
 	{
 	case E_WeaponType::E_Pistol:
-		Item = World->SpawnActor<ABasePistolWeaponActor>(ABasePistolWeaponActor::StaticClass(), Location, Rotation);
+		Item = World->SpawnActor<ABasePistolWeaponActor>(ABasePistolWeaponActor::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_WeaponType::E_Rifle:
-		Item = World->SpawnActor<ABaseRifleWeaponActor>(ABaseRifleWeaponActor::StaticClass(), Location, Rotation);
+		Item = World->SpawnActor<ABaseRifleWeaponActor>(ABaseRifleWeaponActor::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_WeaponType::E_Shotgun:
-		Item = World->SpawnActor<ABaseShotgunWeaponActor>(ABaseShotgunWeaponActor::StaticClass(), Location, Rotation);
+		Item = World->SpawnActor<ABaseShotgunWeaponActor>(ABaseShotgunWeaponActor::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_WeaponType::E_None:
 		break;
@@ -68,7 +68,7 @@ ABaseItemActor* UFactoryManager::WeaponFactory(UWorld* World, E_WeaponType Weapo
 	return Item;
 }
 
-AEnemyCharacter* UFactoryManager::MonsterFactory(UWorld* World, E_MonsterType Type, FVector Location, FRotator Rotation)
+AEnemyCharacter* UFactoryManager::MonsterFactory(UWorld* World, E_MonsterType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
@@ -78,26 +78,26 @@ AEnemyCharacter* UFactoryManager::MonsterFactory(UWorld* World, E_MonsterType Ty
 	switch (Type)
 	{
 	case E_MonsterType::E_Mummy:
-		Character = World->SpawnActor<AMummyNormalEnemyCharacter>(AMummyNormalEnemyCharacter::StaticClass(), Location, Rotation);
+		Character = World->SpawnActor<AMummyNormalEnemyCharacter>(AMummyNormalEnemyCharacter::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_MonsterType::E_Golem:
-		Character = World->SpawnActor<AGolemBossEnemyCharacter>(AGolemBossEnemyCharacter::StaticClass(), Location, Rotation);
+		Character = World->SpawnActor<AGolemBossEnemyCharacter>(AGolemBossEnemyCharacter::StaticClass(), Transform, SpawnParameters);
 		break;
 	}
 	return Character;
 }
 
-ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, E_ItemType Type, FVector Location, FRotator Rotation, E_EquipType EquipType, E_WeaponType WeaponType)
+ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
 		return nullptr;
 
 	ABaseItemActor* Item = nullptr;
 
-	switch (Type)
+	switch (Type.ItemType)
 	{
 	case E_ItemType::E_Equip:
-		EquipFactory(World, EquipType, Location, Rotation, WeaponType);
+		Item = EquipFactory(World, Type, Transform);
 		break;
 	case E_ItemType::E_Cunsumable:
 		//Item = GetWorld()->SpawnActor<>
@@ -106,7 +106,7 @@ ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, E_ItemType Type, FVe
 		//Item = GetWorld()->SpawnActor<>
 		break;
 	case E_ItemType::E_Drop:
-		Item = World->SpawnActor<ADropItemActor>(ADropItemActor::StaticClass(), Location, Rotation);
+		Item = World->SpawnActor<ADropItemActor>(ADropItemActor::StaticClass(),Transform, SpawnParameters);
 		break;
 	}
 	return Item;

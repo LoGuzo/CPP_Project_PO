@@ -162,3 +162,29 @@ struct FMontageData : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
     TSoftObjectPtr<UAnimMontage> Montage;
 };
+
+USTRUCT()
+struct FSpawnItemType
+{
+    GENERATED_BODY()
+
+    UPROPERTY(VisibleAnywhere, Category = "Type")
+    E_ItemType ItemType;
+
+    UPROPERTY(VisibleAnywhere, Category = "Type")
+    E_EquipType EquipType;
+
+    UPROPERTY(VisibleAnywhere, Category = "Type")
+    E_WeaponType WeaponType;
+
+    FSpawnItemType() {};
+
+    FSpawnItemType(E_ItemType _ItemType
+        , E_EquipType _EquipType = E_EquipType::E_None
+        , E_WeaponType _WeaponType = E_WeaponType::E_None)
+    {
+        ItemType = _ItemType;
+        EquipType = _EquipType;
+        WeaponType = _WeaponType;
+    }
+};
