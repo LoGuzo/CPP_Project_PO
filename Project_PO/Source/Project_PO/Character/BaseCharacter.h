@@ -22,9 +22,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsAttack;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Die, meta = (AllowPrivateAccess = "true"))
+	bool bIsDied;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ID, meta = (AllowPrivateAccess = "true"))
+	int32 ID;
+
 public:
 	bool GetIsAttack() { return bIsAttack; }
 	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
 
+	bool GetIsDied() { return bIsDied; }
+	void SetIsDied(bool _bIsDied) { bIsDied = _bIsDied; }
+
 	void SetState(bool NowState);
+
+	int32 GetID() { return ID; }
+	void SetID(int32 _ID) { ID = _ID; }
 };

@@ -4,20 +4,27 @@
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "../../Component/MonsterStatComponent.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
 {
-
+    StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
 }
-
+ 
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+    if (StatComponent)
+        StatComponent->SetStat(ID);
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
+    if (bIsDied)
+        return 0.f;
+
     if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
     {
         FHitResult HitResult;
@@ -45,9 +52,12 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
                 DamageAmount *= 0.5f;
             }
         }
+
+        if (StatComponent)
+            StatComponent->TakeDamage(DamageAmount);
     }
 
-    return  Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
+    return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
 void AEnemyCharacter::SetUpCharacter()

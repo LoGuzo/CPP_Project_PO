@@ -23,7 +23,7 @@ protected:
 
 protected:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
-    int32 ItemID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
     FText ItemName;
@@ -47,9 +47,9 @@ protected:
     TSoftObjectPtr<UStreamableRenderAsset> ItemMesh;
 
 public:
-	virtual void SetItem(int32 _ItemID);
+	virtual void SetItem(int32 _ID);
 
-    int32 GetItemID() { return ItemID; }
+    int32 GetID() { return ID; }
 	TSoftObjectPtr<UStreamableRenderAsset> GetMesh() { return ItemMesh; }
     int32 GetItemStackSize() { return ItemStackSize; }
     E_ItemType GetItemType() { return ItemType; }

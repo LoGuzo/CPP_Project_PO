@@ -10,6 +10,9 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 	SetActorRelativeScale3D(FVector(3.f, 3.f, 3.f));
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
+	
+	MonsterType = E_MonsterType::E_Golem;
+	ID = 102;
 
 	SetUpCharacter();
 }

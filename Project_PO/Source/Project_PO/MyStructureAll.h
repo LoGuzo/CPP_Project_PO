@@ -9,12 +9,75 @@
 
 
 USTRUCT(BlueprintType)
+struct FClassStatData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    E_ClassType ClassType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float Attack;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float Armor;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float Speed;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float AttackSpeed;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float MaxHp;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float MaxMp;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    float MaxExp;
+};
+
+USTRUCT(BlueprintType)
+struct FMonsterStatData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    E_MonsterType MonsterType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    FName MonsterName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float Attack;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float Armor;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float MaxHp;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float MaxMp;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float RewardEXP;
+};
+
+USTRUCT(BlueprintType)
 struct FQuestObjective : public FTableRowBase
 {
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
-    int32 ObjectiveID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     E_ObjectiveType ObjectiveType;
@@ -43,7 +106,7 @@ struct FQuestReward : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
-    int32 RewardID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
     float AcquiredEXP;
@@ -61,7 +124,7 @@ struct FQuestData : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
-    int32 QuestID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
     int32 NextQuestID;
@@ -88,7 +151,7 @@ struct FItemData : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-    int32 ItemID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     FText ItemName;
@@ -154,7 +217,7 @@ struct FMontageData : public FTableRowBase
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
-    int32 ItemID;
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
     FName MontageName;

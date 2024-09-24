@@ -24,7 +24,7 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 
 		E_ItemType ItemType = ItemComponent->GetItemType();
 		if (ItemType == E_ItemType::E_Equip)
-			playerCharacter->SetWeapon(ItemComponent->GetItemID());
+			playerCharacter->SetWeapon(ItemComponent->GetID());
 		else
 		{
 

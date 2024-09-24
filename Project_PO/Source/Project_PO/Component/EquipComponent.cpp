@@ -95,7 +95,7 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 
 void UEquipComponent::SetEquipment(const E_EquipType EquipType, const FEquipItemData ItemData)
 {
-	if (ItemData.ItemID == -1)
+	if (ItemData.ID == -1)
 		return;
 
 	EquipMap.Emplace(EquipType, ItemData);
@@ -103,7 +103,7 @@ void UEquipComponent::SetEquipment(const E_EquipType EquipType, const FEquipItem
 	switch (EquipType)
 	{
 	case E_EquipType::E_Weapon:
-		SpawnWeapon(ItemData.WeaponType, ItemData.ItemID);
+		SpawnWeapon(ItemData.WeaponType, ItemData.ID);
 		break;
 	case E_EquipType::E_Hat:
 	case E_EquipType::E_Shoes:

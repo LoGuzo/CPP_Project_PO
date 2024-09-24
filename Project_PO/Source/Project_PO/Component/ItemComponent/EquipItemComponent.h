@@ -34,7 +34,7 @@ protected:
     TSubclassOf<UAnimInstance> WeaponAnimInstance;
 
 public:
-    virtual void SetItem(int32 _ItemID) override;
+    virtual void SetItem(int32 _ID) override;
 
     E_EquipType GetEquipType() { return EquipType; }
     E_WeaponType GetWeaponType() { return WeaponType; }

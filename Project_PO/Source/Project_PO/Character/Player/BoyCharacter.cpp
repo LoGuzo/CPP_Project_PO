@@ -7,6 +7,8 @@
 
 ABoyCharacter::ABoyCharacter()
 {
+	ID = 1;
+
 	SetCharacterMesh();
 
 	GetCameraBoom()->SocketOffset = FVector(0.f, 50.f, 70.f);

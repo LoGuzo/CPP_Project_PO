@@ -18,6 +18,7 @@
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
 #include "../../Component/EquipComponent.h"
+#include "../../Component/StatComponent.h"
 #include "../../Interface/Interactable.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
@@ -33,8 +34,11 @@ APlayerCharacter::APlayerCharacter()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
 
 	CameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraTimeline"));
+	
+	// Setup Component
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
+	StatComponent = CreateDefaultSubobject<UStatComponent>(TEXT("StatComponent"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -48,6 +52,7 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 	SetupCurve();
+
 }
 
 void APlayerCharacter::BeginPlay()
@@ -79,6 +84,20 @@ void APlayerCharacter::BeginPlay()
 
 	TargetZoomLocation = FVector(InitailZoomLocation.X, InitailZoomLocation.Y * 2, InitailZoomLocation.Z);
 	TargetSpringLength = InitalSpringLength / 2;
+
+	if (StatComponent)
+		StatComponent->SetStat(ID);
+}
+
+float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{	
+	if (bIsDied)
+		return 0.f;
+
+	if (StatComponent)
+		StatComponent->TakeDamage(DamageAmount);
+
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -239,34 +258,43 @@ void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
 
 void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 {
-	if (GetCharacterMovement()->IsFalling() || !bIsMoveFront)
+	if (StatComponent)
 	{
-		GetCharacterMovement()->MaxWalkSpeed = 500.f;
-		bIsSprint = false;
-		return;
-	}
+		if (GetCharacterMovement()->IsFalling() || !bIsMoveFront)
+		{
+			GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
+			bIsSprint = false;
+			return;
+		}
 
-	bIsSprint = true;
-	GetCharacterMovement()->MaxWalkSpeed = 700.f;
-	if (bIsAiming)
-	{
-		bIsAiming = false;
-		if (CameraTimeline)
-			CameraTimeline->Reverse();
-		DisplayCrosshair();
+		bIsSprint = true;
+		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed() + 200.f;
+		if (bIsAiming)
+		{
+			bIsAiming = false;
+			if (CameraTimeline)
+				CameraTimeline->Reverse();
+			DisplayCrosshair();
+		}
 	}
 }
 
 void APlayerCharacter::CanceledSprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	bIsSprint = false;
+	if (StatComponent)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
+		bIsSprint = false;
+	}
 }
 
 void APlayerCharacter::CompletedSprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 500.f;
-	bIsSprint = false;
+	if (StatComponent)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
+		bIsSprint = false;
+	}
 }
 
 void APlayerCharacter::Attack(const FInputActionValue& Value)
@@ -378,7 +406,11 @@ void APlayerCharacter::AttackMontage()
 				if (Data.IsValid())
 				{
 					FMontageData montageData = *Data.Pin();
-					AnimInstance->PlayMontage(montageData.Montage, 1.f);
+					if (StatComponent)
+					{
+						float AttackSpeed = StatComponent->GetAttackSpeed();
+						AnimInstance->PlayMontage(montageData.Montage, 1.f * AttackSpeed);
+					}
 				}
 			}
 		}

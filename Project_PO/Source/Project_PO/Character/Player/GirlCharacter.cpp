@@ -8,6 +8,8 @@
 
 AGirlCharacter::AGirlCharacter()
 {
+	ID = 3;
+
 	SetCharacterMesh();
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 66.0f);
 

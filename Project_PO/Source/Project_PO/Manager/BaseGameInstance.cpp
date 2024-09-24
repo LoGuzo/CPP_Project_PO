@@ -6,9 +6,11 @@
 #include "WidgetManager.h"
 #include "ObjectPoolManager.h"
 #include "DatabaseManager/CunsumItemDatabaseManager.h"
+#include "DatabaseManager/ClassDatabaseManager.h"
 #include "DatabaseManager/ItemDatabaseManager.h"
 #include "DatabaseManager/EquipItemDatabaseManager.h"
 #include "DatabaseManager/MontageDatabaseManager.h"
+#include "DatabaseManager/MonsterDatabaseManager.h"
 
 UBaseGameInstance::UBaseGameInstance()
 {
@@ -22,6 +24,8 @@ void UBaseGameInstance::Init()
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UEquipItemDatabaseManager>()->GetDataMap<FEquipItemData>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UCunsumItemDatabaseManager>()->GetDataMap<FCunsumItemData>());
     AddDataToDatabase(E_ManagerType::E_MontageDatabaseManager, SingletonManager::GetInstance<UMontageDatabaseManager>()->GetDataMap<FMontageData>());
+    AddDataToDatabase(E_ManagerType::E_ClassDatabaseManager, SingletonManager::GetInstance<UClassDatabaseManager>()->GetDataMap<FClassStatData>());
+    AddDataToDatabase(E_ManagerType::E_MonsterDatabaseManager, SingletonManager::GetInstance<UMonsterDatabaseManager>()->GetDataMap<FMonsterStatData>());
 }
 
 void UBaseGameInstance::Shutdown()

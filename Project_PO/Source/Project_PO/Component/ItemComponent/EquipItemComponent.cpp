@@ -8,15 +8,15 @@ UEquipItemComponent::UEquipItemComponent()
 {
 }
 
-void UEquipItemComponent::SetItem(int32 _ItemID)
+void UEquipItemComponent::SetItem(int32 _ID)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
-		TWeakPtr<FEquipItemData> ItemData = GameInstance->GetDatabaseMap<FEquipItemData>(E_ManagerType::E_ItemDatabaseManager, _ItemID);
+		TWeakPtr<FEquipItemData> ItemData = GameInstance->GetDatabaseMap<FEquipItemData>(E_ManagerType::E_ItemDatabaseManager, _ID);
 		if (ItemData.IsValid())
 		{
-			ItemID = ItemData.Pin()->ItemID;
+			ID = ItemData.Pin()->ID;
 			ItemName = ItemData.Pin()->ItemName;
 			ItemDescription = ItemData.Pin()->ItemDescription;
 			ItemImage = ItemData.Pin()->ItemImage;

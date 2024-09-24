@@ -7,6 +7,8 @@
 
 ACatCharacter::ACatCharacter()
 {
+	ID = 2;
+
 	SetCharacterMesh();
 
 	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5101);

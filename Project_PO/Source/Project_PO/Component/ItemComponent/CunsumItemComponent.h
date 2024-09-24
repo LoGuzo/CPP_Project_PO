@@ -28,7 +28,7 @@ protected:
     float Cooltime;
 
 public:
-    virtual void SetItem(int32 _ItemID) override;
+    virtual void SetItem(int32 _ID) override;
 
     float GetRestoreAmount() { return RestoreAmount; }
     float GetDuration() { return Duration; }

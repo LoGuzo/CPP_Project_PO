@@ -27,6 +27,9 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	// TakeDamage
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
+
 	// Tick
 	virtual void Tick(float DeltaTime) override;
 
@@ -83,8 +86,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	FOnTimelineFloat InterpFunction;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	class UCurveFloat* CameraCurve;
+
 
 	E_WeaponType WeaponType;
 
@@ -111,11 +115,14 @@ protected:
 	UPROPERTY()
 	class UBasePlayerAnimInstance* AnimInstance;
 
-	UPROPERTY()
+	UPROPERTY(VisibleAnywhere)
 	class UInteractionComponent* InteractionComponent;
 
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(VisibleAnywhere)
 	class UEquipComponent* EquipComponent;
+
+	UPROPERTY(VisibleAnywhere)
+	class UStatComponent* StatComponent;
 
 	UPROPERTY()
 	class AActor* InteractActor;
@@ -187,7 +194,7 @@ public:
 	FTransform GetLeftHandSocketTransform();
 
 public:
-	void SetWeapon(int32 ItemID);
+	void SetWeapon(int32 ID);
 
 	void AttackCheck();
 };

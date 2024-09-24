@@ -11,6 +11,9 @@ AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -68.f, 0.f));
 
+	MonsterType = E_MonsterType::E_Mummy;
+	ID = 101;
+
 	SetUpCharacter();
 }
 

@@ -32,6 +32,8 @@ enum class E_ManagerType : uint8
 	E_ObjectPoolManager UMETA(DisplayName = "ObjectMonager"),
 	E_ItemDatabaseManager UMETA(DisplayName = "ItemDatabaseManager"),
 	E_MontageDatabaseManager UMETA(DisplayName = "MontageDatabaseManager"),
+	E_ClassDatabaseManager UMETA(DisplayName = "ClassDatabaseManager"),
+	E_MonsterDatabaseManager UMETA(DisplayName = "MonsterDatabaseManager"),
 };
 
 UENUM(BlueprintType)
@@ -80,4 +82,12 @@ enum class E_MonsterType : uint8
 	E_Mummy UMETA(DisplayName = "Mummy"),
 	E_Golem UMETA(DisplayName = "Golem"),
 	E_None UMETA(DisplayName = "None"),
+};
+
+UENUM(BlueprintType)
+enum class E_ClassType : uint8
+{
+	E_Boy UMETA(DisplayName = "Boy"),
+	E_Girl UMETA(DisplayName = "Girl"),
+	E_Cat UMETA(DisplayName = "Cat"),
 };

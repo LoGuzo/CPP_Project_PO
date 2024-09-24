@@ -47,7 +47,7 @@ public:
 			if (data)
 			{
 				MySharedData = MakeShared<T>(*data);
-				DataMap.Emplace(data->ItemID, MySharedData);
+				DataMap.Emplace(data->ID, MySharedData);
 			}
 			else
 				MySharedData.Reset();

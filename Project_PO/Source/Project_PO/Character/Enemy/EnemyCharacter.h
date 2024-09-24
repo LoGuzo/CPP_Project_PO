@@ -24,8 +24,6 @@ protected:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser);
 
 protected:
-	int32 MonsterID;
-
 	E_MonsterType MonsterType;
 
 	UPROPERTY()
@@ -36,6 +34,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* BodyCollision;
+
+	UPROPERTY(VisibleAnywhere)
+	class UMonsterStatComponent* StatComponent;
 
 protected:
 	void SetUpCharacter();
