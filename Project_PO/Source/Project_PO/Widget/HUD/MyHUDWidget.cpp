@@ -9,7 +9,3 @@ UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 {
 
 }
-
-void UMyHUDWidget::SetCrosshairWidget(const TSubclassOf<UCrosshairEtcWidget> _CrosshairWidget)
-{
-}

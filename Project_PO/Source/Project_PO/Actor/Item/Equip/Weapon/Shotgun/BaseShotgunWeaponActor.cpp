@@ -12,7 +12,7 @@ ABaseShotgunWeaponActor::ABaseShotgunWeaponActor()
 {
 	WeaponType = E_WeaponType::E_Shotgun;
 
-	static ConstructorHelpers::FClassFinder<UCrosshairEtcWidget> Crosshair(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/BP_ShotgunCrosshair.BP_ShotgunCrosshair_C"));
+    static ConstructorHelpers::FClassFinder<UCrosshairEtcWidget> Crosshair(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_ShotgunCrosshair.WBP_ShotgunCrosshair_C"));
 	if (Crosshair.Succeeded())
 		CrosshairWidget = Crosshair.Class;
 }

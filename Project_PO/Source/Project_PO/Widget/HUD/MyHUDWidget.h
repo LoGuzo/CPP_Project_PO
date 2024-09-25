@@ -17,7 +17,4 @@ class PROJECT_PO_API UMyHUDWidget : public UBaseHUDWidget
 
 public:
 	UMyHUDWidget(const FObjectInitializer& ObjectInitializer);
-
-public:
-	void SetCrosshairWidget(const TSubclassOf<class UCrosshairEtcWidget> _CrosshairWidget);
 };

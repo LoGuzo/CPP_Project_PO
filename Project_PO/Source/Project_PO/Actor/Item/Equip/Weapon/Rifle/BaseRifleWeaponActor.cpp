@@ -12,7 +12,7 @@ ABaseRifleWeaponActor::ABaseRifleWeaponActor()
 {
 	WeaponType = E_WeaponType::E_Rifle;
 
-	static ConstructorHelpers::FClassFinder<UCrosshairEtcWidget> Crosshair(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/BP_NormalCrosshair.BP_NormalCrosshair_C"));
+	static ConstructorHelpers::FClassFinder<UCrosshairEtcWidget> Crosshair(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_NormalCrosshair.WBP_NormalCrosshair_C"));
 	if (Crosshair.Succeeded())
 		CrosshairWidget = Crosshair.Class;
 

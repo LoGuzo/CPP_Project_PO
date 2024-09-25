@@ -80,12 +80,17 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 					UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 					if (WidgetManager)
 					{
-						UBaseUserWidget* CrossWidget = WidgetManager->CreateAndAddWidget<UCrosshairEtcWidget>(
-							GetWorld(), TEXT("CrosshairWidget"),
-							CurrentWeapon->GetCrosshairWdiget()
-						);
-						if (CrossWidget)
-							CrossWidget->SetAddRemove();
+						APlayerController* PlayerController = Cast<APlayerController>(OwnPlayer->GetController());
+						if (PlayerController)
+						{
+							UBaseUserWidget* CrossWidget = WidgetManager->CreateAndAddWidget<APlayerController, UCrosshairEtcWidget>(
+								PlayerController,
+								TEXT("CrosshairWidget"),
+								CurrentWeapon->GetCrosshairWdiget()
+							);
+							if (CrossWidget)
+								CrossWidget->SetAddRemove();
+						}
 					}
 				}
 			}

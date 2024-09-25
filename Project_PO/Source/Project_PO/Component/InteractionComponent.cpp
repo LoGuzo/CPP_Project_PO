@@ -23,7 +23,7 @@ UInteractionComponent::UInteractionComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget>Widget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Interaction/BP_OwlInteractionWidget.BP_OwlInteractionWidget_C"));
+	static ConstructorHelpers::FClassFinder<UUserWidget>Widget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Interaction/WBP_OwlInteractionWidget.WBP_OwlInteractionWidget_C"));
 	if (Widget.Succeeded())
 		InteractWidget = Widget.Class;
 }
@@ -34,6 +34,9 @@ void UInteractionComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (!OwnPlayer)
+		return;
+
 	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (MyGameInstance)
 	{
@@ -41,7 +44,11 @@ void UInteractionComponent::BeginPlay()
 		{
 			UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
-				WidgetManager->CreateAndAddWidget<UOwlInteractionWidget>(GetWorld(), TEXT("Interaction"), InteractWidget);
+			{
+				APlayerController* PlayerController = Cast<APlayerController>(OwnPlayer->GetController());
+				if (PlayerController)
+					WidgetManager->CreateAndAddWidget<APlayerController, UOwlInteractionWidget>(PlayerController, TEXT("Interaction"), InteractWidget);
+			}
 		}
 	}
 }
@@ -56,9 +63,9 @@ void UInteractionComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 void UInteractionComponent::CheckInteraction()
 {
 	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
-	if (PlayerCharacter)
+	if (OwnPlayer)
 	{
-		if (PlayerCharacter->GetIsAiming())
+		if (OwnPlayer->GetIsAiming())
 			return;
 
 		AActor* PotentialInteractActor = GetInteractableInRange();
@@ -66,7 +73,7 @@ void UInteractionComponent::CheckInteraction()
 		{
 			if (!bIsWidgetVisible)
 			{
-				PlayerCharacter->SetInteractActor(PotentialInteractActor);
+				OwnPlayer->SetInteractActor(PotentialInteractActor);
 				ShowAndHideInteractWidget();
 				bIsWidgetVisible = true;
 			}
@@ -75,7 +82,7 @@ void UInteractionComponent::CheckInteraction()
 		{
 			if (bIsWidgetVisible)
 			{
-				PlayerCharacter->SetInteractActor(nullptr);
+				OwnPlayer->SetInteractActor(nullptr);
 				ShowAndHideInteractWidget();
 				bIsWidgetVisible = false;
 			}
@@ -100,11 +107,10 @@ void UInteractionComponent::ShowAndHideInteractWidget()
 
 AActor* UInteractionComponent::GetInteractableInRange()
 {
-	ACharacter* Player = Cast<ACharacter>(GetOwner());
-	if (!Player)
+	if (!OwnPlayer)
 		return nullptr;
 
-	APlayerController* PlayerController = Cast<APlayerController>(Player->GetController());
+	APlayerController* PlayerController = Cast<APlayerController>(OwnPlayer->GetController());
 	if (!PlayerController)
 		return nullptr;
 

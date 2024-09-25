@@ -31,9 +31,6 @@ private:
 
 	TSubclassOf<class UOwlInteractionWidget> InteractWidget;
 
-	UPROPERTY()
-	class UOwlInteractionWidget* InteractUI;
-
 private:
 	AActor* GetInteractableInRange();
 

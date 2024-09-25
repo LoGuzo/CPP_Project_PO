@@ -19,10 +19,10 @@ private:
 	TMap<FString, class UBaseUserWidget*> Widgets;
 
 public:
-    template<typename T>
-    T* CreateAndAddWidget(UWorld* World, FString WidgetKey, TSubclassOf<T> WidgetClass)
+    template<typename OwnerType, typename T>
+    T* CreateAndAddWidget(OwnerType* OwningObject, FString WidgetKey, TSubclassOf<T> WidgetClass)
     {
-        if (!World)
+        if (!OwningObject)
             return nullptr;
 
         if (Widgets.Contains(WidgetKey))
@@ -38,12 +38,17 @@ public:
             Widgets.Remove(WidgetKey);
         }
 
-        T* NewWidget = CreateWidget<T>(World, WidgetClass);
-        if (NewWidget)
+        OwnerType* Owner = Cast<OwnerType>(OwningObject);
+        if (Owner)
         {
-            Widgets.Emplace(WidgetKey, NewWidget);
+            T* NewWidget = CreateWidget<T>(Owner, WidgetClass);
+            if (NewWidget)
+            {
+                Widgets.Emplace(WidgetKey, NewWidget);
+            }
+            return NewWidget;
         }
-        return NewWidget;
+        return nullptr;
     }
 
     template<typename T>
