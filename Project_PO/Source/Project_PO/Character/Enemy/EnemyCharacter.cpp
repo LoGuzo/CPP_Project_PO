@@ -17,7 +17,7 @@ void AEnemyCharacter::BeginPlay()
 	Super::BeginPlay();
 
     if (StatComponent)
-        StatComponent->SetStat(ID);
+        GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -7,9 +7,10 @@
 #include "../MyEnumClass.h"
 #include "StatComponent.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE(FOnHpChanged);
+DECLARE_MULTICAST_DELEGATE(FOnMpChanged);
+
+
 UCLASS()
 class PROJECT_PO_API UStatComponent : public UBaseActorComponent
 {
@@ -18,30 +19,15 @@ class PROJECT_PO_API UStatComponent : public UBaseActorComponent
 public:
     UStatComponent();
 
-private:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    int32 Level;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    int32 MaxLevel;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    int32 ClassID;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    E_ClassType ClassType;
+protected:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStat", Meta = (AllowPrivateAccess = true))
+    int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
     float Attack;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
     float Armor;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    float Speed;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    float AttackSpeed;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
     float Hp;
@@ -55,27 +41,21 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
     float MaxMp;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    float Exp;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
-    float MaxExp;
-
 public:
-    void SetStat(int32 const& _ClassID);
-    void SetLevel(int32 const& _Level);
+    virtual void SetStat(int32 const& _ID);
 
-    void TakeDamage(float const& TakedDamage);
+    virtual void TakeDamage(float const& TakedDamage);
     void HealHp(float const& HealedHp);
 
     void UseMana(float const& UsedMana);
     void HealMp(float const& HealedMp);
 
-    void SetExp(float const& TakedExp);
-
     float GetAttack() { return Attack; }
     float GetArmor() { return Armor; }
-    float GetSpeed() { return Speed; }
-    float GetAttackSpeed() { return AttackSpeed; }
 
+    float GetHpRatio() { return Hp / MaxHp; }
+    float GetMpRatio() { return Mp / MaxMp; }
+
+    FOnHpChanged OnHpChanged;
+    FOnMpChanged OnMpChanged;
 };

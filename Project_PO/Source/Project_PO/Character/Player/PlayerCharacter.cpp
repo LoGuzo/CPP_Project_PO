@@ -18,7 +18,7 @@
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
 #include "../../Component/EquipComponent.h"
-#include "../../Component/StatComponent.h"
+#include "../../Component/PlayerStatComponent.h"
 #include "../../Interface/Interactable.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
@@ -38,7 +38,7 @@ APlayerCharacter::APlayerCharacter()
 	// Setup Component
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
-	StatComponent = CreateDefaultSubobject<UStatComponent>(TEXT("StatComponent"));
+	StatComponent = CreateDefaultSubobject<UPlayerStatComponent>(TEXT("StatComponent"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -86,7 +86,7 @@ void APlayerCharacter::BeginPlay()
 	TargetSpringLength = InitalSpringLength / 2;
 
 	if (StatComponent)
-		StatComponent->SetStat(ID);
+		GetStatComponent<UPlayerStatComponent>()->SetStat(ID);
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -260,21 +260,25 @@ void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 {
 	if (StatComponent)
 	{
-		if (GetCharacterMovement()->IsFalling() || !bIsMoveFront)
+		UPlayerStatComponent* PlayerComponent = GetStatComponent<UPlayerStatComponent>();
+		if (PlayerComponent)
 		{
-			GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
-			bIsSprint = false;
-			return;
-		}
+			if (GetCharacterMovement()->IsFalling() || !bIsMoveFront)
+			{
+				GetCharacterMovement()->MaxWalkSpeed = PlayerComponent->GetSpeed();
+				bIsSprint = false;
+				return;
+			}
 
-		bIsSprint = true;
-		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed() + 200.f;
-		if (bIsAiming)
-		{
-			bIsAiming = false;
-			if (CameraTimeline)
-				CameraTimeline->Reverse();
-			DisplayCrosshair();
+			bIsSprint = true;
+			GetCharacterMovement()->MaxWalkSpeed = PlayerComponent->GetSpeed() + 200.f;
+			if (bIsAiming)
+			{
+				bIsAiming = false;
+				if (CameraTimeline)
+					CameraTimeline->Reverse();
+				DisplayCrosshair();
+			}
 		}
 	}
 }
@@ -283,7 +287,7 @@ void APlayerCharacter::CanceledSprint(const FInputActionValue& Value)
 {
 	if (StatComponent)
 	{
-		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
+		GetCharacterMovement()->MaxWalkSpeed = GetStatComponent<UPlayerStatComponent>()->GetSpeed();
 		bIsSprint = false;
 	}
 }
@@ -292,7 +296,7 @@ void APlayerCharacter::CompletedSprint(const FInputActionValue& Value)
 {
 	if (StatComponent)
 	{
-		GetCharacterMovement()->MaxWalkSpeed = StatComponent->GetSpeed();
+		GetCharacterMovement()->MaxWalkSpeed = GetStatComponent<UPlayerStatComponent>()->GetSpeed();
 		bIsSprint = false;
 	}
 }
@@ -408,7 +412,7 @@ void APlayerCharacter::AttackMontage()
 					FMontageData montageData = *Data.Pin();
 					if (StatComponent)
 					{
-						float AttackSpeed = StatComponent->GetAttackSpeed();
+						float AttackSpeed = GetStatComponent<UPlayerStatComponent>()->GetAttackSpeed();
 						AnimInstance->PlayMontage(montageData.Montage, 1.f * AttackSpeed);
 					}
 				}

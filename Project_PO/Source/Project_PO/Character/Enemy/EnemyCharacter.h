@@ -35,9 +35,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* BodyCollision;
 
-	UPROPERTY(VisibleAnywhere)
-	class UMonsterStatComponent* StatComponent;
-
 protected:
 	void SetUpCharacter();
 	virtual void SetCharacterMesh() {};

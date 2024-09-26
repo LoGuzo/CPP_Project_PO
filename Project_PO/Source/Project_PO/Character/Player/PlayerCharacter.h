@@ -89,7 +89,6 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCurveFloat* CameraCurve;
 
-
 	E_WeaponType WeaponType;
 
 protected:
@@ -120,9 +119,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	class UEquipComponent* EquipComponent;
-
-	UPROPERTY(VisibleAnywhere)
-	class UStatComponent* StatComponent;
 
 	UPROPERTY()
 	class AActor* InteractActor;

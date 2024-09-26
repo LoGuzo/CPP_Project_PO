@@ -18,6 +18,7 @@ enum class E_WidgetType : uint8
 {
 	E_HUD UMETA(DisplayName = "HUD"),
 	E_MainMenu UMETA(DisplayName = "MainMenu"),
+	E_InGame UMETA(DisplayName = "InGame"),
 	E_PopUp UMETA(DisplayName = "PopUp"),
 	E_Interaction UMETA(DisplayName = "Interaction"),
 	E_Loading UMETA(DisplayName = "Loading"),

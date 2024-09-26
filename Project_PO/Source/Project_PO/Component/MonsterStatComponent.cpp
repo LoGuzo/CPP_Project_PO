@@ -2,7 +2,6 @@
 
 
 #include "MonsterStatComponent.h"
-#include "../Character/Enemy/EnemyCharacter.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/DatabaseManager/ClassDatabaseManager.h"
 
@@ -10,14 +9,15 @@ UMonsterStatComponent::UMonsterStatComponent()
 {
 }
 
-void UMonsterStatComponent::SetStat(int32 MonsterID)
+void UMonsterStatComponent::SetStat(int32 const& _ID)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
-		TWeakPtr<FMonsterStatData> StatData = GameInstance->GetDatabaseMap<FMonsterStatData>(E_ManagerType::E_MonsterDatabaseManager, MonsterID);
+		TWeakPtr<FMonsterStatData> StatData = GameInstance->GetDatabaseMap<FMonsterStatData>(E_ManagerType::E_MonsterDatabaseManager, _ID);
 		if (StatData.IsValid())
 		{
+			ID = StatData.Pin()->ID;
 			MonsterName = StatData.Pin()->MonsterName;
 			Attack = StatData.Pin()->Attack;
 			Armor = StatData.Pin()->Armor;
@@ -28,52 +28,4 @@ void UMonsterStatComponent::SetStat(int32 MonsterID)
 			RewardEXP = StatData.Pin()->RewardEXP;
 		}
 	}
-}
-
-void UMonsterStatComponent::TakeDamage(float const& TakedDamage)
-{
-	if (Hp == 0)
-		return;
-
-	Hp -= TakedDamage;
-
-	if (Hp <= 0)
-	{
-		Hp = 0;
-		AEnemyCharacter* MonsterCharacter = Cast<AEnemyCharacter>(GetOwner());
-		if (MonsterCharacter)
-			if (!MonsterCharacter->GetIsDied())
-				MonsterCharacter->SetIsDied(true);
-	}
-}
-
-void UMonsterStatComponent::HealHp(float const& HealedHp)
-{
-	if (Hp == MaxHp)
-		return;
-
-	Hp += HealedHp;
-
-	if (Hp >= MaxHp)
-		Hp = MaxHp;
-}
-
-void UMonsterStatComponent::UseMana(float const& UsedMana)
-{
-	if (Mp == 0)
-		return;
-
-	Mp -= UsedMana;
-	if (Mp <= 0)
-		Mp = 0;
-}
-
-void UMonsterStatComponent::HealMp(float const& HealedMp)
-{
-	if (Mp == MaxMp)
-		return;
-
-	Mp += HealedMp;
-	if (Mp >= MaxMp)
-		Mp = MaxMp;
 }

@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ID, meta = (AllowPrivateAccess = "true"))
 	int32 ID;
 
+	UPROPERTY(VisibleAnywhere)
+	class UStatComponent* StatComponent;
+
 public:
 	bool GetIsAttack() { return bIsAttack; }
 	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
@@ -39,4 +42,10 @@ public:
 
 	int32 GetID() { return ID; }
 	void SetID(int32 _ID) { ID = _ID; }
+
+	template<typename T>
+	T* GetStatComponent()
+	{
+		return Cast<T>(StatComponent);
+	}
 };
