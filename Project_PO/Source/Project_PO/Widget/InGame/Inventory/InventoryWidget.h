@@ -18,6 +18,9 @@ class PROJECT_PO_API UInventoryWidget : public UBaseInGameWidget
 public:
 	UInventoryWidget(const FObjectInitializer& ObjectInitializer);
 
+public:
+	virtual void NativeConstruct() override;
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Btn_Equip;
@@ -37,6 +40,13 @@ private:
 
 private:
 	void UpdateSlots(const TArray<FSlot>& Slots);
+
+	UFUNCTION()
+	void EquipInven();
+	UFUNCTION()
+	void CunsumInven();
+	UFUNCTION()
+	void EtcInven();
 
 public:
 	void UpdateInventory(class UInventoryComponent* _InventoryComponent);

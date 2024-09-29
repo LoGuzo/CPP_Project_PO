@@ -78,4 +78,5 @@ public:
 	void AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
 	void ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom);
 
+	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
 };

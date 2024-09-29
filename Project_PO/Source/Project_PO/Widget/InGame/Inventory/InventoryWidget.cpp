@@ -2,6 +2,7 @@
 
 
 #include "InventoryWidget.h"
+#include "Components/Button.h"
 #include "Components/WrapBox.h"
 #include "../Slots/InventorySlotWidget.h"
 #include "../../../Component/InventoryComponent.h"
@@ -14,9 +15,23 @@ UInventoryWidget::UInventoryWidget(const FObjectInitializer& ObjectInitializer)
 		SlotWidget = UW.Class;
 }
 
+void UInventoryWidget::NativeConstruct()
+{
+	Super::NativeConstruct();
+
+	if (Btn_Equip)
+		Btn_Equip->OnClicked.AddDynamic(this, &UInventoryWidget::EquipInven);
+	if (Btn_Cunsum)
+		Btn_Cunsum->OnClicked.AddDynamic(this, &UInventoryWidget::CunsumInven);
+	if (Btn_Etc)
+		Btn_Etc->OnClicked.AddDynamic(this, &UInventoryWidget::EtcInven);
+}
+
 void UInventoryWidget::UpdateSlots(const TArray<FSlot>& Slots)
 {
 	int32 index = 0;
+	Wrap_Item->ClearChildren();
+
 	for (const FSlot& slot : Slots)
 	{
 		UInventorySlotWidget* SlotsWidget = CreateWidget<UInventorySlotWidget>(this, SlotWidget);
@@ -31,6 +46,24 @@ void UInventoryWidget::UpdateSlots(const TArray<FSlot>& Slots)
 		Wrap_Item->AddChild(SlotsWidget);
 		index++;
 	}
+}
+
+void UInventoryWidget::EquipInven()
+{
+	InventoryComponent->SetItemType(E_ItemType::E_Equip);
+	UpdateSlots(InventoryComponent->GetSlots());
+}
+
+void UInventoryWidget::CunsumInven()
+{
+	InventoryComponent->SetItemType(E_ItemType::E_Cunsumable);
+	UpdateSlots(InventoryComponent->GetSlots());
+}
+
+void UInventoryWidget::EtcInven()
+{
+	InventoryComponent->SetItemType(E_ItemType::E_Etc);
+	UpdateSlots(InventoryComponent->GetSlots());
 }
 
 void UInventoryWidget::UpdateInventory(UInventoryComponent* _InventoryComponent)

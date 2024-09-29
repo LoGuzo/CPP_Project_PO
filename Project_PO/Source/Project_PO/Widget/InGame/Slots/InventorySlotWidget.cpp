@@ -22,7 +22,8 @@ void UInventorySlotWidget::NativePreConstruct()
 				if (ItemData.Pin()->ItemType == E_ItemType::E_Equip)
 				{
 					Img_Slot->SetBrushFromTexture(ItemImage);
-					Box_Slot->SetVisibility(ESlateVisibility::Hidden);
+					Box_Slot->SetVisibility(ESlateVisibility::Visible);
+					Txt_Slot->SetVisibility(ESlateVisibility::Hidden);
 					Img_Slot->SetVisibility(ESlateVisibility::Visible);
 				}
 				else
