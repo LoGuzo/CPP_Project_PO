@@ -15,9 +15,14 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 	TArray<FSlot> Slots;
 	Slots.SetNum(InventorySize);
-
+	Slots[0].ItemID = 1000;
+	Slots[0].Amount = 1;
 	SlotMap.Emplace(E_ItemType::E_Equip, Slots);
+	Slots[0].ItemID = 1003;
+	Slots[0].Amount = 1;
 	SlotMap.Emplace(E_ItemType::E_Cunsumable, Slots);
+	Slots[0].ItemID = 1005;
+	Slots[0].Amount = 2;
 	SlotMap.Emplace(E_ItemType::E_Etc, Slots);
 }
 
