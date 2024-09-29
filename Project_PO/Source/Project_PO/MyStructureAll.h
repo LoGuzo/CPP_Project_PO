@@ -251,3 +251,18 @@ struct FSpawnItemType
         WeaponType = _WeaponType;
     }
 };
+
+USTRUCT()
+struct FSlot
+{
+    GENERATED_BODY()
+
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    int32 ItemID = -1;
+
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    int32 Amount = 0;
+
+    UPROPERTY(VisibleAnywhere, Category = "Item")
+    FSpawnItemType Type;
+};

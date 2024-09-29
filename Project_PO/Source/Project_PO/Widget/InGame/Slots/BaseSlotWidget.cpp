@@ -3,3 +3,8 @@
 
 #include "BaseSlotWidget.h"
 
+
+UBaseSlotWidget::UBaseSlotWidget(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+}

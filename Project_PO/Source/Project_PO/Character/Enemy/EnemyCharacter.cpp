@@ -4,7 +4,7 @@
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
-#include "../../Component/MonsterStatComponent.h"
+#include "../../Component/StatComponent/MonsterStatComponent.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)

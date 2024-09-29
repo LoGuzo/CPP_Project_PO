@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseSlotWidget.h"
-#include "QuickSlotWidget.generated.h"
+#include "QuickSlotWidget.h"
+#include "CunsumQuickSlotWidget.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT_PO_API UQuickSlotWidget : public UBaseSlotWidget
+class PROJECT_PO_API UCunsumQuickSlotWidget : public UQuickSlotWidget
 {
 	GENERATED_BODY()
 	
 private:
 	UPROPERTY(meta = (BindWidget))
-	class UTextBlock* Txt_Key;
+	class UTextBlock* Txt_Slot;
 };

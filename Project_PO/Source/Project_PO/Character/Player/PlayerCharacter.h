@@ -34,6 +34,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void Jump() override;
+
 private:
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -79,6 +80,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* UseSkillAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* InvenAction;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	UTimelineComponent* CameraTimeline;
@@ -120,6 +124,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UEquipComponent* EquipComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	class UInventoryComponent* InventoryComponent;
+
 	UPROPERTY()
 	class AActor* InteractActor;
 
@@ -151,6 +158,9 @@ protected:
 
 	/** Called for Attack input */
 	void UseSkill(const FInputActionValue& Value);
+
+	/** Called for Attack input */
+	void ShowInven(const FInputActionValue& Value);
 
 private:
 	void BindInputAction();
@@ -186,6 +196,9 @@ public:
 
 	E_WeaponType GetWeaponType() { return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
+
+	class UEquipComponent* GetEquipComponent(){ return EquipComponent; }
+	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
 
 	FTransform GetLeftHandSocketTransform();
 

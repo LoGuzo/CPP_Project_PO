@@ -14,10 +14,19 @@ class PROJECT_PO_API UBaseSlotWidget : public UBaseInGameWidget
 {
 	GENERATED_BODY()
 	
-private:
+public:
+	UBaseSlotWidget(const FObjectInitializer& ObjectInitializer);
+
+protected:
 	UPROPERTY(meta = (BindWidget))
 	class USizeBox* Box_Slot;
 
 	UPROPERTY(meta = (BindWidget))
 	class UImage* Img_Slot;
+
+protected:
+	int32 ID;
+
+public:
+	void SetItemID(int32 const& _ID) { ID = _ID; }
 };

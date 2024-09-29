@@ -22,6 +22,7 @@ protected:
 
 private:
 	TSubclassOf<class UMyHUDWidget> HUDWidget;
+	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
 
 private:
 	void SetUpWidget();

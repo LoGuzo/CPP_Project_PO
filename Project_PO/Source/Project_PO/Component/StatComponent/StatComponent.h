@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseActorComponent.h"
-#include "../MyEnumClass.h"
+#include "../BaseActorComponent.h"
+#include "../../MyEnumClass.h"
 #include "StatComponent.generated.h"
 
 DECLARE_MULTICAST_DELEGATE(FOnHpChanged);
@@ -46,9 +46,11 @@ public:
 
     virtual void TakeDamage(float const& TakedDamage);
     void HealHp(float const& HealedHp);
+    void SetHp(float const& _Hp);
 
     void UseMana(float const& UsedMana);
     void HealMp(float const& HealedMp);
+    void SetMp(float const& _Mp);
 
     float GetAttack() { return Attack; }
     float GetArmor() { return Armor; }

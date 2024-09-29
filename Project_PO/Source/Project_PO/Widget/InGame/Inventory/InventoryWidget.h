@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../BaseInGameWidget.h"
+#include "../../../MyStructureAll.h"
 #include "InventoryWidget.generated.h"
 
 /**
@@ -14,4 +15,30 @@ class PROJECT_PO_API UInventoryWidget : public UBaseInGameWidget
 {
 	GENERATED_BODY()
 	
+public:
+	UInventoryWidget(const FObjectInitializer& ObjectInitializer);
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Equip;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Cunsum;
+
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Etc;
+
+	UPROPERTY(meta = (BindWidget))
+	class UWrapBox* Wrap_Item;
+	
+	class UInventoryComponent* InventoryComponent;
+
+	TSubclassOf<class UInventorySlotWidget> SlotWidget;
+
+private:
+	void UpdateSlots(const TArray<FSlot>& Slots);
+
+public:
+	void UpdateInventory(class UInventoryComponent* _InventoryComponent);
+	void UpdateInventoryDrop();
 };

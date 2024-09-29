@@ -2,8 +2,8 @@
 
 
 #include "MonsterStatComponent.h"
-#include "../Manager/BaseGameInstance.h"
-#include "../Manager/DatabaseManager/ClassDatabaseManager.h"
+#include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/DatabaseManager/ClassDatabaseManager.h"
 
 UMonsterStatComponent::UMonsterStatComponent()
 {

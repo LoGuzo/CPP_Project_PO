@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "StatComponent.h"
-#include "../MyEnumClass.h"
+#include "../../MyEnumClass.h"
 #include "MonsterStatComponent.generated.h"
 
 /**

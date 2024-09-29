@@ -17,4 +17,11 @@ class PROJECT_PO_API UMyHUDWidget : public UBaseHUDWidget
 
 public:
 	UMyHUDWidget(const FObjectInitializer& ObjectInitializer);
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	class UCharInfoWidget* WBP_CharInfo;
+
+public:
+	void SetUpCharInfo(class UStatComponent* StatComponent);
 };

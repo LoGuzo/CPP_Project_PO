@@ -2,8 +2,8 @@
 
 
 #include "StatComponent.h"
-#include "../Character/BaseCharacter.h"
-#include "../Manager/DatabaseManager/ClassDatabaseManager.h"
+#include "../../Character/BaseCharacter.h"
+#include "../../Manager/DatabaseManager/ClassDatabaseManager.h"
 
 UStatComponent::UStatComponent()
 {
@@ -18,18 +18,18 @@ void UStatComponent::TakeDamage(float const& TakedDamage)
 	if (Hp == 0)
 		return;
 
-	Hp -= TakedDamage;
+	float CurHp = Hp;
+	CurHp -= TakedDamage;
 
 	if (Hp <= 0)
 	{
-		Hp = 0;
+		CurHp = 0;
 		ABaseCharacter* OwnCharacter = Cast<ABaseCharacter>(GetOwner());
 		if (OwnCharacter)
 			if (!OwnCharacter->GetIsDied())
 				OwnCharacter->SetIsDied(true);
 	}
-
-	OnHpChanged.Broadcast();
+	SetHp(CurHp);
 }
 
 void UStatComponent::HealHp(float const& HealedHp)
@@ -37,10 +37,18 @@ void UStatComponent::HealHp(float const& HealedHp)
 	if (Hp == MaxHp)
 		return;
 
-	Hp += HealedHp;
+	float CurHp = Hp;
+	CurHp += HealedHp;
 
 	if (Hp >= MaxHp)
-		Hp = MaxHp;
+		CurHp = MaxHp;
+
+	SetMp(CurHp);
+}
+
+void UStatComponent::SetHp(float const& _Hp)
+{
+	Hp = _Hp;
 
 	OnHpChanged.Broadcast();
 }
@@ -50,11 +58,13 @@ void UStatComponent::UseMana(float const& UsedMana)
 	if (Mp == 0)
 		return;
 
-	Mp -= UsedMana;
-	if (Mp <= 0)
-		Mp = 0;
+	float CurMp = Mp;
+	CurMp -= UsedMana;
 
-	OnMpChanged.Broadcast();
+	if (Mp <= 0)
+		CurMp = 0;
+
+	SetMp(CurMp);
 }
 
 void UStatComponent::HealMp(float const& HealedMp)
@@ -62,9 +72,18 @@ void UStatComponent::HealMp(float const& HealedMp)
 	if (Mp == MaxMp)
 		return;
 
-	Mp += HealedMp;
+	float CurMp = Mp;
+	CurMp += HealedMp;
+
 	if (Mp >= MaxMp)
-		Mp = MaxMp;
+		CurMp = MaxMp;
+
+	SetMp(CurMp);
+}
+
+void UStatComponent::SetMp(float const& _Mp)
+{
+	Mp = _Mp;
 
 	OnMpChanged.Broadcast();
 }

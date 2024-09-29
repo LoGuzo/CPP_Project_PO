@@ -42,7 +42,8 @@ public:
     virtual void SetStat(int32 const& _ID) override;
     void SetLevel(int32 const& _Level);
 
-    void SetExp(float const& TakedExp);
+    void TakedExp(float const& TakedExp);
+    void SetExp(float const& _Exp);
 
     float GetSpeed() { return Speed; }
     float GetAttackSpeed() { return AttackSpeed; }

@@ -18,11 +18,13 @@
 #include "../../AnimInstance/BasePlayerAnimInstance.h"
 #include "../../Component/InteractionComponent.h"
 #include "../../Component/EquipComponent.h"
-#include "../../Component/PlayerStatComponent.h"
+#include "../../Component/InventoryComponent.h"
+#include "../../Component/StatComponent/PlayerStatComponent.h"
 #include "../../Interface/Interactable.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/Etc/CrosshairEtcWidget.h"
+#include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 
 APlayerCharacter::APlayerCharacter()
 	: bIsAiming(false)
@@ -39,6 +41,7 @@ APlayerCharacter::APlayerCharacter()
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
 	StatComponent = CreateDefaultSubobject<UPlayerStatComponent>(TEXT("StatComponent"));
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -52,7 +55,6 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 	SetupCurve();
-
 }
 
 void APlayerCharacter::BeginPlay()
@@ -152,8 +154,10 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 		//Skill
 		EnhancedInputComponent->BindAction(UseSkillAction, ETriggerEvent::Triggered, this, &APlayerCharacter::UseSkill);
-	}
 
+		//Inven
+		EnhancedInputComponent->BindAction(InvenAction, ETriggerEvent::Started, this, &APlayerCharacter::ShowInven);
+	}
 }
 
 void APlayerCharacter::Move(const FInputActionValue& Value)
@@ -315,6 +319,21 @@ void APlayerCharacter::UseSkill(const FInputActionValue& Value)
 {
 }
 
+void APlayerCharacter::ShowInven(const FInputActionValue& Value)
+{
+	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (MyGameInstance)
+	{
+		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UBaseUserWidget* InvenWidget = WidgetManager->GetWidget<UMainInventoryWidget>(TEXT("Inven"));
+			if (InvenWidget)
+				InvenWidget->SetAddRemove();
+		}
+	}
+}
+
 void APlayerCharacter::BindInputAction()
 {
 	// Input Asset Load
@@ -361,6 +380,11 @@ void APlayerCharacter::BindInputAction()
 	static ConstructorHelpers::FObjectFinder<UInputAction> SkillActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_UserSkill.IA_UserSkill"));
 	if (SkillActionObject.Succeeded())
 		UseSkillAction = SkillActionObject.Object;
+
+	// Inven Action Asset Load
+	static ConstructorHelpers::FObjectFinder<UInputAction> InvenActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Inven.IA_Inven"));
+	if (SkillActionObject.Succeeded())
+		InvenAction = InvenActionObject.Object;
 }
 
 void APlayerCharacter::SetupCurve()
@@ -381,7 +405,7 @@ void APlayerCharacter::Zoom(float Value)
 
 void APlayerCharacter::DisplayCrosshair()
 {
-	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (MyGameInstance)
 	{
 		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);

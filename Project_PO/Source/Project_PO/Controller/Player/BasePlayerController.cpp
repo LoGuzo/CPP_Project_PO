@@ -4,6 +4,7 @@
 #include "BasePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
+#include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -11,6 +12,10 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>MainHUD(TEXT("/Game/ThirdPerson/Blueprints/Widget/HUD/WBP_HUDWidget.WBP_HUDWidget_C"));
 	if (MainHUD.Succeeded())
 		HUDWidget = MainHUD.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>Inventory(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/Inventory/WBP_MainInventory.WBP_MainInventory_C"));
+	if (Inventory.Succeeded())
+		InventoryWidget = Inventory.Class;
 }
 
 void ABasePlayerController::BeginPlay()
@@ -25,14 +30,22 @@ void ABasePlayerController::SetUpWidget()
 	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (MyGameInstance)
 	{
-		if (HUDWidget)
+		if (IsLocalController())
 		{
 			UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
 			{
-				UMyHUDWidget* HUD = WidgetManager->CreateAndAddWidget<APlayerController, UMyHUDWidget>(this, TEXT("HUD"), HUDWidget);
-				if (HUD)
-					HUD->SetAddRemove();
+				if (HUDWidget)
+				{
+					UMyHUDWidget* HUD = WidgetManager->CreateAndAddWidget<APlayerController, UMyHUDWidget>(this, TEXT("HUD"), HUDWidget);
+					if (HUD)
+						HUD->SetAddRemove();
+				}
+				if (InventoryWidget)
+				{
+					UE_LOG(LogTemp, Warning, TEXT("Chk"));
+					WidgetManager->CreateAndAddWidget<APlayerController, UMainInventoryWidget>(this, TEXT("Inven"), InventoryWidget);
+				}
 			}
 		}
 	}
