@@ -13,5 +13,7 @@ UCLASS()
 class PROJECT_PO_API UWeaponSlotWidget : public UBaseSlotWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	void SetUpWidget(int32 const& _ID);
 };

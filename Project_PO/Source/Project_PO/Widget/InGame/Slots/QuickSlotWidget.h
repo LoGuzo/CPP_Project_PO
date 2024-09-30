@@ -17,4 +17,8 @@ class PROJECT_PO_API UQuickSlotWidget : public UBaseSlotWidget
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Txt_Key;
+
+public:
+	void SetUpWidget(int32 const& _ID);
+	void SetTextKey(FString const& Key);
 };

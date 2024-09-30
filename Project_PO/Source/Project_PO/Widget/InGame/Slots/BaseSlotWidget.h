@@ -13,7 +13,10 @@ UCLASS()
 class PROJECT_PO_API UBaseSlotWidget : public UBaseInGameWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void NativePreConstruct() override;
+
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class USizeBox* Box_Slot;

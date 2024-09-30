@@ -17,4 +17,6 @@ void UEquipPopSlotWidget::EquipItem()
 {
 	if (InventoryComponent)
 		InventoryComponent->ChangeEquip(Index, ItemID);
+
+	RemoveFromParent();
 }

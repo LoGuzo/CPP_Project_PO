@@ -4,7 +4,9 @@
 #include "MyHUDWidget.h"
 #include "../../Character/BaseCharacter.h"
 #include "../../Widget/InGame/CharInfo/CharInfoWidget.h"
-#include <Kismet/GameplayStatics.h>
+#include "../../Widget/InGame/Slots/CunsumQuickSlotWidget.h"
+#include "../../Widget/InGame/Slots/SkillQuickSlotWidget.h"
+#include "../../Widget/InGame/Slots/WeaponSlotWidget.h"
 
 UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -22,4 +24,9 @@ void UMyHUDWidget::SetUpCharInfo(UStatComponent* StatComponent)
 		WBP_CharInfo->BindMp(StatComponent);
 		WBP_CharInfo->BindExp(StatComponent);
 	}
+}
+
+void UMyHUDWidget::SetUpWeaponSlot(int32 const& ID)
+{
+	WBP_WeaponSlot->SetUpWidget(ID);
 }

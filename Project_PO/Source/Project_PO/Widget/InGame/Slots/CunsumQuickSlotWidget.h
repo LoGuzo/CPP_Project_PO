@@ -17,4 +17,7 @@ class PROJECT_PO_API UCunsumQuickSlotWidget : public UQuickSlotWidget
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Txt_Slot;
+
+public:
+	void SetText(int32 const& Amount);
 };

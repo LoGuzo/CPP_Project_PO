@@ -11,6 +11,7 @@
 #include "../Manager/ObjectPoolManager.h"
 #include "../Manager/WidgetManager.h"
 #include "../Widget/Etc/CrosshairEtcWidget.h"
+#include "../Widget/HUD/MyHUDWidget.h"
 
 // Sets default values for this component's properties
 UEquipComponent::UEquipComponent()
@@ -75,6 +76,7 @@ void UEquipComponent::SpawnWeapon()
 				CurrentWeapon->SetItem(ItemData.ID);
 				CurrentWeapon->SetOwner(OwnPlayer);
 				CurrentWeapon->AttachToComponent(OwnPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
+				SetUpWidget(ItemData.ID);
 
 				if (CurrentWeapon->GetCrosshairWdiget())
 				{
@@ -99,7 +101,7 @@ void UEquipComponent::SpawnWeapon()
 	}
 }
 
-void UEquipComponent::SetEquipment(const int32 ID)
+void UEquipComponent::SetEquipment(int32 const& ID)
 {
 	if (ID == -1)
 		return;
@@ -130,3 +132,17 @@ void UEquipComponent::SetEquipment(const int32 ID)
 	}
 }
 
+void UEquipComponent::SetUpWidget(int32 const& ID)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UMyHUDWidget* MyHUD = WidgetManager->GetWidget<UMyHUDWidget>(TEXT("HUD"));
+			if (MyHUD)
+				MyHUD->SetUpWeaponSlot(ID);
+		}
+	}
+}

@@ -29,8 +29,8 @@ private:
 
 public:
 	void SpawnWeapon();
-
-	void SetEquipment(const int32 ID);
+	void SetEquipment(int32 const& ID);
+	void SetUpWidget(int32 const& ID);
 
 	class ABaseWeaponActor* GetCurrentWeapon() { return CurrentWeapon; }
 };

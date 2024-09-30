@@ -17,4 +17,6 @@ void UBasePopSlotWidget::DropItem()
 {
 	if (InventoryComponent)
 		InventoryComponent->DropItem(Index);
+
+	RemoveFromParent();
 }

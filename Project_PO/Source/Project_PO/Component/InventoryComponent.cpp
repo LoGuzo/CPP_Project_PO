@@ -19,11 +19,14 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 	TArray<FSlot> Slots;
 	Slots.SetNum(InventorySize);
+	SlotMap.Emplace(E_ItemType::E_Equip, Slots);
 	Slots[0].ItemID = 1003;
 	Slots[0].Amount = 1;
+	Slots[0].Type = FSpawnItemType(E_ItemType::E_Cunsumable);
 	SlotMap.Emplace(E_ItemType::E_Cunsumable, Slots);
 	Slots[0].ItemID = 1005;
 	Slots[0].Amount = 2;
+	Slots[0].Type = FSpawnItemType(E_ItemType::E_Etc);
 	SlotMap.Emplace(E_ItemType::E_Etc, Slots);
 }
 
@@ -53,12 +56,16 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 				IsAddFailed = true;
 		}
 	}
+
+	OnInventoryUpdated.Broadcast();
 }
 
 void UInventoryComponent::DropItem(int32 TargetIndex)
 {
 	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
-	ArrayRef[0] = FSlot();
+	ArrayRef[TargetIndex] = FSlot();
+
+	OnInventoryUpdated.Broadcast();
 }
 
 FResult UInventoryComponent::FindSlot(int32 ItemID)
@@ -167,14 +174,23 @@ void UInventoryComponent::ChangeEquip(int32 _Index, int32 _ItemID)
 		UEquipComponent* EquipComponent = OwnPlayer->GetEquipComponent();
 		if (EquipComponent)
 		{
-			UEquipItemComponent* EquipItemComponent = EquipComponent->GetCurrentWeapon()->GetItemComponent<UEquipItemComponent>();
-			if (EquipItemComponent)
+			ABaseItemActor* Weapon = EquipComponent->GetCurrentWeapon();
+			if (Weapon)
 			{
-				int32 EquipID = EquipItemComponent->GetID();
-				FSpawnItemType Type = EquipItemComponent->GetItemType();
-				DropItem(_Index);
-				AddItem(EquipID, 1, Type);
+				UEquipItemComponent* EquipItemComponent = Weapon->GetItemComponent<UEquipItemComponent>();
+				if (EquipItemComponent)
+				{
+					int32 EquipID = EquipItemComponent->GetID();
+					FSpawnItemType Type = EquipItemComponent->GetItemType();
+					DropItem(_Index);
+					AddItem(EquipID, 1, Type);
 
+					OwnPlayer->SetEquip(_ItemID);
+				}
+			}
+			else
+			{
+				DropItem(_Index);
 				OwnPlayer->SetEquip(_ItemID);
 			}
 		}

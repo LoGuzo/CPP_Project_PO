@@ -22,6 +22,16 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UCharInfoWidget* WBP_CharInfo;
 
+	UPROPERTY(meta = (BindWidget))
+	class UCunsumQuickSlotWidget* WBP_CunsumQuickSlot;
+
+	UPROPERTY(meta = (BindWidget))
+	class USkillQuickSlotWidget* WBP_SkillQuickSlot;
+
+	UPROPERTY(meta = (BindWidget))
+	class UWeaponSlotWidget* WBP_WeaponSlot;
+
 public:
 	void SetUpCharInfo(class UStatComponent* StatComponent);
+	void SetUpWeaponSlot(int32 const& ID);
 };
