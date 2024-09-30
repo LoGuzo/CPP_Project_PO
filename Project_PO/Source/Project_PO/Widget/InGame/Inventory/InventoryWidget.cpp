@@ -19,11 +19,11 @@ void UInventoryWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	if (Btn_Equip)
+	if (Btn_Equip && !Btn_Equip->OnClicked.IsAlreadyBound(this, &UInventoryWidget::EquipInven))
 		Btn_Equip->OnClicked.AddDynamic(this, &UInventoryWidget::EquipInven);
-	if (Btn_Cunsum)
+	if (Btn_Cunsum && !Btn_Cunsum->OnClicked.IsAlreadyBound(this, &UInventoryWidget::CunsumInven))
 		Btn_Cunsum->OnClicked.AddDynamic(this, &UInventoryWidget::CunsumInven);
-	if (Btn_Etc)
+	if (Btn_Etc && !Btn_Etc->OnClicked.IsAlreadyBound(this, &UInventoryWidget::EtcInven))
 		Btn_Etc->OnClicked.AddDynamic(this, &UInventoryWidget::EtcInven);
 }
 
@@ -41,6 +41,7 @@ void UInventoryWidget::UpdateSlots(const TArray<FSlot>& Slots)
 			SlotsWidget->SetAmount(slot.Amount);
 			SlotsWidget->SetType(slot.Type);
 			SlotsWidget->SetConIndex(index);
+			SlotsWidget->SetInvetoryComponent(InventoryComponent);
 			//SlotsWidget->OnCloseItemPop.AddUObject(this, &UW_Inventory::ClosePop);
 		}
 		Wrap_Item->AddChild(SlotsWidget);
@@ -51,25 +52,24 @@ void UInventoryWidget::UpdateSlots(const TArray<FSlot>& Slots)
 void UInventoryWidget::EquipInven()
 {
 	InventoryComponent->SetItemType(E_ItemType::E_Equip);
-	UpdateSlots(InventoryComponent->GetSlots());
+	InventoryComponent->OnInventoryUpdated.Broadcast();
 }
 
 void UInventoryWidget::CunsumInven()
 {
 	InventoryComponent->SetItemType(E_ItemType::E_Cunsumable);
-	UpdateSlots(InventoryComponent->GetSlots());
+	InventoryComponent->OnInventoryUpdated.Broadcast();
 }
 
 void UInventoryWidget::EtcInven()
 {
 	InventoryComponent->SetItemType(E_ItemType::E_Etc);
-	UpdateSlots(InventoryComponent->GetSlots());
+	InventoryComponent->OnInventoryUpdated.Broadcast();
 }
 
 void UInventoryWidget::UpdateInventory(UInventoryComponent* _InventoryComponent)
 {
 	InventoryComponent = _InventoryComponent;
-	Wrap_Item->ClearChildren();
 	UpdateSlots(InventoryComponent->GetSlots());
 	InventoryComponent->OnInventoryUpdated.AddUObject(this, &UInventoryWidget::UpdateInventoryDrop);
 }

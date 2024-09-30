@@ -14,9 +14,6 @@ class PROJECT_PO_API UBaseSlotWidget : public UBaseInGameWidget
 {
 	GENERATED_BODY()
 	
-public:
-	UBaseSlotWidget(const FObjectInitializer& ObjectInitializer);
-
 protected:
 	UPROPERTY(meta = (BindWidget))
 	class USizeBox* Box_Slot;

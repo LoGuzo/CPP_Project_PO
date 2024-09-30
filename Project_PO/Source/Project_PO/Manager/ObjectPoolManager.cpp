@@ -54,10 +54,10 @@ ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, FSpawnItemType const&
 			if (Type.ItemType == E_ItemType::E_Equip)
 			{
 				UEquipItemComponent* ItemComponent = Item->GetItemComponent<UEquipItemComponent>();
-				if (ItemComponent->GetEquipType() != Type.EquipType)
+				if (ItemComponent->GetItemType().EquipType != Type.EquipType)
 					continue;
 
-				if (Type.EquipType == E_EquipType::E_Weapon && ItemComponent->GetWeaponType() != Type.WeaponType)
+				if (Type.EquipType == E_EquipType::E_Weapon && ItemComponent->GetItemType().WeaponType != Type.WeaponType)
 					continue;
 			}
 

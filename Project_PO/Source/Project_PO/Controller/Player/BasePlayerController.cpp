@@ -27,12 +27,12 @@ void ABasePlayerController::BeginPlay()
 
 void ABasePlayerController::SetUpWidget()
 {
-	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (MyGameInstance)
+	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
 		if (IsLocalController())
 		{
-			UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
 			{
 				if (HUDWidget)

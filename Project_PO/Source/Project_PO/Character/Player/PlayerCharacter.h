@@ -203,7 +203,7 @@ public:
 	FTransform GetLeftHandSocketTransform();
 
 public:
-	void SetWeapon(int32 ID);
+	void SetEquip(int32 ID);
 
 	void AttackCheck();
 };

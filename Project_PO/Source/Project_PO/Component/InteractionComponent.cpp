@@ -37,12 +37,12 @@ void UInteractionComponent::BeginPlay()
 	if (!OwnPlayer)
 		return;
 
-	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (MyGameInstance)
+	auto GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
 	{
 		if (InteractWidget)
 		{
-			UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
 			{
 				APlayerController* PlayerController = Cast<APlayerController>(OwnPlayer->GetController());
@@ -92,10 +92,10 @@ void UInteractionComponent::CheckInteraction()
 
 void UInteractionComponent::ShowAndHideInteractWidget()
 {
-	auto MyGameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
-	if (MyGameInstance)
+	auto GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
 	{
-		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
 			UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Interaction"));

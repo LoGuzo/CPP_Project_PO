@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "../../MyEnumClass.h"
+#include "../../MyStructureAll.h"
 #include "ItemComponent.generated.h"
 
 
@@ -38,7 +38,7 @@ protected:
     int32 ItemStackSize;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
-    E_ItemType ItemType;
+    FSpawnItemType ItemType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item", Meta = (AllowPrivateAccess = true))
     float DropChance;
@@ -52,5 +52,5 @@ public:
     int32 GetID() { return ID; }
 	TSoftObjectPtr<UStreamableRenderAsset> GetMesh() { return ItemMesh; }
     int32 GetItemStackSize() { return ItemStackSize; }
-    E_ItemType GetItemType() { return ItemType; }
+    FSpawnItemType GetItemType() { return ItemType; }
 };

@@ -23,9 +23,7 @@ void UEquipItemComponent::SetItem(int32 _ID)
 			ItemStackSize = ItemData.Pin()->ItemStackSize;
 			ItemType = ItemData.Pin()->ItemType;
 			ItemMesh = ItemData.Pin()->ItemMesh;
-			EquipType = ItemData.Pin()->EquipType;
 			DropChance = ItemData.Pin()->DropChance;
-			WeaponType = ItemData.Pin()->WeaponType;
 			AttackPower = ItemData.Pin()->AttackPower;
 			DefensePower = ItemData.Pin()->DefensePower;
 			WeaponAnimInstance = ItemData.Pin()->AnimInstance;

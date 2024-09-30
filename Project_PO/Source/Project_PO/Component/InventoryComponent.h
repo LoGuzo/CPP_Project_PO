@@ -79,4 +79,7 @@ public:
 	void ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom);
 
 	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
+
+	void ChangeEquip(int32 _Index,int32 _ItemID);
+	void UseItem(int32 _Index);
 };

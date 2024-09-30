@@ -146,6 +146,32 @@ struct FQuestData : public FTableRowBase
 };
 
 USTRUCT(BlueprintType)
+struct FSpawnItemType : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+    E_ItemType ItemType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+    E_EquipType EquipType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Type")
+    E_WeaponType WeaponType;
+
+    FSpawnItemType() {};
+
+    FSpawnItemType(E_ItemType _ItemType
+        , E_EquipType _EquipType = E_EquipType::E_None
+        , E_WeaponType _WeaponType = E_WeaponType::E_None)
+    {
+        ItemType = _ItemType;
+        EquipType = _EquipType;
+        WeaponType = _WeaponType;
+    }
+};
+
+USTRUCT(BlueprintType)
 struct FItemData : public FTableRowBase
 {
     GENERATED_BODY()
@@ -166,7 +192,7 @@ struct FItemData : public FTableRowBase
     int32 ItemStackSize;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
-    E_ItemType ItemType;
+    FSpawnItemType ItemType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
     float DropChance;
@@ -179,12 +205,6 @@ USTRUCT(BlueprintType)
 struct FEquipItemData : public FItemData
 {
     GENERATED_BODY()
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-    E_EquipType EquipType;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
-    E_WeaponType WeaponType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Equipment")
     float AttackPower;
@@ -226,31 +246,6 @@ struct FMontageData : public FTableRowBase
     TSoftObjectPtr<UAnimMontage> Montage;
 };
 
-USTRUCT()
-struct FSpawnItemType
-{
-    GENERATED_BODY()
-
-    UPROPERTY(VisibleAnywhere, Category = "Type")
-    E_ItemType ItemType;
-
-    UPROPERTY(VisibleAnywhere, Category = "Type")
-    E_EquipType EquipType;
-
-    UPROPERTY(VisibleAnywhere, Category = "Type")
-    E_WeaponType WeaponType;
-
-    FSpawnItemType() {};
-
-    FSpawnItemType(E_ItemType _ItemType
-        , E_EquipType _EquipType = E_EquipType::E_None
-        , E_WeaponType _WeaponType = E_WeaponType::E_None)
-    {
-        ItemType = _ItemType;
-        EquipType = _EquipType;
-        WeaponType = _WeaponType;
-    }
-};
 
 USTRUCT()
 struct FSlot

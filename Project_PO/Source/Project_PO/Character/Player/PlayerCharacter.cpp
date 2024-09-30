@@ -321,10 +321,10 @@ void APlayerCharacter::UseSkill(const FInputActionValue& Value)
 
 void APlayerCharacter::ShowInven(const FInputActionValue& Value)
 {
-	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (MyGameInstance)
+	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
 			UBaseUserWidget* InvenWidget = WidgetManager->GetWidget<UMainInventoryWidget>(TEXT("Inven"));
@@ -405,10 +405,10 @@ void APlayerCharacter::Zoom(float Value)
 
 void APlayerCharacter::DisplayCrosshair()
 {
-	auto MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (MyGameInstance)
+	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-		UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
 			UBaseUserWidget* CrossWidget = WidgetManager->GetWidget<UCrosshairEtcWidget>(TEXT("CrosshairWidget"));
@@ -466,18 +466,12 @@ FTransform APlayerCharacter::GetLeftHandSocketTransform()
 	return OutPutTransform;
 }
 
-void APlayerCharacter::SetWeapon(int32 ItemID)
+void APlayerCharacter::SetEquip(int32 ItemID)
 {
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
+	if (EquipComponent)
 	{
-		TWeakPtr<FEquipItemData> ItemData = GameInstance->GetDatabaseMap<FEquipItemData>(E_ManagerType::E_ItemDatabaseManager, ItemID);
-		if (ItemData.IsValid())
-		{
-			FEquipItemData equipData = *ItemData.Pin();
-			EquipComponent->SetEquipment(E_EquipType::E_Weapon, equipData);
-			SetIsArmed(true);
-		}
+		EquipComponent->SetEquipment(ItemID);
+		SetIsArmed(true);
 	}
 }
 

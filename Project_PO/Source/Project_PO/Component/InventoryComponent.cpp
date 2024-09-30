@@ -2,6 +2,10 @@
 
 
 #include "InventoryComponent.h"
+#include "EquipComponent.h"
+#include "ItemComponent/EquipItemComponent.h"
+#include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
+#include "../Character/Player/PlayerCharacter.h"
 #include "../Manager/BaseGameInstance.h"
 
 UInventoryComponent::UInventoryComponent()
@@ -15,9 +19,6 @@ void UInventoryComponent::BeginPlay()
 	Super::BeginPlay();
 	TArray<FSlot> Slots;
 	Slots.SetNum(InventorySize);
-	Slots[0].ItemID = 1000;
-	Slots[0].Amount = 1;
-	SlotMap.Emplace(E_ItemType::E_Equip, Slots);
 	Slots[0].ItemID = 1003;
 	Slots[0].Amount = 1;
 	SlotMap.Emplace(E_ItemType::E_Cunsumable, Slots);
@@ -109,10 +110,10 @@ FResult UInventoryComponent::CheckSlotEmpty()
 
 int32 UInventoryComponent::GetStackSize(int32 ItemID)
 {
-	UBaseGameInstance* MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (MyGameInstance)
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-		TWeakPtr<FItemData> ItemData = MyGameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, ItemID);
+		TWeakPtr<FItemData> ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, ItemID);
 		if (ItemData.IsValid())
 			return ItemData.Pin()->ItemStackSize;
 	}
@@ -129,6 +130,8 @@ void UInventoryComponent::AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnIte
 {
 	FResult result;
 	result = CheckSlotEmpty();
+
+	ItemType = Type.ItemType;
 
 	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
 	ArrayRef[result.Index].ItemID = ItemID;
@@ -155,4 +158,29 @@ void UInventoryComponent::ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInve
 	}
 
 	OnInventoryUpdated.Broadcast();
+}
+
+void UInventoryComponent::ChangeEquip(int32 _Index, int32 _ItemID)
+{
+	if (OwnPlayer)
+	{
+		UEquipComponent* EquipComponent = OwnPlayer->GetEquipComponent();
+		if (EquipComponent)
+		{
+			UEquipItemComponent* EquipItemComponent = EquipComponent->GetCurrentWeapon()->GetItemComponent<UEquipItemComponent>();
+			if (EquipItemComponent)
+			{
+				int32 EquipID = EquipItemComponent->GetID();
+				FSpawnItemType Type = EquipItemComponent->GetItemType();
+				DropItem(_Index);
+				AddItem(EquipID, 1, Type);
+
+				OwnPlayer->SetEquip(_ItemID);
+			}
+		}
+	}
+}
+
+void UInventoryComponent::UseItem(int32 _Index)
+{
 }

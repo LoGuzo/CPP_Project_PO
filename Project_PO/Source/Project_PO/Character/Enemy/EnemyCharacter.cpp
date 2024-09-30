@@ -10,6 +10,7 @@ AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
 {
     StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
+    GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
 }
  
 void AEnemyCharacter::BeginPlay()

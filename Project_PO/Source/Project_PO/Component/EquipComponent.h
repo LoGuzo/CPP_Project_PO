@@ -28,9 +28,9 @@ private:
 	class ABaseWeaponActor* CurrentWeapon;
 
 public:
-	void SpawnWeapon(const E_WeaponType WeaponType, const int32 DataID);
+	void SpawnWeapon();
 
-	void SetEquipment(const E_EquipType EquipType, const FEquipItemData ItemData);
+	void SetEquipment(const int32 ID);
 
 	class ABaseWeaponActor* GetCurrentWeapon() { return CurrentWeapon; }
 };

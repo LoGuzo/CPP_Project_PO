@@ -24,20 +24,21 @@ UEquipComponent::UEquipComponent()
 void UEquipComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
 }
 
-void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 DataID)
+void UEquipComponent::SpawnWeapon()
 {
 	if (OwnPlayer)
 	{
+		FEquipItemData ItemData = *EquipMap.Find(E_EquipType::E_Weapon);
+
+		E_WeaponType WeaponType = ItemData.ItemType.WeaponType;
+
 		OwnPlayer->SetWeaponType(WeaponType);
-		UBaseGameInstance* MyGameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (MyGameInstance)
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
 		{
-			UObjectPoolManager* ObjectPoolManager = MyGameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
+			UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
 
 			if (!ObjectPoolManager)
 				return;
@@ -71,13 +72,13 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 			CurrentWeapon = Cast<ABaseWeaponActor>(ObjectPoolManager->GetItem(GetWorld(), Type, FTransform()));
 			if (CurrentWeapon)
 			{
-				CurrentWeapon->SetItem(DataID);
+				CurrentWeapon->SetItem(ItemData.ID);
 				CurrentWeapon->SetOwner(OwnPlayer);
 				CurrentWeapon->AttachToComponent(OwnPlayer->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, SocketName);
 
 				if (CurrentWeapon->GetCrosshairWdiget())
 				{
-					UWidgetManager* WidgetManager = MyGameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+					UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 					if (WidgetManager)
 					{
 						APlayerController* PlayerController = Cast<APlayerController>(OwnPlayer->GetController());
@@ -98,25 +99,34 @@ void UEquipComponent::SpawnWeapon(const E_WeaponType WeaponType, const int32 Dat
 	}
 }
 
-void UEquipComponent::SetEquipment(const E_EquipType EquipType, const FEquipItemData ItemData)
+void UEquipComponent::SetEquipment(const int32 ID)
 {
-	if (ItemData.ID == -1)
+	if (ID == -1)
 		return;
 
-	EquipMap.Emplace(EquipType, ItemData);
-
-	switch (EquipType)
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-	case E_EquipType::E_Weapon:
-		SpawnWeapon(ItemData.WeaponType, ItemData.ID);
-		break;
-	case E_EquipType::E_Hat:
-	case E_EquipType::E_Shoes:
-	case E_EquipType::E_Chest:
-	case E_EquipType::E_Gloves:
-		break;
-	default:
-		break;
+		TWeakPtr<FEquipItemData> ItemData = GameInstance->GetDatabaseMap<FEquipItemData>(E_ManagerType::E_ItemDatabaseManager, ID);
+		if (ItemData.IsValid())
+		{
+			E_EquipType Type = ItemData.Pin()->ItemType.EquipType;
+			EquipMap.Emplace(Type, *ItemData.Pin());
+
+			switch (Type)
+			{
+			case E_EquipType::E_Weapon:
+				SpawnWeapon();
+				break;
+			case E_EquipType::E_Hat:
+			case E_EquipType::E_Shoes:
+			case E_EquipType::E_Chest:
+			case E_EquipType::E_Gloves:
+				break;
+			default:
+				break;
+			}
+		}
 	}
 }
 

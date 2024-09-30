@@ -6,6 +6,7 @@
 #include "Engine/StaticMesh.h"
 #include "Engine/SkeletalMesh.h"
 #include "../../Character/Player/PlayerCharacter.h"
+#include "../../Component/InventoryComponent.h"
 #include "../../Component/ItemComponent/ItemComponent.h"
 
 ADropItemActor::ADropItemActor()
@@ -22,13 +23,15 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 		if (!ItemComponent)
 			return;
 
-		E_ItemType ItemType = ItemComponent->GetItemType();
-		if (ItemType == E_ItemType::E_Equip)
-			playerCharacter->SetWeapon(ItemComponent->GetID());
-		else
+		UInventoryComponent* InventoryComponent = playerCharacter->GetInventoryComponent();
+		if (InventoryComponent)
 		{
+			int32 ID = ItemComponent->GetID();
+			FSpawnItemType Type = ItemComponent->GetItemType();
 
+			InventoryComponent->AddItem(ID, 1, Type);
 		}
+
 		ResetItem();
 	}
 }
