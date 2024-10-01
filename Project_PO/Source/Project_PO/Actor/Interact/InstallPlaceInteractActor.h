@@ -16,5 +16,15 @@ class PROJECT_PO_API AInstallPlaceInteractActor : public AInteractActor, public 
 	GENERATED_BODY()
 	
 public:
+	AInstallPlaceInteractActor();
+
+public:
 	virtual void Interact(class AActor* PlayerCharacter) override;
+
+private:
+	UPROPERTY(EditAnywhere, Meta = (AllowPrivateAccess = true))
+	bool bIsInstall;
+
+public:
+	bool GetIsInstall() { return bIsInstall; }
 };

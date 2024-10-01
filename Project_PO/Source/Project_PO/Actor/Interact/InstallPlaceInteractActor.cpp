@@ -5,9 +5,17 @@
 #include "../../Character/Player/PlayerCharacter.h"
 #include "../../Component/InteractionComponent.h"
 
+AInstallPlaceInteractActor::AInstallPlaceInteractActor()
+	: bIsInstall(true)
+{
+}
+
 void AInstallPlaceInteractActor::Interact(AActor* PlayerCharacter)
 {
 	APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
 	if (playerCharacter)
+	{
 		playerCharacter->GetInteractionComponent()->InstallObject(GetActorLocation(), GetActorRotation());
+		bIsInstall = false;
+	}
 }

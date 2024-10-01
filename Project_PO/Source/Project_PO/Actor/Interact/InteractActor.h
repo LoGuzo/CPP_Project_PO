@@ -25,13 +25,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* BoxCollision;
 
-	UPROPERTY(EditAnywhere, Meta = (AllowPrivateAccess = true))
-	bool bIsInstall;
-
 private:
 	void SetBoxComponent();
 
 public:
 	class UBoxComponent* GetBoxComponent() { return BoxCollision; }
-	bool GetIsInstall() { return bIsInstall; }
 };

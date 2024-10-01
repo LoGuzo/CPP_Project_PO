@@ -30,5 +30,8 @@ public:
 
 private:
 	UPROPERTY()
-	FLinearColor OriginalColor;
+	UMaterialInterface* InstallMaterial;
+	UPROPERTY()
+	UMaterialInterface* BaseMaterial;
+
 };

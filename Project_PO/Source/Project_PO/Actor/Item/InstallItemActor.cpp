@@ -2,13 +2,19 @@
 
 
 #include "InstallItemActor.h"
-#include "../../Actor/Interact/InteractActor.h"
+#include "Engine/StaticMesh.h"
+#include "../../Actor/Interact/InstallPlaceInteractActor.h"
 #include "../../Character/Player/PlayerCharacter.h"
 #include "../../Component/ItemComponent/ItemComponent.h"
 
 AInstallItemActor::AInstallItemActor()
 {
     ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
+
+    static ConstructorHelpers::FObjectFinder<UMaterialInterface> MInstall(TEXT("/Game/Sky_Dungeon/materials/props_materials/M_InstallObject.M_InstallObject"));
+
+    if (MInstall.Succeeded())
+        InstallMaterial = MInstall.Object;
 }
 
 bool AInstallItemActor::CanBePlaced(FVector const& Location)
@@ -21,7 +27,7 @@ bool AInstallItemActor::CanBePlaced(FVector const& Location)
 
     if (HitResult.GetActor())
     {
-        AInteractActor* InteractActor = Cast<AInteractActor>(HitResult.GetActor());
+        AInstallPlaceInteractActor* InteractActor = Cast<AInstallPlaceInteractActor>(HitResult.GetActor());
         if (InteractActor)
         {
             if (bHit && InteractActor->GetIsInstall())
@@ -33,14 +39,13 @@ bool AInstallItemActor::CanBePlaced(FVector const& Location)
 
 void AInstallItemActor::ShowPreview(FVector const& Location)
 {
-    UMaterialInterface* BaseMaterial = GetStaticMesh()->GetMaterial(0);
-    UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+    UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(InstallMaterial, this);
     if (DynamicMaterial)
     {
         if (CanBePlaced(Location))
-            DynamicMaterial->SetVectorParameterValue(FName("BaseColor"), FLinearColor::Green);
+            DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor::Green);
         else
-            DynamicMaterial->SetVectorParameterValue(FName("BaseColor"), FLinearColor::Red);
+            DynamicMaterial->SetVectorParameterValue(FName("Color"), FLinearColor::Red);
         DynamicMaterial->SetScalarParameterValue(FName("Opacity"), 0.5f);
 
         GetStaticMesh()->SetMaterial(0, DynamicMaterial);
@@ -55,7 +60,8 @@ void AInstallItemActor::Place(FVector const& Location, FRotator const& Rotation)
     {
         SetActorLocationAndRotation(Location, Rotation);
         ResetColor();
-        ResetItem();
+
+        GetStaticMesh()->SetCollisionProfileName(TEXT("BlockAllDynamic"));
     }
 }
 
@@ -63,21 +69,11 @@ void AInstallItemActor::SetItem(int32 _ID)
 {
     Super::SetItem(_ID);
 
-    UMaterialInterface* BaseMaterial = GetStaticMesh()->GetMaterial(0);
-    UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
-    if (DynamicMaterial)
-        DynamicMaterial->GetVectorParameterValue(FName("BaseColor"), OriginalColor);
+    BaseMaterial = GetStaticMesh()->GetMaterial(0);
 }
 
 void AInstallItemActor::ResetColor()
 {
-    UMaterialInterface* BaseMaterial = GetStaticMesh()->GetMaterial(0);
-    UMaterialInstanceDynamic* DynamicMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
-    if (DynamicMaterial)
-    {
-        DynamicMaterial->SetVectorParameterValue(FName("BaseColor"), OriginalColor);
-        DynamicMaterial->SetScalarParameterValue(FName("Opacity"), 1.f);
-
-        GetStaticMesh()->SetMaterial(0, DynamicMaterial);
-    }
+    if(BaseMaterial)
+        GetStaticMesh()->SetMaterial(0, BaseMaterial);
 }

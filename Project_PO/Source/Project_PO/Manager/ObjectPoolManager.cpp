@@ -54,6 +54,9 @@ ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, FSpawnItemType const&
 			if (Type.ItemType == E_ItemType::E_Equip)
 			{
 				UEquipItemComponent* ItemComponent = Item->GetItemComponent<UEquipItemComponent>();
+				if (!ItemComponent)
+					continue;
+
 				if (ItemComponent->GetItemType().EquipType != Type.EquipType)
 					continue;
 
