@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
-#include "../InteractActor.h"
+#include "../Interact/InteractActor.h"
 #include "../../Interface/Interactable.h"
 #include "BaseDoorActor.generated.h"
 

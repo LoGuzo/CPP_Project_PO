@@ -26,6 +26,11 @@ private:
 		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
 	);
 
+	class ABaseItemActor* InstallItemFactory(UWorld* World, FSpawnItemType const& Type
+		, FTransform const& Transform
+		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
+	);
+
 public:
 	class AEnemyCharacter* MonsterFactory(UWorld* World, E_MonsterType const& Type
 		, FTransform const& Transform

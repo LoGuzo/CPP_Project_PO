@@ -3,10 +3,13 @@
 
 #include "InventoryComponent.h"
 #include "EquipComponent.h"
+#include "InteractionComponent.h"
 #include "ItemComponent/EquipItemComponent.h"
 #include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
+#include "../Actor/Item/InstallItemActor.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Manager/BaseGameInstance.h"
+#include "../Manager/ObjectPoolManager.h"
 
 UInventoryComponent::UInventoryComponent()
 {
@@ -21,12 +24,15 @@ void UInventoryComponent::BeginPlay()
 	Slots.SetNum(InventorySize);
 	SlotMap.Emplace(E_ItemType::E_Equip, Slots);
 	Slots[0].ItemID = 1003;
-	Slots[0].Amount = 1;
-	Slots[0].Type = FSpawnItemType(E_ItemType::E_Cunsumable);
+	Slots[0].Amount = 2;
+	Slots[0].Type = FSpawnItemType(E_ItemType::E_Cunsumable, E_EquipType::E_Registerable);
 	SlotMap.Emplace(E_ItemType::E_Cunsumable, Slots);
 	Slots[0].ItemID = 1005;
-	Slots[0].Amount = 2;
+	Slots[0].Amount = 1;
 	Slots[0].Type = FSpawnItemType(E_ItemType::E_Etc);
+	Slots[1].ItemID = 1006;
+	Slots[1].Amount = 1;
+	Slots[1].Type = FSpawnItemType(E_ItemType::E_Etc, E_EquipType::E_Installable);
 	SlotMap.Emplace(E_ItemType::E_Etc, Slots);
 }
 
@@ -167,7 +173,7 @@ void UInventoryComponent::ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInve
 	OnInventoryUpdated.Broadcast();
 }
 
-void UInventoryComponent::ChangeEquip(int32 _Index, int32 _ItemID)
+void UInventoryComponent::ChangeEquip(int32 Index, int32 ItemID)
 {
 	if (OwnPlayer)
 	{
@@ -182,21 +188,67 @@ void UInventoryComponent::ChangeEquip(int32 _Index, int32 _ItemID)
 				{
 					int32 EquipID = EquipItemComponent->GetID();
 					FSpawnItemType Type = EquipItemComponent->GetItemType();
-					DropItem(_Index);
+					DropItem(Index);
 					AddItem(EquipID, 1, Type);
 
-					OwnPlayer->SetEquip(_ItemID);
+					OwnPlayer->SetEquip(ItemID);
 				}
 			}
 			else
 			{
-				DropItem(_Index);
-				OwnPlayer->SetEquip(_ItemID);
+				DropItem(Index);
+				OwnPlayer->SetEquip(ItemID);
 			}
 		}
 	}
 }
 
-void UInventoryComponent::UseItem(int32 _Index)
+void UInventoryComponent::UseItem(int32 Index)
+{
+	switch (ItemType)
+	{
+	case E_ItemType::E_Cunsumable:
+		UseCunsumItem(Index);
+		break;
+	case E_ItemType::E_Etc:
+		UseEtcItem(Index);
+		break;
+	default:
+		break;
+	}
+}
+
+void UInventoryComponent::UseCunsumItem(int32 Index)
+{
+
+}
+
+void UInventoryComponent::UseEtcItem(int32 Index)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		if (OwnPlayer)
+		{
+			UInteractionComponent* InteractionComponent = OwnPlayer->GetInteractionComponent();
+			if (InteractionComponent)
+			{
+				UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
+				if (ObjectPoolManager)
+				{
+					FSlot NowSlot = GetSlot(Index);
+					AInstallItemActor* InstallItem = Cast<AInstallItemActor>(ObjectPoolManager->GetItem(GetWorld(), NowSlot.Type));
+					if (InstallItem)
+					{
+						InstallItem->SetItem(NowSlot.ItemID);
+						InteractionComponent->SetInstallItem(InstallItem);
+					}
+				}
+			}
+		}
+	}
+}
+
+void UInventoryComponent::RegisterQuickSlot(int32 Index, int32 ItemID)
 {
 }

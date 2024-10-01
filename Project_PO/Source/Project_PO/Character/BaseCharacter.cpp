@@ -46,6 +46,7 @@ void ABaseCharacter::SetState(bool NowState)
 {
 	SetActorHiddenInGame(!NowState);
 	SetActorEnableCollision(NowState);
+	SetActorTickEnabled(NowState);
 }
 
 

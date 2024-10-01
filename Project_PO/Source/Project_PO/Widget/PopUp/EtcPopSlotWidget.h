@@ -13,5 +13,11 @@ UCLASS()
 class PROJECT_PO_API UEtcPopSlotWidget : public UBasePopSlotWidget
 {
 	GENERATED_BODY()
-	
+
+public:
+	virtual void NativeConstruct() override;
+
+private:
+	UFUNCTION()
+	void UseItem();
 };

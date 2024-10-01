@@ -24,13 +24,13 @@ private:
 
 public:
 	class AEnemyCharacter* GetMonster(UWorld* World, E_MonsterType const& Type
-		, FTransform const& Transform
+		, FTransform const& Transform = FTransform()
 		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
 	);
 	void ReleaseMonster(class AEnemyCharacter* Monster);
 
 	class ABaseItemActor* GetItem(UWorld* World, FSpawnItemType const& Type
-		, FTransform const& Transform
+		, FTransform const& Transform = FTransform()
 		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
 	);
 	void ReleaseItem(class ABaseItemActor* Item);

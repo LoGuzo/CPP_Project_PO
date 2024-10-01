@@ -80,6 +80,10 @@ public:
 
 	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
 
-	void ChangeEquip(int32 _Index,int32 _ItemID);
-	void UseItem(int32 _Index);
+	void ChangeEquip(int32 Index,int32 ItemID);
+	void UseItem(int32 Index);
+	void UseCunsumItem(int32 Index);
+	void UseEtcItem(int32 Index);
+
+	void RegisterQuickSlot(int32 Index, int32 ItemID);
 };

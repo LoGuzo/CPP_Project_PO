@@ -199,6 +199,7 @@ public:
 
 	class UEquipComponent* GetEquipComponent(){ return EquipComponent; }
 	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
+	class UInteractionComponent* GetInteractionComponent() { return InteractionComponent; }
 
 	FTransform GetLeftHandSocketTransform();
 

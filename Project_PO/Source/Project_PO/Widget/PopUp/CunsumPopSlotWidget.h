@@ -14,4 +14,17 @@ class PROJECT_PO_API UCunsumPopSlotWidget : public UBasePopSlotWidget
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void NativeConstruct() override;
+
+private:
+	UPROPERTY(meta = (BindWidget))
+	class UButton* Btn_Register;
+
+private:
+	UFUNCTION()
+	void UseItem();
+
+	UFUNCTION()
+	void RegisterItem();
 };

@@ -4,6 +4,9 @@
 #include "FactoryManager.h"
 #include "../Actor/Item/BaseItemActor.h"
 #include "../Actor/Item/DropItemActor.h"
+#include "../Actor/Item/InstallItemActor.h"
+#include "../Actor/Item/Cunsum/CunsumItemActor.h"
+#include "../Actor/Item/Etc/EtcItemActor.h"
 #include "../Actor/Item/Equip/EquipItemActor.h"
 #include "../Actor/Item/Equip/Weapon/Pistol/BasePistolWeaponActor.h"
 #include "../Actor/Item/Equip/Weapon/Rifle/BaseRifleWeaponActor.h"
@@ -68,6 +71,27 @@ ABaseItemActor* UFactoryManager::WeaponFactory(UWorld* World, FSpawnItemType con
 	return Item;
 }
 
+ABaseItemActor* UFactoryManager::InstallItemFactory(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
+{
+	if (!World)
+		return nullptr;
+
+	ABaseItemActor* Item = nullptr;
+
+	switch (Type.EquipType)
+	{
+	case E_EquipType::E_Installable:
+		Item = World->SpawnActor<AInstallItemActor>(AInstallItemActor::StaticClass(), Transform, SpawnParameters);
+		break;
+	case E_EquipType::E_None:
+		Item = World->SpawnActor<AEtcItemActor>(AEtcItemActor::StaticClass(), Transform, SpawnParameters);
+		break;
+	default:
+		break;
+	}
+	return Item;
+}
+
 AEnemyCharacter* UFactoryManager::MonsterFactory(UWorld* World, E_MonsterType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
 	if (!World)
@@ -100,10 +124,10 @@ ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, FSpawnItemType const
 		Item = EquipFactory(World, Type, Transform);
 		break;
 	case E_ItemType::E_Cunsumable:
-		//Item = GetWorld()->SpawnActor<>
+		Item = GetWorld()->SpawnActor<ACunsumItemActor>(ACunsumItemActor::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_ItemType::E_Etc:
-		//Item = GetWorld()->SpawnActor<>
+		Item = InstallItemFactory(World, Type, Transform);
 		break;
 	case E_ItemType::E_Drop:
 		Item = World->SpawnActor<ADropItemActor>(ADropItemActor::StaticClass(),Transform, SpawnParameters);

@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
+#include "../Actor/Item/InstallItemActor.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Interface/Interactable.h"
 #include "../Manager/BaseGameInstance.h"
@@ -18,6 +19,7 @@
 UInteractionComponent::UInteractionComponent()
 	: InteractionRange(200.f)
 	, bIsWidgetVisible(false)
+	, InstallItem(nullptr)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -90,6 +92,21 @@ void UInteractionComponent::CheckInteraction()
 	}
 }
 
+void UInteractionComponent::CheckInstall(FVector const& Location)
+{
+	if (InstallItem)
+		InstallItem->ShowPreview(Location);
+}
+
+void UInteractionComponent::InstallObject(FVector const& Location, FRotator const& Rotation)
+{
+	if (InstallItem)
+	{
+		InstallItem->Place(Location, Rotation);
+		InstallItem = nullptr;
+	}
+}
+
 void UInteractionComponent::ShowAndHideInteractWidget()
 {
 	auto GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
@@ -122,6 +139,8 @@ AActor* UInteractionComponent::GetInteractableInRange()
 	CameraLocation = CameraLocation + Offset;
 
 	FVector End = CameraLocation + (CameraRotation.Vector() * InteractionRange);
+
+	CheckInstall(End);
 
 	FHitResult HitResult;
 	FCollisionQueryParams Params;

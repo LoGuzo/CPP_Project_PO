@@ -47,7 +47,7 @@ void UEquipComponent::SpawnWeapon()
 			if (CurrentWeapon)
 			{
 				CurrentWeapon->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-				ObjectPoolManager->ReleaseItem(CurrentWeapon);
+				CurrentWeapon->ResetItem();
 				CurrentWeapon = nullptr;
 			}
 

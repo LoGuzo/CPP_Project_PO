@@ -45,6 +45,8 @@ enum class E_EquipType : uint8
 	E_Shoes UMETA(DisplayName = "Shoes"),
 	E_Chest UMETA(DisplayName = "Chest"),
 	E_Gloves UMETA(DisplayName = "Gloves"),
+	E_Registerable UMETA(DisplayName = "Register"),
+	E_Installable UMETA(DisplayName = "Install"),
 	E_None UMETA(DisplayName = "None"),
 };
 

@@ -55,15 +55,19 @@ void UInventorySlotWidget::NativePreConstruct()
 					Img_Slot->SetVisibility(ESlateVisibility::Visible);
 				}
 
-				if(Box_Slot)
+				if (Box_Slot)
 					Box_Slot->SetVisibility(ESlateVisibility::Visible);
 
 				if (ItemData.Pin()->ItemType.ItemType == E_ItemType::E_Equip)
-					if(Txt_Slot)
+				{
+					if (Txt_Slot)
 						Txt_Slot->SetVisibility(ESlateVisibility::Hidden);
+				}
 				else
+				{
 					if (Txt_Slot)
 						Txt_Slot->SetText(FText::FromString(FString::FromInt(Amount)));
+				}
 			}
 		}
 		else
@@ -171,7 +175,7 @@ void UInventorySlotWidget::SetUpPopSlot(const FPointerEvent& InMouseEvent)
 			switch (Type.ItemType)
 			{
 			case E_ItemType::E_Equip:
-				if(EquipPopSlotWidget)
+				if (EquipPopSlotWidget)
 					PopSlotWidget = Cast<UBasePopSlotWidget>(WidgetManager
 						->CreateAndAddWidget<UInventorySlotWidget, UEquipPopSlotWidget>(
 							this, TEXT("PopUpSlot"), EquipPopSlotWidget
@@ -199,6 +203,7 @@ void UInventorySlotWidget::SetUpPopSlot(const FPointerEvent& InMouseEvent)
 			{
 				PopSlotWidget->SetItemID(ID);
 				PopSlotWidget->SetIndex(ConIndex);
+				PopSlotWidget->SetType(Type);
 				PopSlotWidget->SetInventoryComponent(InventoryComponent);
 				FVector2D MousePosition = InMouseEvent.GetScreenSpacePosition();
 				FVector2D ViewportPosition = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this).AbsoluteToLocal(MousePosition);
@@ -219,7 +224,7 @@ void UInventorySlotWidget::RemovePopSlot()
 		{
 			UBasePopSlotWidget* PopSlotWidget = WidgetManager->GetWidget<UBasePopSlotWidget>(TEXT("PopUpSlot"));
 			if (PopSlotWidget)
-				if(PopSlotWidget->IsInViewport())
+				if (PopSlotWidget->IsInViewport())
 					PopSlotWidget->RemoveFromParent();
 		}
 	}
