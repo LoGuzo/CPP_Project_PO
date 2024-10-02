@@ -24,6 +24,7 @@ public:
 	virtual FReply NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual bool NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation) override;
 	virtual void NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation) override;
+	virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
 
 private:
@@ -31,6 +32,7 @@ private:
 	TSubclassOf<class UEquipPopSlotWidget> EquipPopSlotWidget;
 	TSubclassOf<class UCunsumPopSlotWidget> CunsumPopSlotWidget;
 	TSubclassOf<class UEtcPopSlotWidget> EtcPopSlotWidget;
+	TSubclassOf<class UItemInfoPopUpWidget> ItemInfoWidget;
 
 	class UDragDrop* DragDrop;
 
@@ -48,6 +50,9 @@ private:
 private:
 	void SetUpPopSlot(const FPointerEvent& InMouseEvent);
 	void RemovePopSlot();
+
+	void SetUpItemInfo(const FPointerEvent& InMouseEvent);
+	void RemoveItemInfo();
 
 public:
 	void SetAmount(int32 const& _Amount) { Amount = _Amount; }

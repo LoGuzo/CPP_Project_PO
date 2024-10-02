@@ -8,10 +8,12 @@
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
 #include "../Inventory/DragWidget.h"
+#include "../Inventory/InventoryWidget.h"
 #include "../../PopUp/BasePopSlotWidget.h"
 #include "../../PopUp/CunsumPopSlotWidget.h"
 #include "../../PopUp/EquipPopSlotWidget.h"
 #include "../../PopUp/EtcPopSlotWidget.h"
+#include "../../PopUp/ItemInfoPopUpWidget.h"
 #include "../../../Component/InventoryComponent.h"
 #include "../../../DragDrop.h"
 #include "../../../Manager/BaseGameInstance.h"
@@ -35,6 +37,10 @@ UInventorySlotWidget::UInventorySlotWidget(const FObjectInitializer& ObjectIniti
 	static ConstructorHelpers::FClassFinder<UUserWidget>EtcPopSlot(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_EtcPopSlot.WBP_EtcPopSlot_C"));
 	if (EtcPopSlot.Succeeded())
 		EtcPopSlotWidget = EtcPopSlot.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>ItemInfo(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_PopUpItemInfo.WBP_PopUpItemInfo_C"));
+	if (ItemInfo.Succeeded())
+		ItemInfoWidget = ItemInfo.Class;
 }
 
 void UInventorySlotWidget::NativePreConstruct()
@@ -157,9 +163,21 @@ void UInventorySlotWidget::NativeOnDragDetected(const FGeometry& InGeometry, con
 	}
 }
 
+void UInventorySlotWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (ID == -1)
+		return;
+
+	Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
+
+	SetUpItemInfo(InMouseEvent);
+}
+
 void UInventorySlotWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEvent)
 {
 	Super::NativeOnMouseLeave(InMouseEvent);
+
+	RemoveItemInfo();
 }
 
 void UInventorySlotWidget::SetUpPopSlot(const FPointerEvent& InMouseEvent)
@@ -226,6 +244,46 @@ void UInventorySlotWidget::RemovePopSlot()
 			if (PopSlotWidget)
 				if (PopSlotWidget->IsInViewport())
 					PopSlotWidget->RemoveFromParent();
+		}
+	}
+}
+
+void UInventorySlotWidget::SetUpItemInfo(const FPointerEvent& InMouseEvent)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UItemInfoPopUpWidget* ItemInfoPopUp = WidgetManager
+				->CreateAndAddWidget<UInventorySlotWidget, UItemInfoPopUpWidget>(
+					this, TEXT("ItemInfo"), ItemInfoWidget
+				);
+			if (ItemInfoPopUp)
+			{
+				ItemInfoPopUp->SetItemID(ID);
+				ItemInfoPopUp->SetItemType(Type.ItemType);
+				FVector2D MousePosition = InMouseEvent.GetScreenSpacePosition();
+				FVector2D ViewportPosition = UWidgetLayoutLibrary::GetViewportWidgetGeometry(this).AbsoluteToLocal(MousePosition);
+				ItemInfoPopUp->SetPositionInViewport(ViewportPosition, false);
+				ItemInfoPopUp->SetAddRemove();
+			}
+		}
+	}
+}
+
+void UInventorySlotWidget::RemoveItemInfo()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UItemInfoPopUpWidget* ItemInfoPopUp = WidgetManager->GetWidget<UItemInfoPopUpWidget>(TEXT("ItemInfo"));
+			if (ItemInfoPopUp)
+				ItemInfoPopUp->RemoveFromParent();
 		}
 	}
 }

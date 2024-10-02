@@ -33,7 +33,7 @@ private:
 
 	UPROPERTY(meta = (BindWidget))
 	class UWrapBox* Wrap_Item;
-	
+
 	class UInventoryComponent* InventoryComponent;
 
 	TSubclassOf<class UInventorySlotWidget> SlotWidget;
