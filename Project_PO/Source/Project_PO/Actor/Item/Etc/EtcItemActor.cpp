@@ -6,6 +6,8 @@
 
 AEtcItemActor::AEtcItemActor()
 {
+	ItemType = E_ItemType::E_Etc;
+
 	ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
 	RootComponent = GetStaticMesh();
 }

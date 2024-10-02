@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "../../MyEnumClass.h"
 #include "BaseItemActor.generated.h"
 
 /**
@@ -20,6 +21,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+protected:
+	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* StaticMesh;
@@ -31,8 +35,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UItemComponent* ItemComponent;
 
-protected:
-	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh);
+	E_ItemType ItemType;
+	E_EquipType EquipType;
 
 public:
 	template<typename T>
@@ -48,4 +52,7 @@ public:
 	virtual void SetItem(int32 _ID);
 	virtual void ResetItem();
 	void SetState(bool NowState);
+
+	E_EquipType GetEquipType() { return EquipType; }
+	E_ItemType GetItemType() { return ItemType; }
 };

@@ -26,7 +26,7 @@ void UCunsumPopSlotWidget::NativeConstruct()
 void UCunsumPopSlotWidget::UseItem()
 {
 	if (InventoryComponent)
-		InventoryComponent->UseItem(Index);
+		InventoryComponent->UseItem(Index, Type.ItemType);
 
 	RemoveFromParent();
 }

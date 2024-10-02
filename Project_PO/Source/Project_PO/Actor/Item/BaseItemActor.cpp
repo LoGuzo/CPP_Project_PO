@@ -7,6 +7,8 @@
 #include "../../Manager/ObjectPoolManager.h"
 
 ABaseItemActor::ABaseItemActor()
+	: ItemType(E_ItemType::E_None)
+	, EquipType(E_EquipType::E_None)
 {
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>("StaticMesh");
 	StaticMesh->SetCollisionProfileName(TEXT("NoCollision"));
@@ -64,9 +66,7 @@ void ABaseItemActor::ResetItem()
 		if (!ObjectPoolManager)
 			return;
 		ObjectPoolManager->ReleaseItem(this);
-
-		StaticMesh = nullptr;
-		SkeletalMesh = nullptr;
+		SetOwner(nullptr);
 	}
 }
 

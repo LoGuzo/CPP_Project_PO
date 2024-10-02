@@ -29,6 +29,10 @@ class PROJECT_PO_API UInventoryComponent : public UBaseActorComponent
 public:
 	UInventoryComponent();
 
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
+
 private:
 	int32 InventorySize;
 	E_ItemType ItemType;
@@ -39,22 +43,25 @@ private:
 
 	TMap<E_ItemType, TArray<FSlot>> SlotMap;
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+private:
+	FResult CheckSlotEmpty(E_ItemType Type);
+	int32 GetStackSize(int32 ItemID);
+	void IncreaseSlotStack(int32 Index, int32 Amount);
+	void AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
+	void CheckSlotAmount(int32 Index, E_ItemType Type);
 
 public:
 	FOnInventoryUpdated OnInventoryUpdated;
 
 	TArray<FSlot> GetSlots() { return *SlotMap.Find(ItemType); }
 
-	void SetSlot(int32 _Index, FSlot _Slot) { 
-		if (SlotMap.Contains(ItemType) && SlotMap[ItemType].IsValidIndex(_Index))
-			SlotMap[ItemType][_Index] = _Slot;
+	void SetSlot(int32 _Index, FSlot _Slot, E_ItemType Type) {
+		if (SlotMap.Contains(Type) && SlotMap[Type].IsValidIndex(_Index))
+			SlotMap[Type][_Index] = _Slot;
 	};
 
-	FSlot GetSlot(int32 _Index) { 
-		if (TArray<FSlot>* SlotArray = SlotMap.Find(ItemType))
+	FSlot GetSlot(int32 _Index, E_ItemType Type) {
+		if (TArray<FSlot>* SlotArray = SlotMap.Find(Type))
 		{
 			if (SlotArray->IsValidIndex(_Index))
 				return (*SlotArray)[_Index];
@@ -67,23 +74,19 @@ public:
 	//void UsePotionSlot(int32 _Index);
 
 	void AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
-	void DropItem(int32 TargetIndex);
+	void DropItem(int32 TargetIndex, FSpawnItemType Type);
 
-	FResult FindSlot(int32 ItemID);
-	FResult CheckSlotEmpty();
-
-	int32 GetStackSize(int32 ItemID);
-	void IncreaseSlotStack(int32 Index, int32 Amount);
-
-	void AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
+	FResult FindSlot(int32 ItemID, E_ItemType Type);
+	
 	void ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom);
 
 	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
 
 	void ChangeEquip(int32 Index,int32 ItemID);
-	void UseItem(int32 Index);
-	void UseCunsumItem(int32 Index);
-	void UseEtcItem(int32 Index);
+	void UseItem(int32 Index, E_ItemType Type);
+	void UseCunsumItem(int32 Index, E_ItemType Type);
+	void UseEtcItem(int32 Index, E_ItemType Type);
+	void CheckUseItemAmount(int32 ItemID, E_ItemType Type);
 
 	void RegisterQuickSlot(int32 Index, int32 ItemID);
 };

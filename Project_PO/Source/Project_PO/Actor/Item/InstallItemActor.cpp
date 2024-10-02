@@ -5,10 +5,14 @@
 #include "Engine/StaticMesh.h"
 #include "../../Actor/Interact/InstallPlaceInteractActor.h"
 #include "../../Character/Player/PlayerCharacter.h"
+#include "../../Component/InventoryComponent.h"
 #include "../../Component/ItemComponent/ItemComponent.h"
 
 AInstallItemActor::AInstallItemActor()
 {
+    ItemType = E_ItemType::E_Etc;
+    EquipType = E_EquipType::E_Installable;
+
     ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
 
     static ConstructorHelpers::FObjectFinder<UMaterialInterface> MInstall(TEXT("/Game/Sky_Dungeon/materials/props_materials/M_InstallObject.M_InstallObject"));
@@ -58,11 +62,15 @@ void AInstallItemActor::Place(FVector const& Location, FRotator const& Rotation)
 {
     if (CanBePlaced(Location))
     {
-        SetActorLocationAndRotation(Location, Rotation);
-        ResetColor();
-
+        SetActorLocationAndRotation(Location, Rotation); 
+        UseItem();
         GetStaticMesh()->SetCollisionProfileName(TEXT("BlockAllDynamic"));
     }
+    else
+    {
+        ResetItem();
+    }
+    ResetColor();
 }
 
 void AInstallItemActor::SetItem(int32 _ID)
@@ -76,4 +84,15 @@ void AInstallItemActor::ResetColor()
 {
     if(BaseMaterial)
         GetStaticMesh()->SetMaterial(0, BaseMaterial);
+}
+
+void AInstallItemActor::UseItem()
+{
+    APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+    if(PlayerCharacter)
+    {
+        UInventoryComponent* InvenComponent = PlayerCharacter->GetInventoryComponent();
+        if (InvenComponent)
+            InvenComponent->CheckUseItemAmount(ItemComponent->GetID(), ItemComponent->GetItemType().ItemType);
+    }
 }

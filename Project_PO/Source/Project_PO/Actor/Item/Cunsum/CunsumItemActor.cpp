@@ -6,6 +6,7 @@
 
 ACunsumItemActor::ACunsumItemActor()
 {
+	ItemType = E_ItemType::E_Cunsumable;
 	ItemComponent = CreateDefaultSubobject<UCunsumItemComponent>("ItemComponent");
 	RootComponent = GetStaticMesh();
 }

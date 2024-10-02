@@ -6,7 +6,7 @@
 #include "SingletonManager.h"
 #include "../Actor/Item/BaseItemActor.h"
 #include "../Character/Enemy/EnemyCharacter.h"
-#include "../Component/ItemComponent/EquipItemComponent.h"
+#include "../Component/ItemComponent/ItemComponent.h"
 
 AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
@@ -51,13 +51,16 @@ ABaseItemActor* UObjectPoolManager::GetItem(UWorld* World, FSpawnItemType const&
 		{
 			ABaseItemActor* Item = AvailableItems[i];
 
+			if (Item->GetItemType() != Type.ItemType)
+				continue;
+
+			if(Item->GetEquipType() != Type.EquipType)
+				continue;
+
 			if (Type.ItemType == E_ItemType::E_Equip)
 			{
-				UEquipItemComponent* ItemComponent = Item->GetItemComponent<UEquipItemComponent>();
+				UItemComponent* ItemComponent = Item->GetItemComponent<UItemComponent>();
 				if (!ItemComponent)
-					continue;
-
-				if (ItemComponent->GetItemType().EquipType != Type.EquipType)
 					continue;
 
 				if (Type.EquipType == E_EquipType::E_Weapon && ItemComponent->GetItemType().WeaponType != Type.WeaponType)

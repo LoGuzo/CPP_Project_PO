@@ -29,9 +29,11 @@ public:
 	void ResetColor();
 
 private:
+	void UseItem();
+
+private:
 	UPROPERTY()
 	UMaterialInterface* InstallMaterial;
 	UPROPERTY()
 	UMaterialInterface* BaseMaterial;
-
 };

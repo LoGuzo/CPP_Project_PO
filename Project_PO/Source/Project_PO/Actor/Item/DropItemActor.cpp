@@ -11,6 +11,7 @@
 
 ADropItemActor::ADropItemActor()
 {
+	ItemType = E_ItemType::E_Drop;
 	ItemComponent = CreateDefaultSubobject<UItemComponent>("ItemComponent");
 	SetBoxComponent();
 }

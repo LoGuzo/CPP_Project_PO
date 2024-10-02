@@ -16,7 +16,7 @@ void UBasePopSlotWidget::NativeConstruct()
 void UBasePopSlotWidget::DropItem()
 {
 	if (InventoryComponent)
-		InventoryComponent->DropItem(Index);
+		InventoryComponent->DropItem(Index, Type);
 
 	RemoveFromParent();
 }

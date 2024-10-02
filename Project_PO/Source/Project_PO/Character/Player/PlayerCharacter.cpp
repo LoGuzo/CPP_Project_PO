@@ -214,6 +214,13 @@ void APlayerCharacter::Interact(const FInputActionValue& Value)
 		if (interactActor)
 			interactActor->Interact(this);
 	}
+	else
+	{
+		if (InteractionComponent)
+		{
+			InteractionComponent->InstallObject(FVector(), FRotator());
+		}
+	}
 }
 
 void APlayerCharacter::TriggeredAiming(const FInputActionValue& Value)

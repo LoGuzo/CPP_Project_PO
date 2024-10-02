@@ -5,8 +5,9 @@
 #include "../../../Component/ItemComponent/EquipItemComponent.h"
 
 AEquipItemActor::AEquipItemActor()
-	: EquipType(E_EquipType::E_None)
 {
+	ItemType = E_ItemType::E_Equip;
+	EquipType = E_EquipType::E_None;
 	ItemComponent = CreateDefaultSubobject<UEquipItemComponent>("ItemComponent");
 	RootComponent = GetSkeletalMesh();
 }

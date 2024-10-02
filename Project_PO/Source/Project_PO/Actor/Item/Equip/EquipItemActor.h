@@ -16,11 +16,6 @@ class PROJECT_PO_API AEquipItemActor : public ABaseItemActor
 public:
 	AEquipItemActor();
 
-protected:
-	E_EquipType EquipType;
-
 public:
-	E_EquipType GetEquipType() { return EquipType; }
-
 	virtual void SetItem(int32 _ID) override;
 };

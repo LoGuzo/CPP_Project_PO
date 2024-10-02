@@ -44,6 +44,9 @@ private:
 
 public:
 	void SetInteractionRange(float _InteractionRange) { InteractionRange = _InteractionRange; }
+
+	class AInstallItemActor* GetInstallItem() { return InstallItem; }
 	void SetInstallItem(class AInstallItemActor* _InstallItem) { InstallItem = _InstallItem; }
+
 	void InstallObject(FVector const& Location, FRotator const& Rotation);
 };

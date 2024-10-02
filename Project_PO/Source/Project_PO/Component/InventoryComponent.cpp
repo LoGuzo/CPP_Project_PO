@@ -44,7 +44,7 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 
 	while (AmountLeft > 0 && !IsAddFailed)
 	{
-		result = FindSlot(ItemID);
+		result = FindSlot(ItemID, Type.ItemType);
 		if (result.IsFindItem)
 		{
 			IncreaseSlotStack(result.Index, ItemAmount);
@@ -52,7 +52,7 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 		}
 		else
 		{
-			result = CheckSlotEmpty();
+			result = CheckSlotEmpty(Type.ItemType);
 			if (result.IsFindItem)
 			{
 				AddToNewSlot(ItemID, ItemAmount, Type);
@@ -66,59 +66,59 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 	OnInventoryUpdated.Broadcast();
 }
 
-void UInventoryComponent::DropItem(int32 TargetIndex)
+void UInventoryComponent::DropItem(int32 TargetIndex, FSpawnItemType Type)
 {
-	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
+	TArray<FSlot>& ArrayRef = SlotMap[Type.ItemType];
 	ArrayRef[TargetIndex] = FSlot();
 
 	OnInventoryUpdated.Broadcast();
 }
 
-FResult UInventoryComponent::FindSlot(int32 ItemID)
+FResult UInventoryComponent::FindSlot(int32 ItemID, E_ItemType Type)
 {
 	int32 index = 0;
 
-	FResult result;
+	FResult Result;
 
-	for (const FSlot& Slot : *SlotMap.Find(ItemType)) {
+	for (const FSlot& Slot : *SlotMap.Find(Type)) {
 		if (Slot.ItemID == ItemID)
 		{
 			if (Slot.Amount < GetStackSize(ItemID))
 			{
-				result.Index = index;
-				result.IsFindItem = true;
-				return result;
+				Result.Index = index;
+				Result.IsFindItem = true;
+				return Result;
 			}
 		}
 		index++;
 	}
 
-	result.Index = -1;
-	result.IsFindItem = false;
+	Result.Index = -1;
+	Result.IsFindItem = false;
 
-	return result;
+	return Result;
 }
 
-FResult UInventoryComponent::CheckSlotEmpty()
+FResult UInventoryComponent::CheckSlotEmpty(E_ItemType Type)
 {
 	int32 index = 0;
 
-	FResult result;
+	FResult Result;
 
-	for (const FSlot& Slot : *SlotMap.Find(ItemType)) {
+	for (const FSlot& Slot : *SlotMap.Find(Type)) {
 		if (Slot.Amount == 0)
 		{
-			result.Index = index;
-			result.IsFindItem = true;
-			return result;
+			Result.Index = index;
+			Result.IsFindItem = true;
+			return Result;
 		}
 		index++;
 	}
 
-	result.Index = -1;
-	result.IsFindItem = false;
+	Result.Index = -1;
+	Result.IsFindItem = false;
 
-	return result;
+	return Result;
 }
 
 int32 UInventoryComponent::GetStackSize(int32 ItemID)
@@ -141,31 +141,37 @@ void UInventoryComponent::IncreaseSlotStack(int32 Index, int32 Amount)
 
 void UInventoryComponent::AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type)
 {
-	FResult result;
-	result = CheckSlotEmpty();
+	FResult Result;
+	Result = CheckSlotEmpty(Type.ItemType);
 
-	ItemType = Type.ItemType;
+	TArray<FSlot>& ArrayRef = SlotMap[Type.ItemType];
+	ArrayRef[Result.Index].ItemID = ItemID;
+	ArrayRef[Result.Index].Amount = ItemAmount;
+	ArrayRef[Result.Index].Type = Type;
+}
 
-	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
-	ArrayRef[result.Index].ItemID = ItemID;
-	ArrayRef[result.Index].Amount = ItemAmount;
-	ArrayRef[result.Index].Type = Type;
+void UInventoryComponent::CheckSlotAmount(int32 Index, E_ItemType Type)
+{
+	TArray<FSlot>& ArrayRef = SlotMap[Type];
+	ArrayRef[Index].Amount -= 1;
+	if (ArrayRef[Index].Amount == 0)
+		DropItem(Index, Type);
 }
 
 void UInventoryComponent::ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom)
 {
 	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
-	LocalSlot = BeforeInvenCom->GetSlot(BeforeIndex);
+	LocalSlot = BeforeInvenCom->GetSlot(BeforeIndex, ItemType);
 	if (TargetIndex >= 0)
 	{
 		if (LocalSlot.ItemID != ArrayRef[TargetIndex].ItemID)
 		{
-			BeforeInvenCom->SetSlot(BeforeIndex, ArrayRef[TargetIndex]);
+			BeforeInvenCom->SetSlot(BeforeIndex, ArrayRef[TargetIndex], ItemType);
 			ArrayRef[TargetIndex] = LocalSlot;
 
 		}
 		else {
-			BeforeInvenCom->SetSlot(BeforeIndex, ArrayRef[TargetIndex]);
+			BeforeInvenCom->SetSlot(BeforeIndex, ArrayRef[TargetIndex], ItemType);
 			ArrayRef[TargetIndex] = LocalSlot;
 		}
 	}
@@ -188,7 +194,7 @@ void UInventoryComponent::ChangeEquip(int32 Index, int32 ItemID)
 				{
 					int32 EquipID = EquipItemComponent->GetID();
 					FSpawnItemType Type = EquipItemComponent->GetItemType();
-					DropItem(Index);
+					DropItem(Index, Type);
 					AddItem(EquipID, 1, Type);
 
 					OwnPlayer->SetEquip(ItemID);
@@ -196,34 +202,35 @@ void UInventoryComponent::ChangeEquip(int32 Index, int32 ItemID)
 			}
 			else
 			{
-				DropItem(Index);
+				FSpawnItemType Type = FSpawnItemType(E_ItemType::E_Equip);
+				DropItem(Index, Type);
 				OwnPlayer->SetEquip(ItemID);
 			}
 		}
 	}
 }
 
-void UInventoryComponent::UseItem(int32 Index)
+void UInventoryComponent::UseItem(int32 Index, E_ItemType Type)
 {
-	switch (ItemType)
+	switch (Type)
 	{
 	case E_ItemType::E_Cunsumable:
-		UseCunsumItem(Index);
+		UseCunsumItem(Index, Type);
 		break;
 	case E_ItemType::E_Etc:
-		UseEtcItem(Index);
+		UseEtcItem(Index, Type);
 		break;
 	default:
 		break;
 	}
 }
 
-void UInventoryComponent::UseCunsumItem(int32 Index)
+void UInventoryComponent::UseCunsumItem(int32 Index, E_ItemType Type)
 {
-
+	CheckSlotAmount(Index, Type);
 }
 
-void UInventoryComponent::UseEtcItem(int32 Index)
+void UInventoryComponent::UseEtcItem(int32 Index, E_ItemType Type)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
@@ -236,17 +243,27 @@ void UInventoryComponent::UseEtcItem(int32 Index)
 				UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
 				if (ObjectPoolManager)
 				{
-					FSlot NowSlot = GetSlot(Index);
+					FSlot NowSlot = GetSlot(Index, Type);
 					AInstallItemActor* InstallItem = Cast<AInstallItemActor>(ObjectPoolManager->GetItem(GetWorld(), NowSlot.Type));
 					if (InstallItem)
 					{
 						InstallItem->SetItem(NowSlot.ItemID);
+						InstallItem->SetOwner(OwnPlayer);
 						InteractionComponent->SetInstallItem(InstallItem);
 					}
 				}
 			}
 		}
 	}
+}
+
+void UInventoryComponent::CheckUseItemAmount(int32 ItemID, E_ItemType Type)
+{
+	FResult Result;
+
+	Result = FindSlot(ItemID, Type);
+	if (Result.IsFindItem)
+		CheckSlotAmount(Result.Index, Type);
 }
 
 void UInventoryComponent::RegisterQuickSlot(int32 Index, int32 ItemID)
