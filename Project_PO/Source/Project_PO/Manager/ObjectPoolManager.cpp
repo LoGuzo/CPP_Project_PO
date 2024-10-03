@@ -7,6 +7,7 @@
 #include "../Actor/Item/BaseItemActor.h"
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Component/ItemComponent/ItemComponent.h"
+#include "../Widget/PopUp/DamagePopUpWidget.h"
 
 AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
 {
@@ -86,5 +87,54 @@ void UObjectPoolManager::ReleaseItem(ABaseItemActor* Item)
 		Item->SetState(false);
 		AvailableItems.Add(Item);
 		InUseItems.Remove(Item);
+	}
+}
+
+UDamagePopUpWidget* UObjectPoolManager::GetWidget(UWorld* World, E_DamageType const& Type, TSubclassOf<UDamagePopUpWidget> WidgetClass, FVector2D const& Location, int32 const& Damage)
+{
+	UDamagePopUpWidget* Widget = nullptr;
+
+	for (int32 i = 0; i < AvailableDamageWidgets.Num(); i++)
+	{
+		if (AvailableDamageWidgets[i])
+		{
+			Widget = AvailableDamageWidgets[i];
+			AvailableDamageWidgets.Remove(Widget);
+			InUseDamageWidgets.Add(Widget);
+		}
+	}
+
+	if (!Widget)
+	{
+		Widget = SingletonManager::GetInstance<UFactoryManager>()->WidgetFactory(World, WidgetClass);
+		InUseDamageWidgets.Add(Widget);
+	}
+
+	Widget->AddToViewport();
+	FVector2D RandomLocation= RandomVector2D(Location, 50.f);
+	Widget->SetPositionInViewport(RandomLocation);
+
+	switch (Type)
+	{
+	case E_DamageType::E_Normal:
+		Widget->SetDamageText(Damage);
+		break;
+	case E_DamageType::E_Critical:
+		Widget->SetCriticalText(Damage);
+		break;
+	default:
+		break;
+	}
+
+	return Widget;
+}
+
+void UObjectPoolManager::ReleaseWidget(UDamagePopUpWidget* Widget)
+{
+	if (Widget)
+	{
+		Widget->RemoveFromParent();
+		AvailableDamageWidgets.Add(Widget);
+		InUseDamageWidgets.Remove(Widget);
 	}
 }

@@ -2,9 +2,12 @@
 
 
 #include "BasePlayerController.h"
+#include "Kismet/GameplayStatics.h"
 #include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
+#include "../../Widget/PopUp/DamagePopUpWidget.h"
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -16,6 +19,10 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>Inventory(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/Inventory/WBP_MainInventory.WBP_MainInventory_C"));
 	if (Inventory.Succeeded())
 		InventoryWidget = Inventory.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>DamageWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_DamagePopUp.WBP_DamagePopUp_C"));
+	if (DamageWidget.Succeeded())
+		DamagePopUpWidget = DamageWidget.Class;
 }
 
 void ABasePlayerController::BeginPlay()
@@ -27,7 +34,7 @@ void ABasePlayerController::BeginPlay()
 
 void ABasePlayerController::SetUpWidget()
 {
-	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
 		if (IsLocalController())
@@ -46,6 +53,25 @@ void ABasePlayerController::SetUpWidget()
 					UE_LOG(LogTemp, Warning, TEXT("Chk"));
 					WidgetManager->CreateAndAddWidget<APlayerController, UMainInventoryWidget>(this, TEXT("Inven"), InventoryWidget);
 				}
+			}
+		}
+	}
+}
+
+void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		if (IsLocalController())
+		{
+			UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
+			if (ObjectPoolManager)
+			{
+				FVector2D ScreenPosition;
+
+				UGameplayStatics::ProjectWorldToScreen(this, Location, ScreenPosition);
+				ObjectPoolManager->GetWidget(GetWorld(), Type, DamagePopUpWidget, ScreenPosition, Damage);
 			}
 		}
 	}

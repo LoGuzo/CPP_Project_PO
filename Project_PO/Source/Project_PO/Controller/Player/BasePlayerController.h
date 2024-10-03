@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "../../MyEnumClass.h"
 #include "BasePlayerController.generated.h"
 
 /**
@@ -23,7 +24,11 @@ protected:
 private:
 	TSubclassOf<class UMyHUDWidget> HUDWidget;
 	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
+	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
 
 private:
 	void SetUpWidget();
+
+public:
+	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
 };

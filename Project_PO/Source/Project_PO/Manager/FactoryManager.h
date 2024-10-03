@@ -41,4 +41,8 @@ public:
 		, FTransform const& Transform
 		, const FActorSpawnParameters& SpawnParameters = FActorSpawnParameters()
 	);
+
+	class UDamagePopUpWidget* WidgetFactory(UWorld* World
+		, TSubclassOf<class UDamagePopUpWidget> WidgetClass
+	);
 };

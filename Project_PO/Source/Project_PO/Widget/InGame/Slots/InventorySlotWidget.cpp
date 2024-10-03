@@ -91,6 +91,7 @@ void UInventorySlotWidget::NativeDestruct()
 {
 	Super::NativeDestruct();
 	RemovePopSlot();
+	RemoveItemInfo();
 }
 
 FReply UInventorySlotWidget::NativeOnPreviewMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)

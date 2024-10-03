@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
+#include "../../Controller/Player/BasePlayerController.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
@@ -26,6 +27,8 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
     if (bIsDied)
         return 0.f;
 
+    float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
     if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
     {
         FHitResult HitResult;
@@ -36,29 +39,47 @@ float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& Damage
         {
             FString ComponentName = HitResult.GetComponent()->GetName();
             
+            E_DamageType Type;
+            FVector Location = GetActorLocation();
+
             if (ComponentName == "HeadCollision")
             {
-                DamageAmount *= 1.8f;
+                Damage *= 1.8f;
+                Type = E_DamageType::E_Critical;
             }
             else if (ComponentName == "BodyCollision")
             {
-                DamageAmount *= 1.0f;
+                Damage *= 1.0f;
+                Type = E_DamageType::E_Normal;
             }
             else if (ComponentName == "RightArmCollision" || ComponentName == "LeftArmCollision")
             {
-                DamageAmount *= 0.8f;
+                Damage *= 0.8f;
+                Type = E_DamageType::E_Normal;
             }
             else if (ComponentName == "RightLegCollision" || ComponentName == "LeftLegCollision")
             {
-                DamageAmount *= 0.5f;
+                Damage *= 0.5f;
+                Type = E_DamageType::E_Normal;
             }
+            SetUpDamageWidget(EventInstigator, Type, Location, Damage);
         }
 
         if (StatComponent)
-            StatComponent->TakeDamage(DamageAmount);
+            StatComponent->TakeDamage(Damage);
     }
 
-    return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+    return Damage;
+}
+
+void AEnemyCharacter::SetUpDamageWidget(AController* PlayerController, E_DamageType const& Type, FVector const& Location, int32 const& Damage)
+{
+    if (PlayerController)
+    {
+        ABasePlayerController* playerController = Cast<ABasePlayerController>(PlayerController);
+        if (playerController)
+            playerController->SetUpDamageWidget(Type, Location, Damage);
+    }
 }
 
 void AEnemyCharacter::SetUpCharacter()

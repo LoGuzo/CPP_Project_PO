@@ -94,3 +94,10 @@ enum class E_ClassType : uint8
 	E_Girl UMETA(DisplayName = "Girl"),
 	E_Cat UMETA(DisplayName = "Cat"),
 };
+
+UENUM(BlueprintType)
+enum class E_DamageType : uint8
+{
+	E_Normal UMETA(DisplayName = "Normal"),
+	E_Critical UMETA(DisplayName = "Critical"),
+};

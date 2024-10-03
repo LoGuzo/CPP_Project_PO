@@ -14,6 +14,7 @@
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Character/Enemy/GolemBossEnemyCharacter.h"
 #include "../Character/Enemy/MummyNormalEnemyCharacter.h"
+#include "../Widget/PopUp/DamagePopUpWidget.h"
 
 
 ABaseItemActor* UFactoryManager::EquipFactory(UWorld* World, FSpawnItemType const& Type, FTransform const& Transform, const FActorSpawnParameters& SpawnParameters)
@@ -134,4 +135,17 @@ ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, FSpawnItemType const
 		break;
 	}
 	return Item;
+}
+
+UDamagePopUpWidget* UFactoryManager::WidgetFactory(UWorld* World, TSubclassOf<UDamagePopUpWidget> WidgetClass)
+{
+	if (!World)
+		return nullptr;
+
+	UDamagePopUpWidget* Widget = CreateWidget<UDamagePopUpWidget>(World, WidgetClass);
+	
+	if (!Widget)
+		return nullptr;
+
+	return Widget;
 }
