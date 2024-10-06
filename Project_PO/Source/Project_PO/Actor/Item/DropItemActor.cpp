@@ -24,6 +24,8 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 		if (!ItemComponent)
 			return;
 
+		playerCharacter->SetInteractActor(nullptr);
+
 		UInventoryComponent* InventoryComponent = playerCharacter->GetInventoryComponent();
 		if (InventoryComponent)
 		{
@@ -46,7 +48,7 @@ void ADropItemActor::ResetItem()
 {
 	Super::ResetItem();
 
-	BoxCollision = nullptr;
+	ResetMesh();
 }
 
 void ADropItemActor::SetBoxComponent()
@@ -55,6 +57,31 @@ void ADropItemActor::SetBoxComponent()
 	BoxCollision->SetBoxExtent(FVector(50.f, 50.f, 50.f));
 	BoxCollision->SetCollisionProfileName(TEXT("InteractObject"));
 	RootComponent = BoxCollision;
+}
+
+void ADropItemActor::ResetMesh()
+{
+	if (GetStaticMesh()->GetStaticMesh())
+	{
+		int32 NumMaterials = GetStaticMesh()->GetNumMaterials();
+		for (int32 i = 0; i < NumMaterials; i++)
+		{
+			GetStaticMesh()->SetMaterial(i, nullptr);
+		}
+		GetStaticMesh()->SetStaticMesh(nullptr);
+		return;
+	}
+
+	if (GetSkeletalMesh()->GetSkeletalMeshAsset())
+	{
+		int32 NumMaterials = GetSkeletalMesh()->GetNumMaterials();
+		for (int32 i = 0; i < NumMaterials; i++)
+		{
+			GetSkeletalMesh()->SetMaterial(i, nullptr);
+		}
+		GetSkeletalMesh()->SetSkeletalMesh(nullptr);
+		return;
+	}
 }
 
 void ADropItemActor::SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh)

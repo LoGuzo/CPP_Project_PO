@@ -28,11 +28,12 @@ private:
 public:
 	virtual void Interact(class AActor* PlayerCharacter) override;
 
-	virtual void ResetItem() override;
-
 protected:
 	virtual void SetMeshComponent(TSoftObjectPtr<UStreamableRenderAsset> Mesh) override;
 
+	virtual void ResetItem() override;
+
 private:
 	void SetBoxComponent();
+	void ResetMesh();
 };

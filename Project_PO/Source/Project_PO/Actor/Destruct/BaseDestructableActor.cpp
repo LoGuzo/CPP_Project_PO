@@ -4,6 +4,7 @@
 #include "BaseDestructableActor.h"
 #include "Components/BoxComponent.h"
 #include "GeometryCollection/GeometryCollectionComponent.h"
+#include "../../Component/ItemComponent/ItemSpawnerComponent.h"
 
 // Sets default values
 ABaseDestructableActor::ABaseDestructableActor()
@@ -14,6 +15,7 @@ ABaseDestructableActor::ABaseDestructableActor()
 
 	SetUpBoxComponent();
 	SetUpGeometryComponent();
+	SetUpItemSpawnComponent();
 }
 
 float ABaseDestructableActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -45,7 +47,14 @@ void ABaseDestructableActor::SetUpGeometryComponent()
 	GeometryCollectionComponent->SetupAttachment(RootComponent);
 }
 
+void ABaseDestructableActor::SetUpItemSpawnComponent()
+{
+	ItemSpawnComponent = CreateDefaultSubobject<UItemSpawnerComponent>("ItemSpawnComponent");
+}
+
 void ABaseDestructableActor::DestroyObject()
 {
+	if (ItemSpawnComponent)
+		ItemSpawnComponent->DropItems(GetActorLocation());
 	Destroy();
 }

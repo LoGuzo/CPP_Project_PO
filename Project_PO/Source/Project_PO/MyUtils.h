@@ -9,5 +9,7 @@
  */
 namespace MyUtils
 {
-	FVector2D RandomVector2D(FVector2D OriginalVector, float RandomRange);
+	FVector2D RandomVector2D(FVector2D const& OriginalVector, float const& RandomRange);
+
+	FVector RandomVector(FVector const& OriginalVector, float const& RandomRange);
 }

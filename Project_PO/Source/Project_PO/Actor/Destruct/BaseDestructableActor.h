@@ -22,6 +22,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* BoxComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	class UItemSpawnerComponent* ItemSpawnComponent;
+
 	UPROPERTY()
 	FTimerHandle DestroyTimerHandle;
 
@@ -35,6 +38,7 @@ protected:
 private:
 	void SetUpBoxComponent();
 	void SetUpGeometryComponent();
+	void SetUpItemSpawnComponent();
 
 	UFUNCTION()
 	void DestroyObject();
