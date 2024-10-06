@@ -47,7 +47,7 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 		result = FindSlot(ItemID, Type.ItemType);
 		if (result.IsFindItem)
 		{
-			IncreaseSlotStack(result.Index, ItemAmount);
+			IncreaseSlotStack(result.Index, ItemAmount, Type.ItemType);
 			AmountLeft--;
 		}
 		else
@@ -133,9 +133,9 @@ int32 UInventoryComponent::GetStackSize(int32 ItemID)
 	return -1;
 }
 
-void UInventoryComponent::IncreaseSlotStack(int32 Index, int32 Amount)
+void UInventoryComponent::IncreaseSlotStack(int32 Index, int32 Amount, E_ItemType Type)
 {
-	TArray<FSlot>& ArrayRef = SlotMap[ItemType];
+	TArray<FSlot>& ArrayRef = SlotMap[Type];
 	ArrayRef[Index].Amount = ArrayRef[Index].Amount + Amount;
 }
 

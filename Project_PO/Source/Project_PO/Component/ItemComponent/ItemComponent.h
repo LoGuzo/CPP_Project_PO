@@ -48,6 +48,7 @@ protected:
 
 public:
 	virtual void SetItem(int32 _ID);
+    void ResetItem();
 
     int32 GetID() { return ID; }
 	TSoftObjectPtr<UStreamableRenderAsset> GetMesh() { return ItemMesh; }

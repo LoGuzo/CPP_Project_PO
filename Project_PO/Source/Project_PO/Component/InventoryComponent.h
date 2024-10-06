@@ -46,7 +46,7 @@ private:
 private:
 	FResult CheckSlotEmpty(E_ItemType Type);
 	int32 GetStackSize(int32 ItemID);
-	void IncreaseSlotStack(int32 Index, int32 Amount);
+	void IncreaseSlotStack(int32 Index, int32 Amount, E_ItemType Type);
 	void AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
 	void CheckSlotAmount(int32 Index, E_ItemType Type);
 

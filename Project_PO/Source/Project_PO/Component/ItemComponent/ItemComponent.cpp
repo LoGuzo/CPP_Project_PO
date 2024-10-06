@@ -39,3 +39,14 @@ void UItemComponent::SetItem(int32 _ID)
 	}
 }
 
+void UItemComponent::ResetItem()
+{
+	ID = -1;
+	ItemName = FText();
+	ItemDescription = FText();
+	ItemImage = nullptr;
+	ItemStackSize = 0;
+	ItemType = FSpawnItemType();
+	ItemMesh = nullptr;
+}
+

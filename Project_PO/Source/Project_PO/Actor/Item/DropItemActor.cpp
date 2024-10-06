@@ -24,8 +24,6 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 		if (!ItemComponent)
 			return;
 
-		playerCharacter->SetInteractActor(nullptr);
-
 		UInventoryComponent* InventoryComponent = playerCharacter->GetInventoryComponent();
 		if (InventoryComponent)
 		{
@@ -34,6 +32,8 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 
 			InventoryComponent->AddItem(ID, 1, Type);
 		}
+
+		playerCharacter->SetInteractActor(nullptr);
 
 		ResetItem();
 	}
@@ -49,6 +49,8 @@ void ADropItemActor::ResetItem()
 	Super::ResetItem();
 
 	ResetMesh();
+	if (ItemComponent)
+		ItemComponent->ResetItem();
 }
 
 void ADropItemActor::SetBoxComponent()
