@@ -19,6 +19,7 @@
 #include "../../Component/InteractionComponent.h"
 #include "../../Component/EquipComponent.h"
 #include "../../Component/InventoryComponent.h"
+#include "../../Component/PotionQuickSlotComponent.h"
 #include "../../Component/StatComponent/PlayerStatComponent.h"
 #include "../../Interface/Interactable.h"
 #include "../../Manager/BaseGameInstance.h"
@@ -42,6 +43,7 @@ APlayerCharacter::APlayerCharacter()
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
 	StatComponent = CreateDefaultSubobject<UPlayerStatComponent>(TEXT("StatComponent"));
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
+	PotionQuickSlotComponent = CreateDefaultSubobject<UPotionQuickSlotComponent>(TEXT("PotionQuickSlot"));
 
 	// Create a camera boom (pulls in towards the player if there is a collision)
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -71,24 +73,10 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
-	if (CameraCurve)
-	{
-		InterpFunction.BindUFunction(this, FName("Zoom"));
-		if (CameraTimeline)
-		{
-			CameraTimeline->AddInterpFloat(CameraCurve, InterpFunction);
-			CameraTimeline->SetLooping(false);
-		}
-	}
-
-	InitailZoomLocation = GetCameraBoom()->SocketOffset;
-	InitalSpringLength = GetCameraBoom()->TargetArmLength;
-
-	TargetZoomLocation = FVector(InitailZoomLocation.X, InitailZoomLocation.Y * 2, InitailZoomLocation.Z);
-	TargetSpringLength = InitalSpringLength / 2;
-
-	if (StatComponent)
-		GetStatComponent<UPlayerStatComponent>()->SetStat(ID);
+	SetupCameraCurve();
+	SetupCamera();
+	SetupStatComponent();
+	SetupInventoryComponent();
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -401,6 +389,19 @@ void APlayerCharacter::SetupCurve()
 		CameraCurve = CurveFloat.Object;
 }
 
+void APlayerCharacter::SetupCameraCurve()
+{
+	if (CameraCurve)
+	{
+		InterpFunction.BindUFunction(this, FName("Zoom"));
+		if (CameraTimeline)
+		{
+			CameraTimeline->AddInterpFloat(CameraCurve, InterpFunction);
+			CameraTimeline->SetLooping(false);
+		}
+	}
+}
+
 void APlayerCharacter::Zoom(float Value)
 {
 	FVector ZoomLocation = FMath::Lerp(InitailZoomLocation, TargetZoomLocation, Value);
@@ -408,6 +409,29 @@ void APlayerCharacter::Zoom(float Value)
 
 	float ArmLength = FMath::Lerp(InitalSpringLength, TargetSpringLength, Value);
 	CameraBoom->TargetArmLength = ArmLength;
+}
+
+void APlayerCharacter::SetupCamera()
+{
+	InitailZoomLocation = GetCameraBoom()->SocketOffset;
+	InitalSpringLength = GetCameraBoom()->TargetArmLength;
+
+	TargetZoomLocation = FVector(InitailZoomLocation.X, InitailZoomLocation.Y * 2, InitailZoomLocation.Z);
+	TargetSpringLength = InitalSpringLength / 2;
+}
+
+void APlayerCharacter::SetupStatComponent()
+{
+	if (StatComponent)
+		GetStatComponent<UPlayerStatComponent>()->SetStat(ID);
+}
+
+void APlayerCharacter::SetupInventoryComponent()
+{
+	if (InventoryComponent && PotionQuickSlotComponent)
+	{
+		InventoryComponent->SetQuickSlotComponent(PotionQuickSlotComponent);
+	}
 }
 
 void APlayerCharacter::DisplayCrosshair()

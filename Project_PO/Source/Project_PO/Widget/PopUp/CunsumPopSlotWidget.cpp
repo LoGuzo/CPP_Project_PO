@@ -34,7 +34,7 @@ void UCunsumPopSlotWidget::UseItem()
 void UCunsumPopSlotWidget::RegisterItem()
 {
 	if (InventoryComponent)
-		InventoryComponent->RegisterQuickSlot(Index, ItemID);
+		InventoryComponent->RegisterQuickSlot(Index);
 
 	RemoveFromParent();
 }

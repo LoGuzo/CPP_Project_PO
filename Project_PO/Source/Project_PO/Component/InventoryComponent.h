@@ -34,6 +34,10 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY()
+	class UPotionQuickSlotComponent* QuickSlotComponent;
+
+private:
 	int32 InventorySize;
 	E_ItemType ItemType;
 	bool IsAddFailed;
@@ -81,6 +85,7 @@ public:
 	void ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom);
 
 	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
+	void SetQuickSlotComponent(class UPotionQuickSlotComponent* _QuickSlotComponent) { QuickSlotComponent = _QuickSlotComponent; }
 
 	void ChangeEquip(int32 Index,int32 ItemID);
 	void UseItem(int32 Index, E_ItemType Type);
@@ -88,5 +93,6 @@ public:
 	void UseEtcItem(int32 Index, E_ItemType Type);
 	void CheckUseItemAmount(int32 ItemID, E_ItemType Type);
 
-	void RegisterQuickSlot(int32 Index, int32 ItemID);
+	void RegisterQuickSlot(int32 Index);
+	int32 CheckFullItemAmount(int32 ItemID);
 };

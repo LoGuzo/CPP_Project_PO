@@ -50,7 +50,6 @@ void ABasePlayerController::SetUpWidget()
 				}
 				if (InventoryWidget)
 				{
-					UE_LOG(LogTemp, Warning, TEXT("Chk"));
 					WidgetManager->CreateAndAddWidget<APlayerController, UMainInventoryWidget>(this, TEXT("Inven"), InventoryWidget);
 				}
 			}

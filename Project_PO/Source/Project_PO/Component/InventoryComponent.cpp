@@ -4,6 +4,7 @@
 #include "InventoryComponent.h"
 #include "EquipComponent.h"
 #include "InteractionComponent.h"
+#include "PotionQuickSlotComponent.h"
 #include "ItemComponent/EquipItemComponent.h"
 #include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
 #include "../Actor/Item/InstallItemActor.h"
@@ -64,6 +65,8 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 	}
 
 	OnInventoryUpdated.Broadcast();
+	if (QuickSlotComponent)
+		QuickSlotComponent->OnQuickSlotUpdated.Broadcast();
 }
 
 void UInventoryComponent::DropItem(int32 TargetIndex, FSpawnItemType Type)
@@ -228,6 +231,8 @@ void UInventoryComponent::UseItem(int32 Index, E_ItemType Type)
 void UInventoryComponent::UseCunsumItem(int32 Index, E_ItemType Type)
 {
 	CheckSlotAmount(Index, Type);
+	if (QuickSlotComponent)
+		QuickSlotComponent->OnQuickSlotUpdated.Broadcast();
 }
 
 void UInventoryComponent::UseEtcItem(int32 Index, E_ItemType Type)
@@ -266,6 +271,22 @@ void UInventoryComponent::CheckUseItemAmount(int32 ItemID, E_ItemType Type)
 		CheckSlotAmount(Result.Index, Type);
 }
 
-void UInventoryComponent::RegisterQuickSlot(int32 Index, int32 ItemID)
+void UInventoryComponent::RegisterQuickSlot(int32 Index)
 {
+	if (QuickSlotComponent)
+		QuickSlotComponent->RegisterQuickSlot(Index, this);
+}
+
+int32 UInventoryComponent::CheckFullItemAmount(int32 ItemID)
+{
+	int32 index = 0;
+	int32 Amount = 0;
+
+	for (const FSlot& Slot : *SlotMap.Find(E_ItemType::E_Cunsumable)) {
+		if (Slot.ItemID == ItemID)
+			Amount += Slot.Amount;
+		index++;
+	}
+
+	return Amount;
 }

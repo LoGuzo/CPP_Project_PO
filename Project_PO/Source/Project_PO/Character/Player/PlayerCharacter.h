@@ -120,12 +120,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	class UInteractionComponent* InteractionComponent;
-
 	UPROPERTY(VisibleAnywhere)
 	class UEquipComponent* EquipComponent;
-
 	UPROPERTY(VisibleAnywhere)
 	class UInventoryComponent* InventoryComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UPotionQuickSlotComponent* PotionQuickSlotComponent;
 
 	UPROPERTY()
 	class AActor* InteractActor;
@@ -166,9 +166,14 @@ private:
 	void BindInputAction();
 
 	void SetupCurve();
+	void SetupCameraCurve();
 
 	UFUNCTION()
 	void Zoom(float Value);
+	void SetupCamera();
+
+	void SetupStatComponent();
+	void SetupInventoryComponent();
 
 	void DisplayCrosshair();
 

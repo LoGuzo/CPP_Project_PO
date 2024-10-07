@@ -33,5 +33,9 @@ private:
 
 public:
 	void SetUpCharInfo(class UStatComponent* StatComponent);
+	void SetUpCunsumQuickSlot(class UPotionQuickSlotComponent* PotionQuickSlotComponent);
 	void SetUpWeaponSlot(int32 const& ID);
+
+	class UCunsumQuickSlotWidget* GetCunsumQuickSlot() { return WBP_CunsumQuickSlot; }
+	class USkillQuickSlotWidget* GetSkillQuickSlot() { return WBP_SkillQuickSlot; }
 };

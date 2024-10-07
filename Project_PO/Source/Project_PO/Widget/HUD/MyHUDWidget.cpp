@@ -26,6 +26,18 @@ void UMyHUDWidget::SetUpCharInfo(UStatComponent* StatComponent)
 	}
 }
 
+void UMyHUDWidget::SetUpCunsumQuickSlot(UPotionQuickSlotComponent* PotionQuickSlotComponent)
+{
+	if (!PotionQuickSlotComponent)
+		return;
+
+	if (WBP_CunsumQuickSlot)
+	{
+		WBP_CunsumQuickSlot->SetTextKey(TEXT("1"));
+		WBP_CunsumQuickSlot->BindText(PotionQuickSlotComponent);
+	}
+}
+
 void UMyHUDWidget::SetUpWeaponSlot(int32 const& ID)
 {
 	WBP_WeaponSlot->SetUpWidget(ID);

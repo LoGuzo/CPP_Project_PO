@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "QuickSlotWidget.h"
+#include "../../../MyStructureAll.h"
 #include "CunsumQuickSlotWidget.generated.h"
 
 /**
@@ -18,6 +19,17 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* Txt_Slot;
 
+	UPROPERTY()
+	class UPotionQuickSlotComponent* PotionQuickSlotComponent;
+
+private:
+	FSlot Slot;
+
+private:
+	void SetText();
+
 public:
-	void SetText(int32 const& Amount);
+	void SetUpSlot();
+	void BindText(class UPotionQuickSlotComponent* _PotionQuickSlotComponent);
+
 };
