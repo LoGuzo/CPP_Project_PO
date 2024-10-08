@@ -2,11 +2,11 @@
 
 
 #include "PotionQuickSlotComponent.h"
-#include "InventoryComponent.h"
-#include "../Manager/BaseGameInstance.h"
-#include "../Manager/WidgetManager.h"
-#include "../Widget/HUD/MyHUDWidget.h"
-#include "../Widget/InGame/Slots/CunsumQuickSlotWidget.h"
+#include "../InventoryComponent.h"
+#include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/WidgetManager.h"
+#include "../../Widget/HUD/MyHUDWidget.h"
+#include "../../Widget/InGame/Slots/CunsumQuickSlotWidget.h"
 
 UPotionQuickSlotComponent::UPotionQuickSlotComponent()
 {

@@ -11,6 +11,9 @@
 #include "DatabaseManager/EquipItemDatabaseManager.h"
 #include "DatabaseManager/MontageDatabaseManager.h"
 #include "DatabaseManager/MonsterDatabaseManager.h"
+#include "DatabaseManager/QuestDatabaseManager.h"
+#include "DatabaseManager/QuestObjectiveDatabaseManager.h"
+#include "DatabaseManager/QuestRewardDatabaseManager.h"
 
 UBaseGameInstance::UBaseGameInstance()
 {
@@ -26,6 +29,9 @@ void UBaseGameInstance::Init()
     AddDataToDatabase(E_ManagerType::E_MontageDatabaseManager, SingletonManager::GetInstance<UMontageDatabaseManager>()->GetDataMap<FMontageData>());
     AddDataToDatabase(E_ManagerType::E_ClassDatabaseManager, SingletonManager::GetInstance<UClassDatabaseManager>()->GetDataMap<FClassStatData>());
     AddDataToDatabase(E_ManagerType::E_MonsterDatabaseManager, SingletonManager::GetInstance<UMonsterDatabaseManager>()->GetDataMap<FMonsterStatData>());
+    AddDataToDatabase(E_ManagerType::E_QuestDatabaseManager, SingletonManager::GetInstance<UQuestDatabaseManager>()->GetDataMap<FQuestData>());
+    AddDataToDatabase(E_ManagerType::E_QuestObjectiveDatabaseManager, SingletonManager::GetInstance<UQuestObjectiveDatabaseManager>()->GetDataMap<FQuestObjective>());
+    AddDataToDatabase(E_ManagerType::E_QuestRewardDatabaseManager, SingletonManager::GetInstance<UQuestRewardDatabaseManager>()->GetDataMap<FQuestReward>());
 }
 
 void UBaseGameInstance::Shutdown()

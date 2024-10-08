@@ -3,7 +3,7 @@
 
 #include "CunsumQuickSlotWidget.h"
 #include "Components/TextBlock.h"
-#include "../../../Component/PotionQuickSlotComponent.h"
+#include "../../../Component/QuickSlotComponent/PotionQuickSlotComponent.h"
 
 void UCunsumQuickSlotWidget::SetUpSlot()
 {

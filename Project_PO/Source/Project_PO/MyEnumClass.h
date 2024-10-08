@@ -31,10 +31,14 @@ enum class E_ManagerType : uint8
 {
 	E_WidgetManager UMETA(DisplayName = "WidgetManager"),
 	E_ObjectPoolManager UMETA(DisplayName = "ObjectMonager"),
+	E_QuestManager UMETA(DisplayName = "QuestManager"),
 	E_ItemDatabaseManager UMETA(DisplayName = "ItemDatabaseManager"),
 	E_MontageDatabaseManager UMETA(DisplayName = "MontageDatabaseManager"),
 	E_ClassDatabaseManager UMETA(DisplayName = "ClassDatabaseManager"),
 	E_MonsterDatabaseManager UMETA(DisplayName = "MonsterDatabaseManager"),
+	E_QuestDatabaseManager UMETA(DisplayName = "QuestDatabaseManager"),
+	E_QuestObjectiveDatabaseManager UMETA(DisplayName = "QuestObjectiveDatabaseManager"),
+	E_QuestRewardDatabaseManager UMETA(DisplayName = "QuestRewardDatabaseManager"),
 };
 
 UENUM(BlueprintType)

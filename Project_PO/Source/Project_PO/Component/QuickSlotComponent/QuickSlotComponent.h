@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseActorComponent.h"
-#include "../MyStructureAll.h"
+#include "../BaseActorComponent.h"
+#include "../../MyStructureAll.h"
 #include "QuickSlotComponent.generated.h"
 
 
