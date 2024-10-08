@@ -18,8 +18,14 @@ class PROJECT_PO_API UQuestManager : public UObject
 private:
 	TMap<int32, TWeakPtr<FQuestData>> NowQuests;
 
+private:
+	void GrantItem(int32 const& ItemID, int32 const& Amount, class APlayerCharacter* PlayerCharacter);
+	void GrantExp(float const& Exp, class APlayerCharacter* PlayerCharacter);
+
 public:
 	void StartQuest(int32 const& QuestID);
-	void CompleteQuest(int32 const& QuestID);
-	void GrantRewards(int32 const& QuestID);
+	bool IsCompleteQuest(int32 const& QuestID);
+	void CompleteObjective(int32 const& ObjectiveID, int32 const& Amount);
+	void GrantRewards(int32 const& QuestID, class APlayerCharacter* PlayerCharacter);
+
 };

@@ -98,6 +98,24 @@ struct FQuestObjective : public FTableRowBase
     {
         return CurrentAmount >= RequiredAmount;
     }
+
+    void UpdateProgress(int32 Amount)
+    {
+        CurrentAmount += Amount;
+        bIsComplete = IsComplete();
+    }
+};
+
+USTRUCT(BlueprintType)
+struct FRewardItem
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
+    int32 ItemID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
+    int32 Amount;
 };
 
 USTRUCT(BlueprintType)
@@ -112,11 +130,12 @@ struct FQuestReward : public FTableRowBase
     float AcquiredEXP;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
-    TArray<int32> ItemRewards;
+    TArray<FRewardItem> ItemRewards;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
     int32 AcquiredPoint;
 };
+
 
 USTRUCT(BlueprintType)
 struct FQuestData : public FTableRowBase
