@@ -3,6 +3,7 @@
 
 #include "QuestManager.h"
 #include "BaseGameInstance.h"
+#include "Kismet/GameplayStatics.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Component/InventoryComponent.h"
 #include "../Component/StatComponent/PlayerStatComponent.h"
@@ -12,7 +13,7 @@ void UQuestManager::StartQuest(int32 const& QuestID)
 	if (NowQuests.Contains(QuestID))
 		return;
 
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance)
 	{
 		TWeakPtr<FQuestData> QuestData = GameInstance->GetDatabaseMap<FQuestData>(E_ManagerType::E_QuestDatabaseManager, QuestID);
@@ -32,16 +33,16 @@ void UQuestManager::StartQuest(int32 const& QuestID)
 
 bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 {
-	if (!NowQuests.Contains(QuestID))
-		return false;
-
-	TWeakPtr<FQuestData> QuestData = *NowQuests.Find(QuestID);
-	if (QuestData.IsValid())
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
 	{
-		for (const int32& ObjectiveID : QuestData.Pin()->ObjectiveIDs)
+		TWeakPtr<FQuestData> QuestData = GameInstance->GetDatabaseMap<FQuestData>(E_ManagerType::E_QuestDatabaseManager, QuestID);
+		if (QuestData.IsValid())
 		{
-			UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-			if (GameInstance)
+			if (QuestData.Pin()->QuestState == E_QuestState::E_Completed)
+				return true;
+
+			for (const int32& ObjectiveID : QuestData.Pin()->ObjectiveIDs)
 			{
 				TWeakPtr<FQuestObjective> ObjectiveData = GameInstance->GetDatabaseMap<FQuestObjective>(E_ManagerType::E_QuestObjectiveDatabaseManager, ObjectiveID);
 				if (ObjectiveData.IsValid())
@@ -50,24 +51,27 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 						return false;
 				}
 			}
-		}
-		if (TSharedPtr<FQuestData> questData = QuestData.Pin())
-		{
-			if (questData.IsValid())
+
+			if (TSharedPtr<FQuestData> questData = QuestData.Pin())
 			{
-				if(questData->QuestState != E_QuestState::E_Completed)
-					questData->QuestState = E_QuestState::E_Completed;
-				return true;
+				if (questData.IsValid())
+				{
+					if (questData->QuestState != E_QuestState::E_Completed)
+						questData->QuestState = E_QuestState::E_Completed;
+					if (NowQuests.Contains(QuestID))
+						NowQuests.Remove(QuestID);
+					return true;
+				}
 			}
 		}
+		
 	}
-
 	return false;
 }
 
 void UQuestManager::CompleteObjective(int32 const& ObjectiveID, int32 const& Amount)
 {
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance)
 	{
 		TWeakPtr<FQuestObjective> ObjectiveData = GameInstance->GetDatabaseMap<FQuestObjective>(E_ManagerType::E_QuestObjectiveDatabaseManager, ObjectiveID);
@@ -90,7 +94,7 @@ void UQuestManager::GrantRewards(int32 const& QuestID, class APlayerCharacter* P
 	if (!NowQuests.Contains(QuestID))
 		return;
 
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 	if (GameInstance)
 	{
 		TWeakPtr<FQuestData> QuestData = NowQuests.FindRef(QuestID);
@@ -117,7 +121,7 @@ void UQuestManager::GrantItem(int32 const& ItemID, int32 const& Amount, class AP
 {
 	if (PlayerCharacter)
 	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
 		if (GameInstance)
 		{
 			TWeakPtr<FItemData> ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, ItemID);

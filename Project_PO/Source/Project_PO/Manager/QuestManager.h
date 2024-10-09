@@ -14,7 +14,7 @@ UCLASS()
 class PROJECT_PO_API UQuestManager : public UObject
 {
 	GENERATED_BODY()
-	
+
 private:
 	TMap<int32, TWeakPtr<FQuestData>> NowQuests;
 

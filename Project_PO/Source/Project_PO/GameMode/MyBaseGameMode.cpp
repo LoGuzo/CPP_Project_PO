@@ -5,6 +5,7 @@
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/ObjectPoolManager.h"
+#include "../Manager/QuestManager.h"
 
 AMyBaseGameMode::AMyBaseGameMode()
 {
@@ -37,6 +38,12 @@ void AMyBaseGameMode::BeginPlay()
 			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
 			Transform.SetLocation(FVector(-750.f, -16129.f, -730.f));
 			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
+		}
+
+		auto QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
+		if (QuestManager)
+		{
+			QuestManager->StartQuest(3000);
 		}
 	}
 }

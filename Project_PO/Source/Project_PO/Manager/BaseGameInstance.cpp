@@ -22,9 +22,9 @@ UBaseGameInstance::UBaseGameInstance()
 
 void UBaseGameInstance::Init()
 {
-	ManagerMap.Emplace(E_ManagerType::E_WidgetManager, NewObject<UWidgetManager>());
-	ManagerMap.Emplace(E_ManagerType::E_ObjectPoolManager, NewObject<UObjectPoolManager>());
-	ManagerMap.Emplace(E_ManagerType::E_QuestManager, NewObject<UQuestManager>());
+	ManagerMap.Emplace(E_ManagerType::E_WidgetManager, NewObject<UWidgetManager>(this));
+	ManagerMap.Emplace(E_ManagerType::E_ObjectPoolManager, NewObject<UObjectPoolManager>(this));
+	ManagerMap.Emplace(E_ManagerType::E_QuestManager, NewObject<UQuestManager>(this));
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UItemDatabaseManager>()->GetDataMap<FItemData>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UEquipItemDatabaseManager>()->GetDataMap<FEquipItemData>());
     AddDataToDatabase(E_ManagerType::E_ItemDatabaseManager, SingletonManager::GetInstance<UCunsumItemDatabaseManager>()->GetDataMap<FCunsumItemData>());

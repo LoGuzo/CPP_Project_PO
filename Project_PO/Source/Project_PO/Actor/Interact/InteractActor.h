@@ -23,7 +23,7 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int32 RequiredQuestID;
 
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere)
 	int32 RequiredItemID;
 
 private:
