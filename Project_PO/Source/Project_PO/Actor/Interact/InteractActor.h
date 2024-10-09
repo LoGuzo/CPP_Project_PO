@@ -15,18 +15,23 @@ public:
 	// Sets default values for this actor's properties
 	AInteractActor();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	virtual void PostInitializeComponents() override;
-
 private:
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* BoxCollision;
 
+protected:
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	int32 RequiredQuestID;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	int32 RequiredItemID;
+
 private:
 	void SetBoxComponent();
+
+protected:
+	bool CheckingRequiredQuest();
+	bool CheckingRequiredItem(class AActor* PlayerCharacter);
 
 public:
 	class UBoxComponent* GetBoxComponent() { return BoxCollision; }

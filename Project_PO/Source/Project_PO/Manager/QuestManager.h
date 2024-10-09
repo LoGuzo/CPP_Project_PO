@@ -27,5 +27,4 @@ public:
 	bool IsCompleteQuest(int32 const& QuestID);
 	void CompleteObjective(int32 const& ObjectiveID, int32 const& Amount);
 	void GrantRewards(int32 const& QuestID, class APlayerCharacter* PlayerCharacter);
-
 };

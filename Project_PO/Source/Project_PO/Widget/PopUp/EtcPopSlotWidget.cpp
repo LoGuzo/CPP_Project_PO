@@ -24,7 +24,7 @@ void UEtcPopSlotWidget::NativeConstruct()
 void UEtcPopSlotWidget::UseItem()
 {
 	if (InventoryComponent)
-		InventoryComponent->UseItem(Index, Type.ItemType);
+		InventoryComponent->UseItem(Index, Type);
 
 	RemoveFromParent();
 }

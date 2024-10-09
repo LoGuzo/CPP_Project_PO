@@ -41,7 +41,10 @@ void AOwlTeleportActor::Interact(AActor* PlayerCharacter)
 {
 	if (PlayerCharacter)
 	{
-		PlayerCharacter->SetActorLocation(TeleportLocation);
+		if (CheckingRequiredQuest() && CheckingRequiredItem(PlayerCharacter))
+		{
+			PlayerCharacter->SetActorLocation(TeleportLocation);
+		}
 	}
 }
 

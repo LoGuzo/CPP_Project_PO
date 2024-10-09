@@ -30,6 +30,8 @@ ABaseDoorActor::ABaseDoorActor()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
+
+	RequiredItemID = 1005;
 }
 
 void ABaseDoorActor::BeginPlay()
@@ -59,16 +61,19 @@ void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 {
 	if (!bIsOpened)
 	{
-		if (ParticleComponent)
-			ParticleComponent->Activate(true);
+		if (CheckingRequiredQuest() && CheckingRequiredItem(PlayerCharacter))
+		{
+			if (ParticleComponent)
+				ParticleComponent->Activate(true);
 
-		if (AudioComponent)
-			AudioComponent->Play();
+			if (AudioComponent)
+				AudioComponent->Play();
 
-		if(DoorTimeline)
-			DoorTimeline->Play();
+			if (DoorTimeline)
+				DoorTimeline->Play();
 
-		bIsOpened = true;
+			bIsOpened = true;
+		}
 	}
 }
 

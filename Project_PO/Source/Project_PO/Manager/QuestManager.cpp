@@ -55,7 +55,8 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 		{
 			if (questData.IsValid())
 			{
-				questData->QuestState = E_QuestState::E_Completed;
+				if(questData->QuestState != E_QuestState::E_Completed)
+					questData->QuestState = E_QuestState::E_Completed;
 				return true;
 			}
 		}

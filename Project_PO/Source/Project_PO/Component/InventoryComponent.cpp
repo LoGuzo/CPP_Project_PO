@@ -213,12 +213,12 @@ void UInventoryComponent::ChangeEquip(int32 Index, int32 ItemID)
 	}
 }
 
-void UInventoryComponent::UseItem(int32 Index, E_ItemType Type)
+void UInventoryComponent::UseItem(int32 Index, FSpawnItemType Type)
 {
-	switch (Type)
+	switch (Type.ItemType)
 	{
 	case E_ItemType::E_Cunsumable:
-		UseCunsumItem(Index, Type);
+		UseCunsumItem(Index, Type.ItemType);
 		break;
 	case E_ItemType::E_Etc:
 		UseEtcItem(Index, Type);
@@ -235,7 +235,21 @@ void UInventoryComponent::UseCunsumItem(int32 Index, E_ItemType Type)
 		QuickSlotComponent->OnQuickSlotUpdated.Broadcast();
 }
 
-void UInventoryComponent::UseEtcItem(int32 Index, E_ItemType Type)
+void UInventoryComponent::UseEtcItem(int32 Index, FSpawnItemType Type)
+{
+	switch (Type.EquipType)
+	{
+	case E_EquipType::E_Installable:
+		UseInstallEtcItem(Index, Type.ItemType);
+	case E_EquipType::E_None:
+		CheckSlotAmount(Index, Type.ItemType);
+	default:
+		break;
+	}
+	
+}
+
+void UInventoryComponent::UseInstallEtcItem(int32 Index, E_ItemType Type)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
