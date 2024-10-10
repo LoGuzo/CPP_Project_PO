@@ -22,6 +22,12 @@ void AMyBaseGameMode::InitGame(const FString& MapName, const FString& Options, F
 	Super::InitGame(MapName, Options, ErrorMessage);
 }
 
+void AMyBaseGameMode::PostLogin(APlayerController* NewPlayer)
+{
+	Super::PostLogin(NewPlayer);
+
+	GetWorld()->GetTimerManager().SetTimer(ResetTimer, this, &AMyBaseGameMode::StartQuest, 1.f, false);
+}
 
 void AMyBaseGameMode::BeginPlay()
 {
@@ -39,7 +45,14 @@ void AMyBaseGameMode::BeginPlay()
 			Transform.SetLocation(FVector(-750.f, -16129.f, -730.f));
 			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
 		}
+	}
+}
 
+void AMyBaseGameMode::StartQuest()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
 		auto QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
 		if (QuestManager)
 		{

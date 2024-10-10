@@ -61,6 +61,7 @@ enum class E_ObjectiveType : uint8
 	E_Kill UMETA(DisplayName = "Kill"),
 	E_Interact UMETA(DisplayName = "Interact"),
 	E_ReachLocation UMETA(DisplayName = "Reach Location"),
+	E_Guard UMETA(DisplayName = "Guard"),
 	E_None UMETA(DisplayName = "None"),
 };
 

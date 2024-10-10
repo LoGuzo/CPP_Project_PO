@@ -91,6 +91,9 @@ struct FQuestObjective : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     int32 CurrentAmount;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+    TSoftObjectPtr<UTexture2D> ObjectiveImage;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     bool bIsComplete;
 
@@ -146,7 +149,7 @@ struct FQuestData : public FTableRowBase
     int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
-    int32 NextQuestID;
+    int32 NextQuestID = -1;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
     FText QuestName;

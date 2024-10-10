@@ -7,6 +7,7 @@
 #include "../../Widget/InGame/Slots/CunsumQuickSlotWidget.h"
 #include "../../Widget/InGame/Slots/SkillQuickSlotWidget.h"
 #include "../../Widget/InGame/Slots/WeaponSlotWidget.h"
+#include "../../Widget/InGame/Quest/QuestMainWidget.h"
 
 UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 	:Super(ObjectInitializer)
@@ -41,4 +42,9 @@ void UMyHUDWidget::SetUpCunsumQuickSlot(UPotionQuickSlotComponent* PotionQuickSl
 void UMyHUDWidget::SetUpWeaponSlot(int32 const& ID)
 {
 	WBP_WeaponSlot->SetUpWidget(ID);
+}
+
+void UMyHUDWidget::SetUpQuestMain(int32 const& ID)
+{
+	WBP_QuestMain->SetUpWidget(ID);
 }

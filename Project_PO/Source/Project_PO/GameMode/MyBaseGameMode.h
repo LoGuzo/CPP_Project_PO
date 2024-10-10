@@ -15,11 +15,18 @@ class AMyBaseGameMode : public AGameModeBase
 public:
 	AMyBaseGameMode();
 
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	FTimerHandle ResetTimer;
+
 public:
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+	virtual void PostLogin(APlayerController* NewPlayer);
 
 protected:
-    virtual void BeginPlay() override;
+	void StartQuest();
 };
 
 

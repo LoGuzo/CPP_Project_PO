@@ -7,9 +7,9 @@
 #include "../MyStructureAll.h"
 #include "QuestManager.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnQuestUpdated, int32);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnObjectiveUpdated, int32);
+
 UCLASS()
 class PROJECT_PO_API UQuestManager : public UObject
 {
@@ -17,6 +17,10 @@ class PROJECT_PO_API UQuestManager : public UObject
 
 private:
 	TMap<int32, TWeakPtr<FQuestData>> NowQuests;
+
+public:
+	FOnQuestUpdated OnQuestUpdated;
+	FOnObjectiveUpdated OnObjectiveUpdated;
 
 private:
 	void GrantItem(int32 const& ItemID, int32 const& Amount, class APlayerCharacter* PlayerCharacter);

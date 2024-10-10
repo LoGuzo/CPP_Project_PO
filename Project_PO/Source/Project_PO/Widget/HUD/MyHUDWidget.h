@@ -31,11 +31,16 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UWeaponSlotWidget* WBP_WeaponSlot;
 
+	UPROPERTY(meta = (BindWidget))
+	class UQuestMainWidget* WBP_QuestMain;
+
 public:
 	void SetUpCharInfo(class UStatComponent* StatComponent);
 	void SetUpCunsumQuickSlot(class UPotionQuickSlotComponent* PotionQuickSlotComponent);
 	void SetUpWeaponSlot(int32 const& ID);
+	void SetUpQuestMain(int32 const& ID);
 
 	class UCunsumQuickSlotWidget* GetCunsumQuickSlot() { return WBP_CunsumQuickSlot; }
 	class USkillQuickSlotWidget* GetSkillQuickSlot() { return WBP_SkillQuickSlot; }
+	class UQuestMainWidget* GetQuestMain() { return WBP_QuestMain; }
 };

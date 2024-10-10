@@ -47,10 +47,10 @@ void UInventorySlotWidget::NativePreConstruct()
 {
 	Super::NativePreConstruct();
 
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
-	{
-		if (ID != -1) {
+	if (ID != -1) {
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
 			TWeakPtr<FItemData>ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, ID);
 			if (ItemData.IsValid())
 			{
@@ -76,14 +76,14 @@ void UInventorySlotWidget::NativePreConstruct()
 				}
 			}
 		}
-		else
-		{
-			if (Box_Slot)
-				Box_Slot->SetVisibility(ESlateVisibility::Hidden);
+	}
+	else
+	{
+		if (Box_Slot)
+			Box_Slot->SetVisibility(ESlateVisibility::Hidden);
 
-			if (Img_Slot)
-				Img_Slot->SetVisibility(ESlateVisibility::Hidden);
-		}
+		if (Img_Slot)
+			Img_Slot->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
 

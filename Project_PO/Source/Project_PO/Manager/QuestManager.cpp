@@ -26,6 +26,8 @@ void UQuestManager::StartQuest(int32 const& QuestID)
 			{
 				questData->QuestState = E_QuestState::E_InProgress;
 				NowQuests.Emplace(QuestID, questData);
+
+				OnQuestUpdated.Broadcast(QuestID);
 			}
 		}
 	}
@@ -58,13 +60,21 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 				{
 					if (questData->QuestState != E_QuestState::E_Completed)
 						questData->QuestState = E_QuestState::E_Completed;
+
 					if (NowQuests.Contains(QuestID))
+					{
 						NowQuests.Remove(QuestID);
+
+						if (QuestData.Pin()->NextQuestID != -1)
+							StartQuest(QuestData.Pin()->NextQuestID);
+						else
+							OnQuestUpdated.Broadcast(-1);
+					}
+
 					return true;
 				}
 			}
 		}
-		
 	}
 	return false;
 }
@@ -84,6 +94,8 @@ void UQuestManager::CompleteObjective(int32 const& ObjectiveID, int32 const& Amo
 			{
 				if(objectiveData.IsValid())
 					objectiveData->UpdateProgress(Amount);
+
+				OnObjectiveUpdated.Broadcast(ObjectiveID);
 			}
 		}
 	}
