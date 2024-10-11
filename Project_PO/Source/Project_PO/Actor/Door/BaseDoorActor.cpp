@@ -61,7 +61,7 @@ void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 {
 	if (!bIsOpened)
 	{
-		if (CheckingRequiredQuest() && CheckingRequiredItem(PlayerCharacter))
+		if (CheckingRequiredItem(PlayerCharacter))
 		{
 			if (ParticleComponent)
 				ParticleComponent->Activate(true);

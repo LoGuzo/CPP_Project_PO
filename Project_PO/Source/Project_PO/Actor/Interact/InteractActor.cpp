@@ -7,7 +7,9 @@
 #include "../../Character/Player/PlayerCharacter.h"
 #include "../../Component/InventoryComponent.h"
 #include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/WidgetManager.h"
 #include "../../Manager/QuestManager.h"
+#include "../../Widget/PopUp/AccessAlertWidget.h"
 
 // Sets default values
 AInteractActor::AInteractActor()
@@ -39,34 +41,62 @@ bool AInteractActor::CheckingRequiredQuest()
 			if (QuestManager)
 			{
 				if (!QuestManager->IsCompleteQuest(RequiredQuestID))
+				{
+					SetUpAlertWidget(E_Access::E_QuestAccess);
 					return false;
+				}
 			}
 		}
 	}
 	return true;
 }
 
+void AInteractActor::SetUpAlertWidget(E_Access _Type)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UAccessAlertWidget* AccessAlertWidget = WidgetManager->GetWidget<UAccessAlertWidget>(TEXT("Alert"));
+			if (AccessAlertWidget)
+			{
+				AccessAlertWidget->SetUpText(_Type);
+				
+				if(!AccessAlertWidget->IsInViewport())
+					AccessAlertWidget->AddToViewport();
+			}
+		}
+	}
+}
+
 bool AInteractActor::CheckingRequiredItem(AActor* PlayerCharacter)
 {
-	if (RequiredItemID != -1)
+	if (CheckingRequiredQuest())
 	{
-		APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
-		if (playerCharacter)
+		if (RequiredItemID != -1)
 		{
-			UInventoryComponent* InventoryComponent = playerCharacter->GetInventoryComponent();
-			if (InventoryComponent)
+			APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
+			if (playerCharacter)
 			{
-				UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-				if (GameInstance)
+				UInventoryComponent* InventoryComponent = playerCharacter->GetInventoryComponent();
+				if (InventoryComponent)
 				{
-					TWeakPtr<FItemData> ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, RequiredItemID);
-					if (ItemData.IsValid())
+					UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+					if (GameInstance)
 					{
-						FResult result = InventoryComponent->FindSlot(RequiredItemID, ItemData.Pin()->ItemType.ItemType);
-						if (!result.IsFindItem)
-							return false;
-
-						InventoryComponent->UseItem(result.Index, ItemData.Pin()->ItemType);
+						TWeakPtr<FItemData> ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, RequiredItemID);
+						if (ItemData.IsValid())
+						{
+							FResult result = InventoryComponent->FindSlot(RequiredItemID, ItemData.Pin()->ItemType.ItemType);
+							if (!result.IsFindItem)
+							{
+								SetUpAlertWidget(E_Access::E_ItemAccess);
+								return false;
+							}
+							InventoryComponent->UseItem(result.Index, ItemData.Pin()->ItemType);
+						}
 					}
 				}
 			}

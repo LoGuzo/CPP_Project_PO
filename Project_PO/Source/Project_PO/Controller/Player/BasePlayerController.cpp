@@ -8,6 +8,7 @@
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 #include "../../Widget/PopUp/DamagePopUpWidget.h"
+#include "../../Widget/PopUp/AccessAlertWidget.h"
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -23,6 +24,10 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>DamageWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_DamagePopUp.WBP_DamagePopUp_C"));
 	if (DamageWidget.Succeeded())
 		DamagePopUpWidget = DamageWidget.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>AlertWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/Alert/WBP_AccessAlertWidget.WBP_AccessAlertWidget_C"));
+	if (AlertWidget.Succeeded())
+		AccessAlertWidget = AlertWidget.Class;
 }
 
 void ABasePlayerController::BeginPlay()
@@ -48,10 +53,12 @@ void ABasePlayerController::SetUpWidget()
 					if (HUD)
 						HUD->SetAddRemove();
 				}
+
 				if (InventoryWidget)
-				{
 					WidgetManager->CreateAndAddWidget<APlayerController, UMainInventoryWidget>(this, TEXT("Inven"), InventoryWidget);
-				}
+
+				if (AccessAlertWidget)
+					WidgetManager->CreateAndAddWidget<APlayerController, UAccessAlertWidget>(this, TEXT("Alert"), AccessAlertWidget);
 			}
 		}
 	}

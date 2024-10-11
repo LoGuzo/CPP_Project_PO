@@ -25,6 +25,7 @@ private:
 	TSubclassOf<class UMyHUDWidget> HUDWidget;
 	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
 	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
+	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
 
 private:
 	void SetUpWidget();

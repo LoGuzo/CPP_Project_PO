@@ -28,9 +28,10 @@ protected:
 
 private:
 	void SetBoxComponent();
+	bool CheckingRequiredQuest();
+	void SetUpAlertWidget(enum E_Access _Type);
 
 protected:
-	bool CheckingRequiredQuest();
 	bool CheckingRequiredItem(class AActor* PlayerCharacter);
 
 public:
