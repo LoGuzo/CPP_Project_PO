@@ -35,7 +35,7 @@ private:
 
 private:
 	void UpdateWidget();
-
+	void BindWidget(int32 _ObjectiveID);
 public:
 	void SetUpWidget(int32 _ObjectiveID);
 };

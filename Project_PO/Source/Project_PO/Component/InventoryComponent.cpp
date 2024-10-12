@@ -24,16 +24,7 @@ void UInventoryComponent::BeginPlay()
 	TArray<FSlot> Slots;
 	Slots.SetNum(InventorySize);
 	SlotMap.Emplace(E_ItemType::E_Equip, Slots);
-	Slots[0].ItemID = 1003;
-	Slots[0].Amount = 2;
-	Slots[0].Type = FSpawnItemType(E_ItemType::E_Cunsumable, E_EquipType::E_Registerable);
 	SlotMap.Emplace(E_ItemType::E_Cunsumable, Slots);
-	Slots[0].ItemID = 1005;
-	Slots[0].Amount = 1;
-	Slots[0].Type = FSpawnItemType(E_ItemType::E_Etc);
-	Slots[1].ItemID = 1006;
-	Slots[1].Amount = 1;
-	Slots[1].Type = FSpawnItemType(E_ItemType::E_Etc, E_EquipType::E_Installable);
 	SlotMap.Emplace(E_ItemType::E_Etc, Slots);
 }
 
@@ -48,7 +39,7 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 		result = FindSlot(ItemID, Type.ItemType);
 		if (result.IsFindItem)
 		{
-			IncreaseSlotStack(result.Index, ItemAmount, Type.ItemType);
+			IncreaseSlotStack(result.Index, 1, Type.ItemType);
 			AmountLeft--;
 		}
 		else
@@ -56,7 +47,7 @@ void UInventoryComponent::AddItem(int32 ItemID, int32 ItemAmount, FSpawnItemType
 			result = CheckSlotEmpty(Type.ItemType);
 			if (result.IsFindItem)
 			{
-				AddToNewSlot(ItemID, ItemAmount, Type);
+				AddToNewSlot(ItemID, 1, Type);
 				AmountLeft--;
 			}
 			else
@@ -98,6 +89,40 @@ FResult UInventoryComponent::FindSlot(int32 ItemID, E_ItemType Type)
 
 	Result.Index = -1;
 	Result.IsFindItem = false;
+
+	return Result;
+}
+
+FResult UInventoryComponent::FindItem(int32 ItemID, E_ItemType Type)
+{
+	int32 index = 0;
+	int32 MinStackSize = GetStackSize(ItemID) + 1;
+	int32 MinIndex = -1;
+
+	FResult Result;
+
+	for (const FSlot& Slot : *SlotMap.Find(Type)) {
+		if (Slot.ItemID == ItemID)
+		{
+			int32 AvailableStackSpace = GetStackSize(ItemID) - Slot.Amount;
+
+			if (AvailableStackSpace >= 0 && AvailableStackSpace < MinStackSize)
+			{
+				MinStackSize = AvailableStackSpace;
+				MinIndex = index;
+				Result.IsFindItem = true;
+			}
+		}
+		index++;
+	}
+
+	if (MinIndex != -1) {
+		Result.Index = MinIndex;
+	}
+	else {
+		Result.Index = -1;
+		Result.IsFindItem = false;
+	}
 
 	return Result;
 }

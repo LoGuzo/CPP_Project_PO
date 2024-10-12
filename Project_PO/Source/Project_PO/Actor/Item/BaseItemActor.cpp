@@ -5,6 +5,7 @@
 #include "../../Component/ItemComponent/ItemComponent.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
+#include "../../Manager/QuestManager.h"
 
 ABaseItemActor::ABaseItemActor()
 	: ItemType(E_ItemType::E_None)
@@ -45,6 +46,17 @@ void ABaseItemActor::SetState(bool NowState)
 	SetActorHiddenInGame(!NowState);
 	SetActorEnableCollision(NowState);
 	SetActorTickEnabled(NowState);
+}
+
+void ABaseItemActor::CheckingObjective()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UQuestManager* QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
+		if (QuestManager)
+			QuestManager->CheckingObjective(ItemComponent->GetID(), 1);
+	}
 }
 
 void ABaseItemActor::SetItem(int32 _ID)

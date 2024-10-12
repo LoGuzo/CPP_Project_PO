@@ -64,6 +64,7 @@ void AInstallItemActor::Place(FVector const& Location, FRotator const& Rotation)
     {
         SetActorLocationAndRotation(Location, Rotation); 
         UseItem();
+        CheckingObjective();
         GetStaticMesh()->SetCollisionProfileName(TEXT("BlockAllDynamic"));
     }
     else

@@ -115,6 +115,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsMoveFront;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsFirstPlayer;
+
 	UPROPERTY()
 	class UBasePlayerAnimInstance* AnimInstance;
 
@@ -198,6 +201,9 @@ public:
 
 	bool GetIsSprint() { return bIsSprint; }
 	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
+
+	bool GetIsFirstPlayer() { return bIsFirstPlayer; }
+	void SetIsFirstPlayer(bool _bIsFirstPlayer) { bIsFirstPlayer = _bIsFirstPlayer; }
 
 	E_WeaponType GetWeaponType() { return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }

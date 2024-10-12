@@ -31,8 +31,8 @@ void ADropItemActor::Interact(AActor* PlayerCharacter)
 			FSpawnItemType Type = ItemComponent->GetItemType();
 
 			InventoryComponent->AddItem(ID, 1, Type);
+			CheckingObjective();
 		}
-
 		playerCharacter->SetInteractActor(nullptr);
 
 		ResetItem();

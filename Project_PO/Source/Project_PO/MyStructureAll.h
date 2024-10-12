@@ -80,6 +80,12 @@ struct FQuestObjective : public FTableRowBase
     int32 ID;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
+    int32 TargetID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
+    int32 QuestID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     E_ObjectiveType ObjectiveType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
@@ -91,7 +97,7 @@ struct FQuestObjective : public FTableRowBase
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     int32 CurrentAmount;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Item")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
     TSoftObjectPtr<UTexture2D> ObjectiveImage;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Objective")
@@ -119,6 +125,9 @@ struct FRewardItem
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
     int32 Amount;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reward")
+    bool bIsIndividualReward;
 };
 
 USTRUCT(BlueprintType)

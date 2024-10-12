@@ -20,6 +20,9 @@ private:
 	class UBoxComponent* BoxCollision;
 
 protected:
+	UPROPERTY(VisibleAnywhere)
+	int32 InteractID;
+
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	int32 RequiredQuestID;
 
@@ -33,6 +36,7 @@ private:
 
 protected:
 	bool CheckingRequiredItem(class AActor* PlayerCharacter);
+	void CheckingObjective();
 
 public:
 	class UBoxComponent* GetBoxComponent() { return BoxCollision; }

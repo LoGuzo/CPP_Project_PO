@@ -31,6 +31,7 @@ ABaseDoorActor::ABaseDoorActor()
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
 
+	InteractID = 6000;
 	RequiredItemID = 1005;
 }
 
@@ -71,6 +72,8 @@ void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 
 			if (DoorTimeline)
 				DoorTimeline->Play();
+
+			CheckingObjective();
 
 			bIsOpened = true;
 		}

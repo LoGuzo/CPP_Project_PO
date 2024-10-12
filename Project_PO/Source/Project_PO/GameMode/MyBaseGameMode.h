@@ -18,15 +18,25 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
-	FTimerHandle ResetTimer;
-
 public:
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 	virtual void PostLogin(APlayerController* NewPlayer);
 
+private:
+	FTimerHandle ResetTimer;
+
+	bool bIsHavingFirstPlayer;
+protected:
+	UPROPERTY()
+	TArray<class ABasePlayerController*> PlayerControllers;
+
+private:
+	void InitPlayerController(APlayerController* NewPlayer);
+
 protected:
 	void StartQuest();
+	void BindingReward();
+	void GrantReward(int32 QuestID);
 };
 
 

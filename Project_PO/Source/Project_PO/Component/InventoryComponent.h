@@ -81,6 +81,7 @@ public:
 	void DropItem(int32 TargetIndex, FSpawnItemType Type);
 
 	FResult FindSlot(int32 ItemID, E_ItemType Type);
+	FResult FindItem(int32 ItemID, E_ItemType Type);
 	
 	void ChangeSlot(int32 BeforeIndex, int32 TargetIndex, UInventoryComponent* BeforeInvenCom);
 

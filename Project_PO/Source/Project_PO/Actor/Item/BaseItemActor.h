@@ -38,6 +38,9 @@ protected:
 	E_ItemType ItemType;
 	E_EquipType EquipType;
 
+protected:
+	void CheckingObjective();
+
 public:
 	template<typename T>
 	T* GetItemComponent()

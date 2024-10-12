@@ -22,7 +22,7 @@ void UObjectiveSlotWidget::NativeConstruct()
 	{
 		UQuestManager* QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
 		if (QuestManager)
-			QuestManager->OnObjectiveUpdated.AddUObject(this, &UObjectiveSlotWidget::SetUpWidget);
+			QuestManager->OnObjectiveUpdated.AddUObject(this, &UObjectiveSlotWidget::BindWidget);
 	}
 }
 
@@ -66,4 +66,10 @@ void UObjectiveSlotWidget::UpdateWidget()
 			}
 		}
 	}
+}
+
+void UObjectiveSlotWidget::BindWidget(int32 _ObjectiveID)
+{
+	if (_ObjectiveID != -1 && ObjectiveID == _ObjectiveID)
+		UpdateWidget();
 }

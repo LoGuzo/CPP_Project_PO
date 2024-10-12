@@ -71,6 +71,17 @@ void AInteractActor::SetUpAlertWidget(E_Access _Type)
 	}
 }
 
+void AInteractActor::CheckingObjective()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UQuestManager* QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
+		if (QuestManager)
+			QuestManager->CheckingObjective(InteractID, 1);
+	}
+}
+
 bool AInteractActor::CheckingRequiredItem(AActor* PlayerCharacter)
 {
 	if (CheckingRequiredQuest())
@@ -89,7 +100,7 @@ bool AInteractActor::CheckingRequiredItem(AActor* PlayerCharacter)
 						TWeakPtr<FItemData> ItemData = GameInstance->GetDatabaseMap<FItemData>(E_ManagerType::E_ItemDatabaseManager, RequiredItemID);
 						if (ItemData.IsValid())
 						{
-							FResult result = InventoryComponent->FindSlot(RequiredItemID, ItemData.Pin()->ItemType.ItemType);
+							FResult result = InventoryComponent->FindItem(RequiredItemID, ItemData.Pin()->ItemType.ItemType);
 							if (!result.IsFindItem)
 							{
 								SetUpAlertWidget(E_Access::E_ItemAccess);
@@ -101,6 +112,7 @@ bool AInteractActor::CheckingRequiredItem(AActor* PlayerCharacter)
 				}
 			}
 		}
+		return true;
 	}
-	return true;
+	return false;
 }
