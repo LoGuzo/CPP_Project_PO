@@ -38,7 +38,7 @@ public:
 	bool GetIsDied() { return bIsDied; }
 	void SetIsDied(bool _bIsDied) { bIsDied = _bIsDied; }
 
-	void SetState(bool NowState);
+	virtual void SetState(bool NowState);
 
 	int32 GetID() { return ID; }
 	void SetID(int32 _ID) { ID = _ID; }

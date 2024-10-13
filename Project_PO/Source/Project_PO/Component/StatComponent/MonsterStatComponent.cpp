@@ -22,7 +22,7 @@ void UMonsterStatComponent::SetStat(int32 const& _ID)
 			Attack = StatData.Pin()->Attack;
 			Armor = StatData.Pin()->Armor;
 			MaxHp = StatData.Pin()->MaxHp;
-			Hp = MaxHp;
+			SetHp(MaxHp);
 			MaxMp = StatData.Pin()->MaxMp;
 			Mp = MaxMp;
 			RewardEXP = StatData.Pin()->RewardEXP;

@@ -44,9 +44,12 @@ protected:
 public:
     virtual void SetStat(int32 const& _ID);
 
+    float GetHp() { return Hp; }
     virtual void TakeDamage(float const& TakedDamage);
     void HealHp(float const& HealedHp);
     void SetHp(float const& _Hp);
+
+    float GetMaxHp() { return MaxHp; }
 
     void UseMana(float const& UsedMana);
     void HealMp(float const& HealedMp);

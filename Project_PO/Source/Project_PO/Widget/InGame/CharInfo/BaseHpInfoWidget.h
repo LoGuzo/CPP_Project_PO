@@ -22,6 +22,6 @@ protected:
 	class UStatComponent* StatComponent;
 
 public:
-	void BindHp(class UStatComponent* _StatComp);
-	void UpdateHp();
+	virtual void BindHp(class UStatComponent* _StatComp);
+	virtual void UpdateHp();
 };

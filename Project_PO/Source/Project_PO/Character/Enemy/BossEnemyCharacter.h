@@ -18,6 +18,10 @@ public:
 	ABossEnemyCharacter();
 
 protected:
+	virtual void BeginPlay() override;
+
+private:
+	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
@@ -32,7 +36,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* LeftLegCollision;
 
+private:
+	void SetUpBossHp();
+	void VisibleWidget();
+
 protected:
 	virtual void SetUpArmCollision() override;
 	virtual void SetUpLegCollision() override;
+
+	virtual void SetState(bool NowState) override;
 };

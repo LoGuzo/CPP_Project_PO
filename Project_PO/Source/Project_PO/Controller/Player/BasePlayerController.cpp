@@ -6,6 +6,7 @@
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
+#include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 #include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 #include "../../Widget/PopUp/DamagePopUpWidget.h"
 #include "../../Widget/PopUp/AccessAlertWidget.h"
@@ -39,10 +40,10 @@ void ABasePlayerController::BeginPlay()
 
 void ABasePlayerController::SetUpWidget()
 {
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
+	if (IsLocalController())
 	{
-		if (IsLocalController())
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
 		{
 			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
@@ -66,11 +67,12 @@ void ABasePlayerController::SetUpWidget()
 
 void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage)
 {
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
+	if (IsLocalController())
 	{
-		if (IsLocalController())
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
 		{
+
 			UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
 			if (ObjectPoolManager)
 			{

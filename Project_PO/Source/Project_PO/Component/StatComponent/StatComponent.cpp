@@ -21,7 +21,7 @@ void UStatComponent::TakeDamage(float const& TakedDamage)
 	float CurHp = Hp;
 	CurHp -= TakedDamage;
 
-	if (Hp <= 0)
+	if (CurHp <= 0)
 	{
 		CurHp = 0;
 		ABaseCharacter* OwnCharacter = Cast<ABaseCharacter>(GetOwner());
@@ -40,7 +40,7 @@ void UStatComponent::HealHp(float const& HealedHp)
 	float CurHp = Hp;
 	CurHp += HealedHp;
 
-	if (Hp >= MaxHp)
+	if (CurHp >= MaxHp)
 		CurHp = MaxHp;
 
 	SetMp(CurHp);
@@ -61,7 +61,7 @@ void UStatComponent::UseMana(float const& UsedMana)
 	float CurMp = Mp;
 	CurMp -= UsedMana;
 
-	if (Mp <= 0)
+	if (CurMp <= 0)
 		CurMp = 0;
 
 	SetMp(CurMp);
@@ -75,7 +75,7 @@ void UStatComponent::HealMp(float const& HealedMp)
 	float CurMp = Mp;
 	CurMp += HealedMp;
 
-	if (Mp >= MaxMp)
+	if (CurMp >= MaxMp)
 		CurMp = MaxMp;
 
 	SetMp(CurMp);

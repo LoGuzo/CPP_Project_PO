@@ -28,5 +28,8 @@ private:
 public:
     virtual void SetStat(int32 const& _ID) override;
 
+    FName GetMonsterName() { return MonsterName; }
+    void SetMonsterName(FName const& _MonsterName) { MonsterName = _MonsterName; }
+
     float GetRewardExp() { return RewardEXP; }
 };
