@@ -15,6 +15,10 @@ AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 	ID = 101;
 
 	SetUpCharacter();
+
+	AnimMontageMap.Emplace(TEXT("Attack"), 5401);
+	AnimMontageMap.Emplace(TEXT("Attack1"), 5402);
+	AnimMontageMap.Emplace(TEXT("Death"), 5403);
 }
 
 void AMummyNormalEnemyCharacter::SetCharacterMesh()

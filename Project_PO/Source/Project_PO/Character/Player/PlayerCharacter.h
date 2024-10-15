@@ -180,7 +180,8 @@ private:
 
 	void DisplayCrosshair();
 
-	void AttackMontage();
+protected:
+	virtual void AttackMontage() override;
 
 public:
 	UPROPERTY(EditAnywhere)

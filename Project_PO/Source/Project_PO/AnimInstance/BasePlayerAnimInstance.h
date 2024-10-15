@@ -49,9 +49,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = IK, meta = (AllowPrivateAccess = "true"))
 	FVector JointTargetLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Montage, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* AttackMontage;
-
 public:
 	bool GetIsArmed() { return bIsArmed; }
 	void SetIsArmed(bool _bIsArmed) { bIsArmed = _bIsArmed; }
@@ -64,11 +61,6 @@ public:
 
 	E_WeaponType GetWeaponType(){ return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
-
-	void OnAttackPlayAM();
-
-	UFUNCTION()
-	void OnAttackMontageEnded(UAnimMontage* Montage, bool bInterrupted);
 
 	UFUNCTION()
 	void AnimNotify_AttackHit();

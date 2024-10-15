@@ -19,7 +19,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Montage, meta = (AllowPrivateAccess = "true"))
-	UAnimMontage* GunAttackMontage;
+	UAnimMontage* GunAnimMontage;
 
 public:
 	void OnGunAttackPlayAM();

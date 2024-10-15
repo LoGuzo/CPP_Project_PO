@@ -20,9 +20,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-private:
-	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
-
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* RightArmCollision;

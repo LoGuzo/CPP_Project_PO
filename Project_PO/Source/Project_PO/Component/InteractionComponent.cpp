@@ -17,8 +17,8 @@
 
 // Sets default values for this component's properties
 UInteractionComponent::UInteractionComponent()
-	: InteractionRange(200.f)
-	, bIsWidgetVisible(false)
+	: bIsWidgetVisible(false)
+	, InteractionRange(200.f)
 	, InstallItem(nullptr)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features

@@ -37,7 +37,7 @@ APlayerCharacter::APlayerCharacter()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Player"));
 
 	CameraTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("CameraTimeline"));
-	
+
 	// Setup Component
 	InteractionComponent = CreateDefaultSubobject<UInteractionComponent>("Interaction");
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("EquipComponent");
@@ -80,7 +80,7 @@ void APlayerCharacter::BeginPlay()
 }
 
 float APlayerCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{	
+{
 	if (bIsDied)
 		return 0.f;
 
@@ -452,25 +452,17 @@ void APlayerCharacter::DisplayCrosshair()
 void APlayerCharacter::AttackMontage()
 {
 	ABaseWeaponActor* CurrentWeapon = EquipComponent->GetCurrentWeapon();
-  	if (CurrentWeapon)
+	if (CurrentWeapon)
 	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (GameInstance)
+		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
+		if (AnimInstance)
 		{
-			AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
-			if (AnimInstance)
+			int32 MontageID = *AttackMontageMap.Find(WeaponType);
+			TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
+			if (StatComponent)
 			{
-				int32 MontageID = *AttackMontageMap.Find(WeaponType);
-				TWeakPtr<FMontageData> Data = GameInstance->GetDatabaseMap<FMontageData>(E_ManagerType::E_MontageDatabaseManager, MontageID);
-				if (Data.IsValid())
-				{
-					FMontageData montageData = *Data.Pin();
-					if (StatComponent)
-					{
-						float AttackSpeed = GetStatComponent<UPlayerStatComponent>()->GetAttackSpeed();
-						AnimInstance->PlayMontage(montageData.Montage, 1.f * AttackSpeed);
-					}
-				}
+				float AttackSpeed = GetStatComponent<UPlayerStatComponent>()->GetAttackSpeed();
+				AnimInstance->PlayMontage(Montage, 1.f * AttackSpeed);
 			}
 		}
 	}

@@ -28,8 +28,16 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ID, meta = (AllowPrivateAccess = "true"))
 	int32 ID;
 
+	int32 AttackIndex;
+
 	UPROPERTY(VisibleAnywhere)
 	class UStatComponent* StatComponent;
+
+	UPROPERTY()
+	TMap<FString, int32 > AnimMontageMap;
+
+protected:
+	TSoftObjectPtr<UAnimMontage> FindMontage(int32 const& MontageID);
 
 public:
 	bool GetIsAttack() { return bIsAttack; }
@@ -42,6 +50,9 @@ public:
 
 	int32 GetID() { return ID; }
 	void SetID(int32 _ID) { ID = _ID; }
+
+	virtual void AttackMontage() {};
+	void AnimMontage(FString const& MontageName);
 
 	template<typename T>
 	T* GetStatComponent()

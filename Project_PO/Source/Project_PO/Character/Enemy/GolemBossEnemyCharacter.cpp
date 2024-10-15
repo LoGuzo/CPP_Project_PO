@@ -15,6 +15,12 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 	ID = 102;
 
 	SetUpCharacter();
+
+	AnimMontageMap.Emplace(TEXT("Attack"), 5301);
+	AnimMontageMap.Emplace(TEXT("Attack1"), 5302);
+	AnimMontageMap.Emplace(TEXT("Attack2"), 5303);
+	AnimMontageMap.Emplace(TEXT("Death"), 5304);
+	AnimMontageMap.Emplace(TEXT("Rise"), 5305);
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()

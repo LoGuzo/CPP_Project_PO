@@ -16,4 +16,15 @@ class PROJECT_PO_API UBaseEnemyAnimInstance : public UBaseAnimInstance
 	
 public:
 	UBaseEnemyAnimInstance();
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
+	bool bIsWait;
+
+public:
+	bool GetIsWait() { return bIsWait; }
+	void SetIsWait(bool _bIsWait) { bIsWait = _bIsWait; }
+
+	void JumpToSection(int32 SectionIndex, TSoftObjectPtr<UAnimMontage> Montage);
+	FName GetAnimMontageName(int32 SectionIndex);
 };

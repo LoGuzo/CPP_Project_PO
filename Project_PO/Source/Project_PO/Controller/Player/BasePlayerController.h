@@ -26,10 +26,13 @@ private:
 	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
 	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
 	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
+	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
 
 private:
 	void SetUpWidget();
 
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
+
+	void VisibleWidget(FString const& WidgetName);
 };

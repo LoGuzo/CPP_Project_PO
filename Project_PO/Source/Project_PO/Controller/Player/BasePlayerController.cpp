@@ -29,12 +29,15 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>AlertWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/Alert/WBP_AccessAlertWidget.WBP_AccessAlertWidget_C"));
 	if (AlertWidget.Succeeded())
 		AccessAlertWidget = AlertWidget.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>BossHpWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/CharInfo/WBP_BossHpMain.WBP_BossHpMain_C"));
+	if (BossHpWidget.Succeeded())
+		BossHpMainWidget = BossHpWidget.Class;
 }
 
 void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
 	SetUpWidget();
 }
 
@@ -60,6 +63,9 @@ void ABasePlayerController::SetUpWidget()
 
 				if (AccessAlertWidget)
 					WidgetManager->CreateAndAddWidget<APlayerController, UAccessAlertWidget>(this, TEXT("Alert"), AccessAlertWidget);
+
+				if (BossHpMainWidget)
+					WidgetManager->CreateAndAddWidget<APlayerController, UBossHpMainWidget>(this, TEXT("BossHp"), BossHpMainWidget);
 			}
 		}
 	}
@@ -80,6 +86,24 @@ void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector 
 
 				UGameplayStatics::ProjectWorldToScreen(this, Location, ScreenPosition);
 				ObjectPoolManager->GetWidget(GetWorld(), Type, DamagePopUpWidget, ScreenPosition, Damage);
+			}
+		}
+	}
+}
+
+void ABasePlayerController::VisibleWidget(FString const& WidgetName)
+{
+	if (IsLocalController())
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
+			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			if (WidgetManager)
+			{
+				UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(WidgetName);
+				if (NowWidget)
+					NowWidget->SetAddRemove();
 			}
 		}
 	}

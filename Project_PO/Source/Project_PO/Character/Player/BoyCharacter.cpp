@@ -17,7 +17,7 @@ ABoyCharacter::ABoyCharacter()
 	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5001);
 	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5002);
 	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5003);
-	AttackMontageMap.Emplace(E_WeaponType::E_None, 5004);
+	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5004);
 }
 
 void ABoyCharacter::BeginPlay()

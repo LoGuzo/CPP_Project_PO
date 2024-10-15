@@ -19,7 +19,7 @@ AGirlCharacter::AGirlCharacter()
 	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5201);
 	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5202);
 	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5203);
-	AttackMontageMap.Emplace(E_WeaponType::E_None, 5204);
+	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5204);
 }
 
 void AGirlCharacter::BeginPlay()

@@ -4,82 +4,84 @@
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "../../AnimInstance/BaseEnemyAnimInstance.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
 #include "../../Controller/Player/BasePlayerController.h"
+#include "../../Manager/BaseGameInstance.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
 {
-    StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
-    GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
+	StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
 }
- 
+
 void AEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-    if (StatComponent)
-        GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
+	if (StatComponent)
+		GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-    if (bIsDied)
-        return 0.f;
+	if (bIsDied)
+		return 0.f;
 
-    float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-    if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
-    {
-        FHitResult HitResult;
-        const FPointDamageEvent& PointDamageEvent = static_cast<const FPointDamageEvent&>(DamageEvent);
-        HitResult = PointDamageEvent.HitInfo;
+	if (DamageEvent.IsOfType(FPointDamageEvent::ClassID))
+	{
+		FHitResult HitResult;
+		const FPointDamageEvent& PointDamageEvent = static_cast<const FPointDamageEvent&>(DamageEvent);
+		HitResult = PointDamageEvent.HitInfo;
 
-        if (HitResult.GetComponent())
-        {
-            FString ComponentName = HitResult.GetComponent()->GetName();
-            
-            E_DamageType Type;
-            FVector Location = GetActorLocation();
+		if (HitResult.GetComponent())
+		{
+			FString ComponentName = HitResult.GetComponent()->GetName();
 
-            if (ComponentName == "HeadCollision")
-            {
-                Damage *= 1.8f;
-                Type = E_DamageType::E_Critical;
-            }
-            else if (ComponentName == "BodyCollision")
-            {
-                Damage *= 1.0f;
-                Type = E_DamageType::E_Normal;
-            }
-            else if (ComponentName == "RightArmCollision" || ComponentName == "LeftArmCollision")
-            {
-                Damage *= 0.8f;
-                Type = E_DamageType::E_Normal;
-            }
-            else if (ComponentName == "RightLegCollision" || ComponentName == "LeftLegCollision")
-            {
-                Damage *= 0.5f;
-                Type = E_DamageType::E_Normal;
-            }
-            SetUpDamageWidget(EventInstigator, Type, Location, Damage);
-        }
+			E_DamageType Type;
+			FVector Location = GetActorLocation();
 
-        if (StatComponent)
-            StatComponent->TakeDamage(Damage);
-    }
+			if (ComponentName == "HeadCollision")
+			{
+				Damage *= 1.8f;
+				Type = E_DamageType::E_Critical;
+			}
+			else if (ComponentName == "BodyCollision")
+			{
+				Damage *= 1.0f;
+				Type = E_DamageType::E_Normal;
+			}
+			else if (ComponentName == "RightArmCollision" || ComponentName == "LeftArmCollision")
+			{
+				Damage *= 0.8f;
+				Type = E_DamageType::E_Normal;
+			}
+			else if (ComponentName == "RightLegCollision" || ComponentName == "LeftLegCollision")
+			{
+				Damage *= 0.5f;
+				Type = E_DamageType::E_Normal;
+			}
+			SetUpDamageWidget(EventInstigator, Type, Location, Damage);
+		}
 
-    return Damage;
+		if (StatComponent)
+			StatComponent->TakeDamage(Damage);
+	}
+
+	return Damage;
 }
 
 void AEnemyCharacter::SetUpDamageWidget(AController* PlayerController, E_DamageType const& Type, FVector const& Location, int32 const& Damage)
 {
-    if (PlayerController)
-    {
-        ABasePlayerController* playerController = Cast<ABasePlayerController>(PlayerController);
-        if (playerController)
-            playerController->SetUpDamageWidget(Type, Location, Damage);
-    }
+	if (PlayerController)
+	{
+		ABasePlayerController* playerController = Cast<ABasePlayerController>(PlayerController);
+		if (playerController)
+			playerController->SetUpDamageWidget(Type, Location, Damage);
+	}
 }
 
 void AEnemyCharacter::SetUpCharacter()
@@ -105,4 +107,18 @@ void AEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->SetupAttachment(GetMesh(), TEXT("pelvis"));
 	BodyCollision->SetCollisionProfileName(TEXT("Enemy"));
 	BodyCollision->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_Owner;
+}
+
+void AEnemyCharacter::AttackMontage()
+{
+	AnimInstance = Cast<UBaseEnemyAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance)
+	{
+		int32 MontageID = *AnimMontageMap.Find("Attack");
+		TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
+		AnimInstance->PlayMontage(Montage, 1.f);
+		AnimInstance->JumpToSection(AttackIndex, Montage);
+	}
+
+	AttackIndex = (AttackIndex + 1) % 2;
 }

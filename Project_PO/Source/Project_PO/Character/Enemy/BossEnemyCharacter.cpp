@@ -7,19 +7,18 @@
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 
+#include "../../Component/StatComponent/MonsterStatComponent.h"
 
 ABossEnemyCharacter::ABossEnemyCharacter()
 {
-	static ConstructorHelpers::FClassFinder<UUserWidget>BossHpWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/CharInfo/WBP_BossHpMain.WBP_BossHpMain_C"));
-	if (BossHpWidget.Succeeded())
-		BossHpMainWidget = BossHpWidget.Class;
 }
 
 void ABossEnemyCharacter::BeginPlay()
 {
-	SetUpBossHp();
-
 	Super::BeginPlay();
+
+	/*FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossEnemyCharacter::SetUpBossHp, 2.f, false);*/
 }
 
 void ABossEnemyCharacter::SetUpBossHp()
@@ -30,35 +29,15 @@ void ABossEnemyCharacter::SetUpBossHp()
 		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
-			if (BossHpMainWidget)
+			UBossHpMainWidget* BossHp = WidgetManager->GetWidget<UBossHpMainWidget>(TEXT("BossHp"));
+			if (BossHp)
 			{
-				UBossHpMainWidget* BossHp =	WidgetManager->CreateAndAddWidget<UWorld, UBossHpMainWidget>(GetWorld(), TEXT("BossHp"), BossHpMainWidget);
-				if (BossHp)
-				{
-					BossHp->SetBossHp(StatComponent);
-					BossHp->SetAddRemove();
-				}
+				BossHp->SetBossHp(StatComponent);
 			}
 		}
 	}
-}
-
-void ABossEnemyCharacter::VisibleWidget()
-{
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-	if (GameInstance)
-	{
-		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
-		if (WidgetManager)
-		{
-			if (BossHpMainWidget)
-			{
-				UBossHpMainWidget* BossHp = WidgetManager->GetWidget<UBossHpMainWidget>(TEXT("BossHp"));
-				if (BossHp)
-					BossHp->SetAddRemove();
-			}
-		}
-	}
+	if (StatComponent)
+		GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
 }
 
 void ABossEnemyCharacter::SetUpArmCollision()
@@ -94,6 +73,4 @@ void ABossEnemyCharacter::SetUpLegCollision()
 void ABossEnemyCharacter::SetState(bool NowState)
 {
 	Super::SetState(NowState);
-
-	VisibleWidget();
 }

@@ -14,7 +14,7 @@ ACatCharacter::ACatCharacter()
 	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5101);
 	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5102);
 	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5103);
-	AttackMontageMap.Emplace(E_WeaponType::E_None, 5104);
+	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5104);
 }
 
 void ACatCharacter::BeginPlay()

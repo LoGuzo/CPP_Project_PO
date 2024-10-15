@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "../BaseCharacter.h"
-#include "../../MyEnumClass.h"
+#include "../../MyStructureAll.h"
 #include "EnemyCharacter.generated.h"
 
 /**
@@ -48,4 +48,6 @@ protected:
 
 public:
 	E_MonsterType GetMonsterType() { return MonsterType; }
+	virtual void AttackMontage() override;
+
 };

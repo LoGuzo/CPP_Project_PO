@@ -9,8 +9,8 @@ UBaseGunAnimInstance::UBaseGunAnimInstance()
 
 void UBaseGunAnimInstance::OnGunAttackPlayAM()
 {
-	if (!Montage_IsPlaying(GunAttackMontage))
+	if (!Montage_IsPlaying(GunAnimMontage))
 	{
-		Montage_Play(GunAttackMontage, 1.f);
+		Montage_Play(GunAnimMontage, 1.f);
 	}
 }

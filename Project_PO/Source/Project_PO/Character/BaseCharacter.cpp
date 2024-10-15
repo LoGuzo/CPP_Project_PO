@@ -10,8 +10,11 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "../AnimInstance/BaseAnimInstance.h"
+#include "../Manager/BaseGameInstance.h"
 
 ABaseCharacter::ABaseCharacter()
+	: AttackIndex(0)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -39,7 +42,32 @@ void ABaseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+}
 
+void ABaseCharacter::AnimMontage(FString const& MontageName)
+{
+	UBaseAnimInstance* AnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
+	if (AnimInstance)
+	{
+		int32 MontageID = *AnimMontageMap.Find(MontageName);
+		TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
+		AnimInstance->PlayMontage(Montage, 1.f);
+	}
+}
+
+TSoftObjectPtr<UAnimMontage> ABaseCharacter::FindMontage(int32 const& MontageID)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		TWeakPtr<FMontageData> Data = GameInstance->GetDatabaseMap<FMontageData>(E_ManagerType::E_MontageDatabaseManager, MontageID);
+		if (Data.IsValid())
+		{
+			FMontageData MontageData = *Data.Pin();
+			return MontageData.Montage;
+		}
+	}
+	return TSoftObjectPtr<UAnimMontage>();
 }
 
 void ABaseCharacter::SetState(bool NowState)
