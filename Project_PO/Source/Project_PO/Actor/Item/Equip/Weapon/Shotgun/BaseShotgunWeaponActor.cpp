@@ -50,9 +50,9 @@ void ABaseShotgunWeaponActor::Fire()
         FVector TargetDirection = SpreadRotation.Vector();
         FVector End = Start + (SpreadRotation.Vector() * 2000.0f);
 
-        FHitResult HitResult;
+        FHitResult AttackHitResult;
         bool bHit = GetWorld()->LineTraceSingleByChannel(
-            HitResult,
+            AttackHitResult,
             Start,
             End,
             ECC_GameTraceChannel3,
@@ -61,12 +61,14 @@ void ABaseShotgunWeaponActor::Fire()
 
         if (bHit)
         {
-            // 적을 타격한 경우
+            if (!AttackHitResult.GetActor()->ActorHasTag("Enemy"))
+                return;
+
             FHitResult ObstacleHitResult;
             bool bObstacleHit = GetWorld()->LineTraceSingleByChannel(
                 ObstacleHitResult,
                 Start,
-                HitResult.ImpactPoint,
+                AttackHitResult.ImpactPoint,
                 ECC_Visibility,
                 CollisionParams
             );
@@ -76,13 +78,13 @@ void ABaseShotgunWeaponActor::Fire()
             else
             {
                 UGameplayStatics::ApplyPointDamage(
-                    HitResult.GetActor(),
+                    AttackHitResult.GetActor(),
                     GetItemComponent<UEquipItemComponent>()->GetAttackPower(),
-                    TargetDirection, HitResult,
+                    TargetDirection, AttackHitResult,
                     OwnerCharacter->GetController(),
                     this, UDamageType::StaticClass()
                 );
-                DrawDebugLine(GetWorld(), Start, HitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
+                DrawDebugLine(GetWorld(), Start, AttackHitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
             }
         }
     }

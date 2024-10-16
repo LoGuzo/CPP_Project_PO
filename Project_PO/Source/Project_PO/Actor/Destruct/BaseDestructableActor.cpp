@@ -16,6 +16,8 @@ ABaseDestructableActor::ABaseDestructableActor()
 	SetUpBoxComponent();
 	SetUpGeometryComponent();
 	SetUpItemSpawnComponent();
+
+	Tags.Add(TEXT("Enemy"));
 }
 
 float ABaseDestructableActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -22,6 +22,8 @@ ABaseProtectActor::ABaseProtectActor()
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
 	Statcomponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
+
+	Tags.Add(TEXT("Player"));
 }
 
 // Called when the game starts or when spawned

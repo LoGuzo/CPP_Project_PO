@@ -11,10 +11,9 @@ ACatCharacter::ACatCharacter()
 
 	SetCharacterMesh();
 
-	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5101);
-	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5102);
-	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5103);
-	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5104);
+	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, TEXT("Cat Pistol Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, TEXT("Cat Rifle Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, TEXT("Cat Shotgun Attack"));
 }
 
 void ACatCharacter::BeginPlay()

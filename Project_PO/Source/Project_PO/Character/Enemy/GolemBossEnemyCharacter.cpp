@@ -16,11 +16,11 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 
 	SetUpCharacter();
 
-	AnimMontageMap.Emplace(TEXT("Attack"), 5301);
-	AnimMontageMap.Emplace(TEXT("Attack1"), 5302);
-	AnimMontageMap.Emplace(TEXT("Attack2"), 5303);
-	AnimMontageMap.Emplace(TEXT("Death"), 5304);
-	AnimMontageMap.Emplace(TEXT("Rise"), 5305);
+	SkillMontageMap.Emplace(TEXT("Attack"), 5301);
+	SkillMontageMap.Emplace(TEXT("Attack1"), 5302);
+	SkillMontageMap.Emplace(TEXT("Attack2"), 5303);
+	SkillMontageMap.Emplace(TEXT("Death"), 5304);
+	SkillMontageMap.Emplace(TEXT("Rise"), 5305);
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()
@@ -81,4 +81,17 @@ void AGolemBossEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->InitCapsuleSize(30.f,50.f);
 	BodyCollision->SetRelativeLocation(FVector(32.f, 4.f, 0.f));
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, -11.f));
+}
+
+void AGolemBossEnemyCharacter::Attack()
+{
+	if (bIsAttack)
+		return;
+
+	float Speed = GetVelocity().Size();
+
+	if (Speed > 300.f)
+		PlaySkill(TEXT("Mummy Dash Attack"), 1.f);
+	else
+		PlaySkill(TEXT("Mummy Attack"), 1.f);
 }

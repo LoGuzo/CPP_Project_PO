@@ -21,4 +21,7 @@ private:
 	virtual void SetCharacterMesh() override;
 	virtual void SetUpHeadCollision() override;
 	virtual void SetUpBodyCollision() override;
+
+public:
+	virtual void Attack();
 };

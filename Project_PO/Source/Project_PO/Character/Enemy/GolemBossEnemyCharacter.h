@@ -23,4 +23,7 @@ private:
 	virtual void SetUpArmCollision() override;
 	virtual void SetUpLegCollision() override;
 	virtual void SetUpBodyCollision() override;
+
+public:
+	virtual void Attack();
 };

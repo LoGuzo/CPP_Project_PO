@@ -28,18 +28,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ID, meta = (AllowPrivateAccess = "true"))
 	int32 ID;
 
-	int32 AttackIndex;
-
 	UPROPERTY(VisibleAnywhere)
 	class UStatComponent* StatComponent;
 
 	UPROPERTY()
-	TMap<FString, int32 > AnimMontageMap;
-
-protected:
-	TSoftObjectPtr<UAnimMontage> FindMontage(int32 const& MontageID);
+	TMap<FString, int32 > SkillMontageMap;
 
 public:
+	template<typename T>
+	T* GetStatComponent()
+	{
+		return Cast<T>(StatComponent);
+	}
+
 	bool GetIsAttack() { return bIsAttack; }
 	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
 
@@ -51,12 +52,10 @@ public:
 	int32 GetID() { return ID; }
 	void SetID(int32 _ID) { ID = _ID; }
 
-	virtual void AttackMontage() {};
-	void AnimMontage(FString const& MontageName);
+	virtual void PlaySkill(FString const& SkillName, float const& AttackSpeed);
+	void AddSkillMap(TArray<int32> SkillIDs);
 
-	template<typename T>
-	T* GetStatComponent()
-	{
-		return Cast<T>(StatComponent);
-	}
+	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) {};
+	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) {};
+	virtual void ShotAttackCheck() {};
 };

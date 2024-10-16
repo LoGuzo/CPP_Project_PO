@@ -57,6 +57,8 @@ APlayerCharacter::APlayerCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
 	SetupCurve();
+
+	Tags.Add(TEXT("Player"));
 }
 
 void APlayerCharacter::BeginPlay()
@@ -457,12 +459,11 @@ void APlayerCharacter::AttackMontage()
 		AnimInstance = Cast<UBasePlayerAnimInstance>(GetMesh()->GetAnimInstance());
 		if (AnimInstance)
 		{
-			int32 MontageID = *AttackMontageMap.Find(WeaponType);
-			TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
+			FString AttackString = *AttackMontageMap.Find(WeaponType);
 			if (StatComponent)
 			{
 				float AttackSpeed = GetStatComponent<UPlayerStatComponent>()->GetAttackSpeed();
-				AnimInstance->PlayMontage(Montage, 1.f * AttackSpeed);
+				PlaySkill(AttackString, AttackSpeed);
 			}
 		}
 	}
@@ -487,6 +488,13 @@ FTransform APlayerCharacter::GetLeftHandSocketTransform()
 		OutPutTransform.SetRotation(FQuat(OutputRotation));
 	}
 	return OutPutTransform;
+}
+
+void APlayerCharacter::ShotAttackCheck()
+{
+	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
+	if (Weapon)
+		Weapon->Fire();
 }
 
 void APlayerCharacter::SetEquip(int32 ItemID)

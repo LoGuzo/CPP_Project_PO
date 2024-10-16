@@ -14,7 +14,6 @@
 #include "../Manager/BaseGameInstance.h"
 
 ABaseCharacter::ABaseCharacter()
-	: AttackIndex(0)
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
@@ -44,30 +43,37 @@ void ABaseCharacter::BeginPlay()
 	Super::BeginPlay();
 }
 
-void ABaseCharacter::AnimMontage(FString const& MontageName)
-{
-	UBaseAnimInstance* AnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
-	if (AnimInstance)
-	{
-		int32 MontageID = *AnimMontageMap.Find(MontageName);
-		TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
-		AnimInstance->PlayMontage(Montage, 1.f);
-	}
-}
-
-TSoftObjectPtr<UAnimMontage> ABaseCharacter::FindMontage(int32 const& MontageID)
+void ABaseCharacter::PlaySkill(FString const& SkillName, float const& AttackSpeed)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
-		TWeakPtr<FMontageData> Data = GameInstance->GetDatabaseMap<FMontageData>(E_ManagerType::E_MontageDatabaseManager, MontageID);
+		int32 SkillID = *SkillMontageMap.Find(SkillName);
+		TSharedPtr<FBaseSkillData> Data = GameInstance->GetDatabaseMap<FBaseSkillData>(E_ManagerType::E_SkillDatabaseManager, SkillID);
 		if (Data.IsValid())
 		{
-			FMontageData MontageData = *Data.Pin();
-			return MontageData.Montage;
+			UBaseAnimInstance* AnimInstance = Cast<UBaseAnimInstance>(GetMesh()->GetAnimInstance());
+			if (AnimInstance)
+				AnimInstance->PlaySome(Data.Get(), AttackSpeed);
 		}
 	}
-	return TSoftObjectPtr<UAnimMontage>();
+}
+
+void ABaseCharacter::AddSkillMap(TArray<int32> SkillIDs)
+{
+	for (int32 const& SkillID : SkillIDs)
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
+			TWeakPtr<FBaseSkillData> Data = GameInstance->GetDatabaseMap<FBaseSkillData>(E_ManagerType::E_SkillDatabaseManager, SkillID);
+			if (Data.IsValid())
+			{
+				FString str = Data.Pin()->SkillName.ToString();
+				SkillMontageMap.Emplace(Data.Pin()->SkillName.ToString(), SkillID);
+			}
+		}
+	}
 }
 
 void ABaseCharacter::SetState(bool NowState)

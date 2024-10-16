@@ -14,4 +14,15 @@ class PROJECT_PO_API UBTDecorator_CanAttack : public UBTDecorator
 {
 	GENERATED_BODY()
 	
+public:
+	UBTDecorator_CanAttack();
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Attack Condition")
+	float SpeedThreshold;
+
+	UPROPERTY(EditAnywhere, Category = "Attack Condition")
+	float DistanceThreshold;
+
+	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 };

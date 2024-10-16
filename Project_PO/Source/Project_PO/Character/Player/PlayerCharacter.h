@@ -134,7 +134,7 @@ protected:
 	class AActor* InteractActor;
 
 	UPROPERTY()
-	TMap<E_WeaponType, int32> AttackMontageMap;
+	TMap<E_WeaponType, FString> AttackMontageMap;
 
 protected:
 	/** Called for movement input */
@@ -180,8 +180,7 @@ private:
 
 	void DisplayCrosshair();
 
-protected:
-	virtual void AttackMontage() override;
+	void AttackMontage();
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -214,6 +213,8 @@ public:
 	class UInteractionComponent* GetInteractionComponent() { return InteractionComponent; }
 
 	FTransform GetLeftHandSocketTransform();
+
+	virtual void ShotAttackCheck() override;
 
 public:
 	void SetEquip(int32 ID);

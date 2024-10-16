@@ -38,6 +38,10 @@ void UPlayerStatComponent::SetStat(int32 const& _ID)
 			MaxHp = StatData.Pin()->MaxHp;
 			MaxMp = StatData.Pin()->MaxMp;
 			MaxExp = StatData.Pin()->MaxExp;
+
+			APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetOwner());
+			if (PlayerCharacter)
+				PlayerCharacter->AddSkillMap(StatData.Pin()->SkillIDs);
 		}
 	}
 

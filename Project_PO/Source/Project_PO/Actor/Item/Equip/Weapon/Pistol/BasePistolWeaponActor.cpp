@@ -27,6 +27,7 @@ void ABasePistolWeaponActor::Fire()
 
 	if (!GetOwner())
 		return;
+
 	CollisionParams.AddIgnoredActor(GetOwner());
 
 	APlayerCharacter* OwnerCharacter = Cast<APlayerCharacter>(GetOwner());
@@ -50,6 +51,9 @@ void ABasePistolWeaponActor::Fire()
 
 	if (bHit)
 	{
+		if (!AttackHitResult.GetActor()->ActorHasTag("Enemy"))
+			return;
+
 		FHitResult ObstacleHitResult;
 		bool bObstacleHit = GetWorld()->LineTraceSingleByChannel(
 			ObstacleHitResult,

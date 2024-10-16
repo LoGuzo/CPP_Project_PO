@@ -21,10 +21,14 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
 	bool bIsWait;
 
+	int32 AttackIndex;
+
 public:
 	bool GetIsWait() { return bIsWait; }
 	void SetIsWait(bool _bIsWait) { bIsWait = _bIsWait; }
 
-	void JumpToSection(int32 SectionIndex, TSoftObjectPtr<UAnimMontage> Montage);
+	void JumpToSection();
 	FName GetAnimMontageName(int32 SectionIndex);
+
+	virtual void PlaySome(FBaseSkillData* Data, float AttackSpeed) override;
 };

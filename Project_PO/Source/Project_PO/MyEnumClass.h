@@ -39,6 +39,7 @@ enum class E_ManagerType : uint8
 	E_QuestDatabaseManager UMETA(DisplayName = "QuestDatabaseManager"),
 	E_QuestObjectiveDatabaseManager UMETA(DisplayName = "QuestObjectiveDatabaseManager"),
 	E_QuestRewardDatabaseManager UMETA(DisplayName = "QuestRewardDatabaseManager"),
+	E_SkillDatabaseManager UMETA(DisplayName = "SkillDatabaseManager"),
 };
 
 UENUM(BlueprintType)
@@ -105,4 +106,13 @@ enum class E_DamageType : uint8
 {
 	E_Normal UMETA(DisplayName = "Normal"),
 	E_Critical UMETA(DisplayName = "Critical"),
+}; 
+
+UENUM(BlueprintType)
+enum class E_SkillType : uint8
+{
+	E_Melee UMETA(DisplayName = "Melee"),
+	E_Scope UMETA(DisplayName = "Scope"),
+	E_Shot UMETA(DisplayName = "Shot"),
+	E_None UMETA(DisplayName = "None"),
 };

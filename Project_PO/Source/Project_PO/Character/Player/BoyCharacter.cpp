@@ -14,10 +14,9 @@ ABoyCharacter::ABoyCharacter()
 	GetCameraBoom()->SocketOffset = FVector(0.f, 50.f, 70.f);
 	GetCameraBoom()->TargetArmLength = 250.0f;
 
-	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5001);
-	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5002);
-	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5003);
-	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5004);
+	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, TEXT("Boy Pistol Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, TEXT("Boy Rifle Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, TEXT("Boy Shotgun Attack"));
 }
 
 void ABoyCharacter::BeginPlay()

@@ -3,6 +3,7 @@
 
 #include "MummyNormalEnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
 
 AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
@@ -16,9 +17,9 @@ AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 
 	SetUpCharacter();
 
-	AnimMontageMap.Emplace(TEXT("Attack"), 5401);
-	AnimMontageMap.Emplace(TEXT("Attack1"), 5402);
-	AnimMontageMap.Emplace(TEXT("Death"), 5403);
+	SkillMontageMap.Emplace(TEXT("Attack"), 5401);
+	SkillMontageMap.Emplace(TEXT("Attack1"), 5402);
+	SkillMontageMap.Emplace(TEXT("Death"), 5403);
 }
 
 void AMummyNormalEnemyCharacter::SetCharacterMesh()
@@ -55,4 +56,9 @@ void AMummyNormalEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->InitCapsuleSize(30.f, 50.f);
 	BodyCollision->SetRelativeLocation(FVector(-5.f, -5.f, 0.f));
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
+}
+
+void AMummyNormalEnemyCharacter::Attack()
+{
+	
 }

@@ -39,6 +39,9 @@ struct FClassStatData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
     float MaxExp;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    TArray<int32> SkillIDs;
 };
 
 USTRUCT(BlueprintType)
@@ -69,6 +72,9 @@ struct FMonsterStatData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
     float RewardEXP;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    TArray<int32> SkillIDs;
 };
 
 USTRUCT(BlueprintType)
@@ -275,6 +281,60 @@ struct FMontageData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Montage")
     TSoftObjectPtr<UAnimMontage> Montage;
+};
+
+USTRUCT()
+struct FBaseSkillData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    E_SkillType SkillType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    FText SkillName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float CoolTime;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float AttackRange;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float Range;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float Scale;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float Coefficient;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    int32 MontageID;
+};
+
+USTRUCT()
+struct FSkillData : public FBaseSkillData
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
+    FText SkillDesc;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
+    int32 ReqLvl;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
+    int32 CurLvl;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
+    int32 MaxLvl;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")
+    UTexture2D* SkillImg;
 };
 
 

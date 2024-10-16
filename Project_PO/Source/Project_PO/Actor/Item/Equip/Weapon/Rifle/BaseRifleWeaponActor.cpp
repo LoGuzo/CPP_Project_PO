@@ -51,6 +51,9 @@ void ABaseRifleWeaponActor::Fire()
 
     if (bHit)
     {
+        if (!AttackHitResult.GetActor()->ActorHasTag("Enemy"))
+            return;
+
         FHitResult ObstacleHitResult;
         bool bObstacleHit = GetWorld()->LineTraceSingleByChannel(
             ObstacleHitResult,

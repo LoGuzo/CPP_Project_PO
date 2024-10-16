@@ -16,10 +16,9 @@ AGirlCharacter::AGirlCharacter()
 	GetCameraBoom()->SocketOffset = FVector(0.f, 40.f, 45.f);
 	GetCameraBoom()->TargetArmLength = 200.0f;
 
-	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, 5201);
-	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, 5202);
-	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, 5203);
-	AnimMontageMap.Emplace(TEXT("DrinkItem"), 5204);
+	AttackMontageMap.Emplace(E_WeaponType::E_Pistol, TEXT("Girl Pistol Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Rifle, TEXT("Girl Rifle Attack"));
+	AttackMontageMap.Emplace(E_WeaponType::E_Shotgun, TEXT("Girl Shotgun Attack"));
 }
 
 void AGirlCharacter::BeginPlay()

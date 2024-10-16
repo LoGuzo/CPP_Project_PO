@@ -46,8 +46,10 @@ protected:
 	virtual void SetUpArmCollision() {};
 	virtual void SetUpLegCollision() {};
 
+	virtual void Attack() {};
+
 public:
 	E_MonsterType GetMonsterType() { return MonsterType; }
-	virtual void AttackMontage() override;
 
+	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
 };

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "../MyEnumClass.h"
+#include "../MyStructureAll.h"
 #include "BaseAnimInstance.generated.h"
 
 /**
@@ -37,16 +37,28 @@ protected:
 
 private:
 	UPROPERTY()
-	class ACharacter* OwnCharacter;
+	class ABaseCharacter* OwnCharacter;
+
+protected:
+	FBaseSkillData* NowData;
+
+private:
+	void ColliderNotify();
+
+protected:
+	TSoftObjectPtr<UAnimMontage> FindMontage(int32 const& MontageID);
 
 public:
-	UFUNCTION()
-	void SetOwnCharacter(class ACharacter* _OwnCharacter) { OwnCharacter = _OwnCharacter; }
+	void SetOwnCharacter(class ABaseCharacter* _OwnCharacter) { OwnCharacter = _OwnCharacter; }
 
-	UFUNCTION()
-	class ACharacter* GetOwnCharacter() { return OwnCharacter; }
+	class ABaseCharacter* GetOwnCharacter() { return OwnCharacter; }
 
 	void PlayMontage(TSoftObjectPtr<UAnimMontage> Montage, float AttackSpeed);
+
+	virtual void PlaySome(FBaseSkillData* Data, float AttackSpeed);
+
+	UFUNCTION()
+	void AnimNotify_Collider();
 
 	UFUNCTION()
 	void AnimNotify_AttackEnd();

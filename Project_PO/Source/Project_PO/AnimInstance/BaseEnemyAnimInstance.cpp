@@ -5,20 +5,35 @@
 
 UBaseEnemyAnimInstance::UBaseEnemyAnimInstance()
 	: bIsWait(false)
+	, AttackIndex(0)
 {
 }
 
-void UBaseEnemyAnimInstance::JumpToSection(int32 SectionIndex, TSoftObjectPtr<UAnimMontage> Montage)
+void UBaseEnemyAnimInstance::JumpToSection()
 {
-	UAnimMontage* AnimMontage = Montage.LoadSynchronous();
+	if (!NowData)
+		return;
+
+	UAnimMontage* AnimMontage = FindMontage(NowData->MontageID).LoadSynchronous();
 	if (AnimMontage)
 	{
-		FName Name = GetAnimMontageName(SectionIndex);
-		Montage_JumpToSection(Name, AnimMontage);
+		FName Name = GetAnimMontageName(AttackIndex);
+
+		if (AnimMontage->IsValidSectionName(Name))
+		{
+			Montage_JumpToSection(Name, AnimMontage);
+			AttackIndex = (AttackIndex + 1) % 2;
+		}
 	}
 }
 
 FName UBaseEnemyAnimInstance::GetAnimMontageName(int32 SectionIndex)
 {
 	return FName(FString::Printf(TEXT("Attack%d"), SectionIndex));
+}
+
+void UBaseEnemyAnimInstance::PlaySome(FBaseSkillData* Data, float AttackSpeed)
+{
+	Super::PlaySome(Data, AttackSpeed);
+	JumpToSection();
 }

@@ -4,6 +4,7 @@
 #include "EnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
 #include "../../Controller/Player/BasePlayerController.h"
@@ -14,6 +15,7 @@ AEnemyCharacter::AEnemyCharacter()
 {
 	StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
+	Tags.Add(TEXT("Enemy"));
 }
 
 void AEnemyCharacter::BeginPlay()
@@ -109,16 +111,44 @@ void AEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_Owner;
 }
 
-void AEnemyCharacter::AttackMontage()
+void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coefficient)
 {
-	AnimInstance = Cast<UBaseEnemyAnimInstance>(GetMesh()->GetAnimInstance());
-	if (AnimInstance)
-	{
-		int32 MontageID = *AnimMontageMap.Find("Attack");
-		TSoftObjectPtr<UAnimMontage> Montage = FindMontage(MontageID);
-		AnimInstance->PlayMontage(Montage, 1.f);
-		AnimInstance->JumpToSection(AttackIndex, Montage);
-	}
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	float AttackRange = Range * GetActorScale3D().X;
+	float AttackRadius = 50.f * GetActorScale3D().X;
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		this->GetActorLocation(),
+		this->GetActorLocation() + (this->GetActorForwardVector()) * (AttackRange),
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel1,
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params
+	);
 
-	AttackIndex = (AttackIndex + 1) % 2;
+	FVector Vec = this->GetActorForwardVector() * AttackRange;
+	FVector Center = this->GetActorLocation() + Vec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat Rotation = FRotationMatrix::MakeFromZ(Vec).ToQuat();
+	FColor DrawColor = FColor::Red;
+
+	for (FHitResult hitResult : HitResults)
+	{
+		if (bResult && hitResult.GetActor())
+		{
+			if (hitResult.GetActor()->ActorHasTag(TEXT("Player")))
+			{
+				UGameplayStatics::ApplyPointDamage(
+					hitResult.GetActor(),
+					StatComponent->GetAttack() * Coefficient,
+					GetActorForwardVector(), hitResult,
+					GetController(),
+					this, UDamageType::StaticClass()
+				);
+			}
+		}
+	}
+	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
 }

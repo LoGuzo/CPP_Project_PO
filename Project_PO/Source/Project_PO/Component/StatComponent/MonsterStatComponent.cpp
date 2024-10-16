@@ -2,6 +2,7 @@
 
 
 #include "MonsterStatComponent.h"
+#include "../../Character/Enemy/EnemyCharacter.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/DatabaseManager/ClassDatabaseManager.h"
 
@@ -26,6 +27,10 @@ void UMonsterStatComponent::SetStat(int32 const& _ID)
 			MaxMp = StatData.Pin()->MaxMp;
 			Mp = MaxMp;
 			RewardEXP = StatData.Pin()->RewardEXP;
+
+			AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
+			if (EnemyCharacter)
+				EnemyCharacter->AddSkillMap(StatData.Pin()->SkillIDs);
 		}
 	}
 }

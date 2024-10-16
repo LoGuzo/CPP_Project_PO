@@ -7,11 +7,13 @@
 #include "ObjectPoolManager.h"
 #include "QuestManager.h"
 #include "DatabaseManager/CunsumItemDatabaseManager.h"
+#include "DatabaseManager/BaseSkillDatabaseManager.h"
 #include "DatabaseManager/ClassDatabaseManager.h"
 #include "DatabaseManager/ItemDatabaseManager.h"
 #include "DatabaseManager/EquipItemDatabaseManager.h"
 #include "DatabaseManager/MontageDatabaseManager.h"
 #include "DatabaseManager/MonsterDatabaseManager.h"
+#include "DatabaseManager/PlayerSkillDatabaseManager.h"
 #include "DatabaseManager/QuestDatabaseManager.h"
 #include "DatabaseManager/QuestObjectiveDatabaseManager.h"
 #include "DatabaseManager/QuestRewardDatabaseManager.h"
@@ -34,6 +36,8 @@ void UBaseGameInstance::Init()
     AddDataToDatabase(E_ManagerType::E_QuestDatabaseManager, SingletonManager::GetInstance<UQuestDatabaseManager>()->GetDataMap<FQuestData>());
     AddDataToDatabase(E_ManagerType::E_QuestObjectiveDatabaseManager, SingletonManager::GetInstance<UQuestObjectiveDatabaseManager>()->GetDataMap<FQuestObjective>());
     AddDataToDatabase(E_ManagerType::E_QuestRewardDatabaseManager, SingletonManager::GetInstance<UQuestRewardDatabaseManager>()->GetDataMap<FQuestReward>());
+    AddDataToDatabase(E_ManagerType::E_SkillDatabaseManager, SingletonManager::GetInstance<UBaseSkillDatabaseManager>()->GetDataMap<FBaseSkillData>());
+    AddDataToDatabase(E_ManagerType::E_SkillDatabaseManager, SingletonManager::GetInstance<UPlayerSkillDatabaseManager>()->GetDataMap<FSkillData>());
 }
 
 void UBaseGameInstance::Shutdown()
