@@ -25,5 +25,5 @@ private:
 	virtual void SetUpBodyCollision() override;
 
 public:
-	virtual void Attack();
+	virtual void Attack() override;
 };

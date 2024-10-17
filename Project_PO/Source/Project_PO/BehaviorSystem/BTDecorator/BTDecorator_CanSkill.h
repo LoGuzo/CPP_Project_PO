@@ -14,4 +14,9 @@ class PROJECT_PO_API UBTDecorator_CanSkill : public UBTDecorator
 {
 	GENERATED_BODY()
 	
+public:
+	UBTDecorator_CanSkill();
+
+protected:
+	virtual bool CalculateRawConditionValue(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) const override;
 };

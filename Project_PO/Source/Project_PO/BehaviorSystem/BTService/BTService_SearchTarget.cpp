@@ -2,6 +2,8 @@
 
 
 #include "BTService_SearchTarget.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "../../Controller/AI/BaseAIController.h"
 
 UBTService_SearchTarget::UBTService_SearchTarget()
 {
@@ -12,6 +14,15 @@ void UBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	// Actor를 구하는 함수를 컨트롤러에 구현
-	// 타겟 설정
+    UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
+    if (!BlackboardComponent)
+        return;
+
+    ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
+    if (!AIController)
+        return;
+
+    AActor* Target = AIController->SearchTarget();
+
+    BlackboardComponent->SetValueAsObject(FName(TEXT("Target")), Target);
 }

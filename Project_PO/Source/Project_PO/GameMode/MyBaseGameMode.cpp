@@ -2,6 +2,7 @@
 
 #include "MyBaseGameMode.h"
 #include "UObject/ConstructorHelpers.h"
+#include "../Character/Enemy/EnemyCharacter.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Controller/Player/BasePlayerController.h"
 #include "../Manager/BaseGameInstance.h"
@@ -49,7 +50,9 @@ void AMyBaseGameMode::BeginPlay()
 			Transform.SetLocation(FVector(-670.f, -15369.f, -512.f));
 			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
 			Transform.SetLocation(FVector(-750.f, -16129.f, -730.f));
-			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
+			AEnemyCharacter* Enemy = ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
+			if (Enemy)
+				Enemy->SetTarget(PlayerControllers[0]->GetPawn());
 		}
 	}
 }

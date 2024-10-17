@@ -74,6 +74,9 @@ struct FMonsterStatData : public FTableRowBase
     float RewardEXP;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
+    float AttackRange;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat")
     TArray<int32> SkillIDs;
 };
 

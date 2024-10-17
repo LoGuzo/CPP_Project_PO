@@ -2,10 +2,12 @@
 
 
 #include "BTTaskNode_Attack.h"
+#include "../../Character/BaseCharacter.h"
+#include "../../Controller/AI/BaseAIController.h"
 
 UBTTaskNode_Attack::UBTTaskNode_Attack()
-	: blsAttacking(false)
 {
+	bNotifyTick = true;
 	NodeName = TEXT("Attack");
 }
 
@@ -13,9 +15,27 @@ EBTNodeResult::Type UBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	return EBTNodeResult::Type();
+	ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
+	if (!AIController)
+		return EBTNodeResult::Failed;
+
+	AIController->Attack();
+
+	return Result;
 }
 
 void UBTTaskNode_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+	ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
+	if (!AIController)
+		return;
+
+	ABaseCharacter* Character = Cast<ABaseCharacter>(AIController->GetPawn());
+	if (!Character)
+		return;
+
+	if (!Character->GetIsAttack())
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 }

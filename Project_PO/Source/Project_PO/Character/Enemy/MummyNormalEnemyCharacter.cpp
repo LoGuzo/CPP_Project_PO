@@ -5,21 +5,22 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
+#include "../../Component/StatComponent/MonsterStatComponent.h"
+#include "../../Controller/AI/BaseNormalAIController.h"
 
 AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 {
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 70.f);
 
-	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -68.f, 0.f));
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -90.f, 0.f));
 
 	MonsterType = E_MonsterType::E_Mummy;
 	ID = 101;
 
 	SetUpCharacter();
-
-	SkillMontageMap.Emplace(TEXT("Attack"), 5401);
-	SkillMontageMap.Emplace(TEXT("Attack1"), 5402);
-	SkillMontageMap.Emplace(TEXT("Death"), 5403);
+	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	AIControllerClass = ABaseNormalAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void AMummyNormalEnemyCharacter::SetCharacterMesh()
@@ -60,5 +61,36 @@ void AMummyNormalEnemyCharacter::SetUpBodyCollision()
 
 void AMummyNormalEnemyCharacter::Attack()
 {
-	
+	if (bIsAttack)
+		return;
+
+	PlaySkill(TEXT("Mummy Attack"), 1.f);
+}
+
+AActor* AMummyNormalEnemyCharacter::SearchTarget()
+{
+	return Super::SearchTarget();
+}
+
+bool AMummyNormalEnemyCharacter::CanAttack(AActor const* _Target)
+{
+	bool bChkParent = Super::CanAttack(_Target);
+
+	if (!bChkParent)
+		return false;
+
+	UMonsterStatComponent* MonsterStatComponent = GetStatComponent<UMonsterStatComponent>();
+	if (!MonsterStatComponent)
+		return false;
+
+	float DistanceToTarget = _Target->GetDistanceTo(this);
+
+	bool bCanAttack = false;
+
+	float AttackRange = MonsterStatComponent->GetAttackRange();
+
+	if (DistanceToTarget <= AttackRange)
+		bCanAttack = true;
+
+	return bCanAttack;
 }

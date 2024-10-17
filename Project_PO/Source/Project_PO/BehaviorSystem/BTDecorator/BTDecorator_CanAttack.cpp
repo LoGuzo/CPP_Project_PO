@@ -2,9 +2,8 @@
 
 
 #include "BTDecorator_CanAttack.h"
-#include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "GameFramework/Character.h"
+#include "../../Controller/AI/BaseAIController.h"
 
 UBTDecorator_CanAttack::UBTDecorator_CanAttack()
 {
@@ -19,33 +18,13 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
     if (!BlackboardComponent)
         return false;
 
-    AAIController* AIController = OwnerComp.GetAIOwner();
+    ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
     if (!AIController)
-        return false;
-
-    ACharacter* ControlledCharacter = Cast<ACharacter>(AIController->GetPawn());
-    if (!ControlledCharacter)
         return false;
 
     AActor* Target = Cast<AActor>(BlackboardComponent->GetValueAsObject(FName(TEXT("Target"))));
     if (!Target)
         return false;
 
-    float CurrentSpeed = ControlledCharacter->GetVelocity().Size();
-    float DistanceToTarget = Target->GetDistanceTo(ControlledCharacter);
-
-    bool bCanAttack = false;
-
-    if (CurrentSpeed >= SpeedThreshold)
-    {
-        if (DistanceThreshold * 1.5f <= DistanceToTarget)
-            bCanAttack = true;
-    }
-    else
-    {
-        if (DistanceThreshold <= DistanceThreshold)
-            bCanAttack = true;
-    }
-
-    return bResult && bCanAttack;
+    return bResult && AIController->CanAttack(Target);
 }

@@ -13,5 +13,7 @@ UCLASS()
 class PROJECT_PO_API ABaseNormalAIController : public ABaseAIController
 {
 	GENERATED_BODY()
-	
+
+public:
+	ABaseNormalAIController();
 };

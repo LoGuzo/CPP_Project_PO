@@ -21,8 +21,8 @@ void UBaseEnemyAnimInstance::JumpToSection()
 
 		if (AnimMontage->IsValidSectionName(Name))
 		{
-			Montage_JumpToSection(Name, AnimMontage);
 			AttackIndex = (AttackIndex + 1) % 2;
+			Montage_JumpToSection(Name, AnimMontage);
 		}
 	}
 }
@@ -35,5 +35,6 @@ FName UBaseEnemyAnimInstance::GetAnimMontageName(int32 SectionIndex)
 void UBaseEnemyAnimInstance::PlaySome(FBaseSkillData* Data, float AttackSpeed)
 {
 	Super::PlaySome(Data, AttackSpeed);
+
 	JumpToSection();
 }

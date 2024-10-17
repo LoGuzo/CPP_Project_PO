@@ -35,6 +35,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* BodyCollision;
 
+	UPROPERTY()
+	class AActor* Target;
+
 private:
 	void SetUpDamageWidget(class AController* PlayerController, E_DamageType const & Type, FVector const& Location, int32 const& Damage);
 
@@ -46,10 +49,16 @@ protected:
 	virtual void SetUpArmCollision() {};
 	virtual void SetUpLegCollision() {};
 
-	virtual void Attack() {};
-
 public:
 	E_MonsterType GetMonsterType() { return MonsterType; }
 
+	void SetTarget(AActor* _Target) { Target = _Target; }
+	AActor* GetTarget() { return Target; }
+
 	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
+
+	virtual void Attack() {};
+	virtual AActor* SearchTarget();
+	virtual bool CanAttack(AActor const* _Target);
+	virtual bool CanUseSkill(AActor const* _Target);
 };

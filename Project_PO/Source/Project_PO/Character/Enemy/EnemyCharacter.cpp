@@ -123,7 +123,7 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 		this->GetActorLocation(),
 		this->GetActorLocation() + (this->GetActorForwardVector()) * (AttackRange),
 		FQuat::Identity,
-		ECollisionChannel::ECC_GameTraceChannel1,
+		ECollisionChannel::ECC_GameTraceChannel3,
 		FCollisionShape::MakeSphere(AttackRadius),
 		Params
 	);
@@ -147,8 +147,33 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 					GetController(),
 					this, UDamageType::StaticClass()
 				);
+				DrawColor = FColor::Green;
 			}
 		}
 	}
 	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
+}
+
+AActor* AEnemyCharacter::SearchTarget()
+{
+	if (bIsDied || !Target)
+		return nullptr;
+
+	return Target;
+}
+
+bool AEnemyCharacter::CanAttack(AActor const* _Target)
+{
+	if (bIsDied || !_Target)
+		return false;
+
+	return true;
+}
+
+bool AEnemyCharacter::CanUseSkill(AActor const* _Target)
+{
+	if (bIsDied || !_Target)
+		return false;
+
+	return true;
 }

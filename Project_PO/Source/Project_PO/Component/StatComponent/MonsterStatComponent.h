@@ -25,6 +25,9 @@ private:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat", Meta = (AllowPrivateAccess = true))
     float RewardEXP;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "MonsterStat", Meta = (AllowPrivateAccess = true))
+    float AttackRange;
+
 public:
     virtual void SetStat(int32 const& _ID) override;
 
@@ -32,4 +35,6 @@ public:
     void SetMonsterName(FName const& _MonsterName) { MonsterName = _MonsterName; }
 
     float GetRewardExp() { return RewardEXP; }
+
+    float GetAttackRange() { return AttackRange; }
 };

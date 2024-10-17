@@ -26,4 +26,10 @@ protected:
 	class UBehaviorTree* EnemyBehaviorTree;
 	UPROPERTY()
 	class UBlackboardData* EnemyBlackboradData;
+
+public:
+	virtual void Attack();
+	virtual AActor* SearchTarget();
+	virtual bool CanAttack(AActor const* _Target);
+	virtual bool CanUseSkill(AActor const* _Target);
 };

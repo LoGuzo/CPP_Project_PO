@@ -85,13 +85,4 @@ void AGolemBossEnemyCharacter::SetUpBodyCollision()
 
 void AGolemBossEnemyCharacter::Attack()
 {
-	if (bIsAttack)
-		return;
-
-	float Speed = GetVelocity().Size();
-
-	if (Speed > 300.f)
-		PlaySkill(TEXT("Mummy Dash Attack"), 1.f);
-	else
-		PlaySkill(TEXT("Mummy Attack"), 1.f);
 }

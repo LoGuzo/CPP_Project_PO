@@ -27,6 +27,7 @@ void UMonsterStatComponent::SetStat(int32 const& _ID)
 			MaxMp = StatData.Pin()->MaxMp;
 			Mp = MaxMp;
 			RewardEXP = StatData.Pin()->RewardEXP;
+			AttackRange = StatData.Pin()->AttackRange;
 
 			AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetOwner());
 			if (EnemyCharacter)
