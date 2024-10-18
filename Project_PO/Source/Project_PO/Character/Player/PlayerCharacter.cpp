@@ -469,7 +469,7 @@ void APlayerCharacter::AttackMontage()
 	}
 }
 
-FTransform APlayerCharacter::GetLeftHandSocketTransform()
+/*FTransform APlayerCharacter::GetLeftHandSocketTransform()
 {
 	FTransform OutPutTransform;
 	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
@@ -488,7 +488,7 @@ FTransform APlayerCharacter::GetLeftHandSocketTransform()
 		OutPutTransform.SetRotation(FQuat(OutputRotation));
 	}
 	return OutPutTransform;
-}
+}*/
 
 void APlayerCharacter::ShotAttackCheck()
 {

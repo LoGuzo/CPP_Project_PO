@@ -2,6 +2,7 @@
 
 
 #include "BTTaskNode_Attack.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "../../Character/BaseCharacter.h"
 #include "../../Controller/AI/BaseAIController.h"
 
@@ -15,11 +16,20 @@ EBTNodeResult::Type UBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
+	if (!BlackboardComponent)
+		return EBTNodeResult::Failed;
+
+
 	ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
 	if (!AIController)
 		return EBTNodeResult::Failed;
 
-	AIController->Attack();
+	AActor* Target = Cast<AActor>(BlackboardComponent->GetValueAsObject(FName(TEXT("Target"))));
+	if (!Target)
+		return EBTNodeResult::Failed;
+
+	AIController->Attack(Target);
 
 	return Result;
 }

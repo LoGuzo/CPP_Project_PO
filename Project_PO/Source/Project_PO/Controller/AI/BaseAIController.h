@@ -28,8 +28,9 @@ protected:
 	class UBlackboardData* EnemyBlackboradData;
 
 public:
-	virtual void Attack();
+	virtual void Attack(AActor* _Target);
+	virtual void AttackSkill(AActor* _Target, int32 const& SkillID);
 	virtual AActor* SearchTarget();
-	virtual bool CanAttack(AActor const* _Target);
-	virtual bool CanUseSkill(AActor const* _Target);
+	virtual bool CanAttack(AActor* _Target);
+	virtual bool CanUseSkill(AActor* _Target);
 };

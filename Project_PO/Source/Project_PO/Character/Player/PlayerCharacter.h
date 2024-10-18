@@ -212,7 +212,7 @@ public:
 	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
 	class UInteractionComponent* GetInteractionComponent() { return InteractionComponent; }
 
-	FTransform GetLeftHandSocketTransform();
+	//FTransform GetLeftHandSocketTransform();
 
 	virtual void ShotAttackCheck() override;
 

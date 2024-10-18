@@ -38,13 +38,26 @@ void ABaseAIController::OnUnPossess()
         BlackboardComponent->ClearValue("Target");
 }
 
-void ABaseAIController::Attack()
+void ABaseAIController::Attack(AActor* _Target)
 {
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)
 		return;
 
-	EnemyCharacter->Attack();
+	SetFocus(_Target);
+
+	EnemyCharacter->Attack(_Target);
+}
+
+void ABaseAIController::AttackSkill(AActor* _Target, int32 const& SkillID)
+{
+	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
+	if (!EnemyCharacter)
+		return;
+
+	SetFocus(_Target);
+
+	EnemyCharacter->AttackSkill(_Target, SkillID);
 }
 
 AActor* ABaseAIController::SearchTarget()
@@ -56,7 +69,7 @@ AActor* ABaseAIController::SearchTarget()
 	return EnemyCharacter->SearchTarget();
 }
 
-bool ABaseAIController::CanAttack(AActor const* _Target)
+bool ABaseAIController::CanAttack(AActor* _Target)
 {
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)
@@ -65,7 +78,7 @@ bool ABaseAIController::CanAttack(AActor const* _Target)
 	return EnemyCharacter->CanAttack(_Target);
 }
 
-bool ABaseAIController::CanUseSkill(AActor const* _Target)
+bool ABaseAIController::CanUseSkill(AActor* _Target)
 {
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)

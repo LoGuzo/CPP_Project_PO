@@ -301,6 +301,12 @@ struct FBaseSkillData : public FTableRowBase
     FText SkillName;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    float MpCost;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    bool bIsReady = true;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
     float CoolTime;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
@@ -314,6 +320,9 @@ struct FBaseSkillData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
     float Coefficient;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
+    FTimerHandle SkillTimer;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Skill")
     int32 MontageID;

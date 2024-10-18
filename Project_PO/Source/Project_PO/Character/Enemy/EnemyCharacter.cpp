@@ -120,16 +120,16 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 	float AttackRadius = 50.f * GetActorScale3D().X;
 	bool bResult = GetWorld()->SweepMultiByChannel(
 		HitResults,
-		this->GetActorLocation(),
-		this->GetActorLocation() + (this->GetActorForwardVector()) * (AttackRange),
+		GetActorLocation(),
+		GetActorLocation() + (GetActorForwardVector()) * (AttackRange),
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel3,
 		FCollisionShape::MakeSphere(AttackRadius),
 		Params
 	);
 
-	FVector Vec = this->GetActorForwardVector() * AttackRange;
-	FVector Center = this->GetActorLocation() + Vec * 0.5f;
+	FVector Vec = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + Vec * 0.5f;
 	float HalfHeight = AttackRange * 0.5f + AttackRadius;
 	FQuat Rotation = FRotationMatrix::MakeFromZ(Vec).ToQuat();
 	FColor DrawColor = FColor::Red;
@@ -154,6 +154,16 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
 }
 
+void AEnemyCharacter::AttackSkill(AActor* _Target, int32 const& SkillID)
+{
+	if (bIsDied || !_Target || bIsAttack)
+		return;
+
+	Target = _Target;
+
+	ControlSkill(SkillID);
+}
+
 AActor* AEnemyCharacter::SearchTarget()
 {
 	if (bIsDied || !Target)
@@ -162,7 +172,7 @@ AActor* AEnemyCharacter::SearchTarget()
 	return Target;
 }
 
-bool AEnemyCharacter::CanAttack(AActor const* _Target)
+bool AEnemyCharacter::CanAttack(AActor* _Target)
 {
 	if (bIsDied || !_Target)
 		return false;
@@ -170,7 +180,7 @@ bool AEnemyCharacter::CanAttack(AActor const* _Target)
 	return true;
 }
 
-bool AEnemyCharacter::CanUseSkill(AActor const* _Target)
+bool AEnemyCharacter::CanUseSkill(AActor* _Target)
 {
 	if (bIsDied || !_Target)
 		return false;

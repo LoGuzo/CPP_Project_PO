@@ -36,14 +36,3 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	}
 }
 
-void UBasePlayerAnimInstance::NativeInitializeAnimation()
-{
-	Super::NativeInitializeAnimation();
-}
-
-void UBasePlayerAnimInstance::AnimNotify_AttackHit()
-{
-	APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
-	if (Player)
-		Player->AttackCheck();
-}

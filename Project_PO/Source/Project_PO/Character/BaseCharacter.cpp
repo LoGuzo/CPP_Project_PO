@@ -11,6 +11,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "../AnimInstance/BaseAnimInstance.h"
+#include "../Component/SkillComponent/SkillComponent.h"
 #include "../Manager/BaseGameInstance.h"
 
 ABaseCharacter::ABaseCharacter()
@@ -35,12 +36,23 @@ ABaseCharacter::ABaseCharacter()
 	GetCharacterMovement()->MinAnalogWalkSpeed = 20.f;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.f;
+
+	SkillComponent = CreateDefaultSubobject<USkillComponent>("SkillComponent");
 }
 
 void ABaseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	if (SkillComponent && StatComponent)
+		SkillComponent->SetStatComponent(StatComponent);
+}
+
+void ABaseCharacter::ControlSkill(int32 const& SkillID)
+{
+	if (SkillComponent)
+		SkillComponent->UseSkill(SkillID);
 }
 
 void ABaseCharacter::PlaySkill(FString const& SkillName, float const& AttackSpeed)
@@ -74,6 +86,9 @@ void ABaseCharacter::AddSkillMap(TArray<int32> SkillIDs)
 			}
 		}
 	}
+
+	if (SkillComponent)
+		SkillComponent->SetUpSkillMap(SkillIDs);
 }
 
 void ABaseCharacter::SetState(bool NowState)

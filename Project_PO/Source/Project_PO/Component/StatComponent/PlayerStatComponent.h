@@ -28,9 +28,6 @@ private:
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStat", Meta = (AllowPrivateAccess = true))
     float Speed;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStat", Meta = (AllowPrivateAccess = true))
-    float AttackSpeed;
 	
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStat", Meta = (AllowPrivateAccess = true))
     float Exp;

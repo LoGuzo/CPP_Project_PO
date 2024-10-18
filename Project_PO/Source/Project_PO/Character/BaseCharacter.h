@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	class UStatComponent* StatComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	class USkillComponent* SkillComponent;
+
 	UPROPERTY()
 	TMap<FString, int32 > SkillMontageMap;
 
@@ -52,6 +55,7 @@ public:
 	int32 GetID() { return ID; }
 	void SetID(int32 _ID) { ID = _ID; }
 
+	virtual void ControlSkill(int32 const& SkillID);
 	virtual void PlaySkill(FString const& SkillName, float const& AttackSpeed);
 	void AddSkillMap(TArray<int32> SkillIDs);
 

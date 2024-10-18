@@ -57,8 +57,9 @@ public:
 
 	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
 
-	virtual void Attack() {};
+	virtual void Attack(AActor* _Target) {};
+	void AttackSkill(AActor* _Target, int32 const& SkillID);
 	virtual AActor* SearchTarget();
-	virtual bool CanAttack(AActor const* _Target);
-	virtual bool CanUseSkill(AActor const* _Target);
+	virtual bool CanAttack(AActor* _Target);
+	virtual bool CanUseSkill(AActor* _Target);
 };

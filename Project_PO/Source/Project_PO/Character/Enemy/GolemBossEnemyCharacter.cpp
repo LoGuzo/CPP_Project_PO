@@ -83,6 +83,6 @@ void AGolemBossEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, -11.f));
 }
 
-void AGolemBossEnemyCharacter::Attack()
+void AGolemBossEnemyCharacter::Attack(AActor* _Target)
 {
 }

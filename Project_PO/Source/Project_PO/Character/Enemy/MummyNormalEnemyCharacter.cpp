@@ -59,7 +59,7 @@ void AMummyNormalEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 }
 
-void AMummyNormalEnemyCharacter::Attack()
+void AMummyNormalEnemyCharacter::Attack(AActor* _Target)
 {
 	if (bIsAttack)
 		return;
@@ -72,7 +72,7 @@ AActor* AMummyNormalEnemyCharacter::SearchTarget()
 	return Super::SearchTarget();
 }
 
-bool AMummyNormalEnemyCharacter::CanAttack(AActor const* _Target)
+bool AMummyNormalEnemyCharacter::CanAttack(AActor* _Target)
 {
 	bool bChkParent = Super::CanAttack(_Target);
 

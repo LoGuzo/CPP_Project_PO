@@ -27,6 +27,9 @@ protected:
     float Attack;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
+    float AttackSpeed;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
     float Armor;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat", Meta = (AllowPrivateAccess = true))
@@ -45,17 +48,19 @@ public:
     virtual void SetStat(int32 const& _ID);
 
     float GetHp() { return Hp; }
+    void SetHp(float const& _Hp);
     virtual void TakeDamage(float const& TakedDamage);
     void HealHp(float const& HealedHp);
-    void SetHp(float const& _Hp);
 
     float GetMaxHp() { return MaxHp; }
 
+    float GetMp() { return Mp; }
+    void SetMp(float const& _Mp);
     void UseMana(float const& UsedMana);
     void HealMp(float const& HealedMp);
-    void SetMp(float const& _Mp);
 
     float GetAttack() { return Attack; }
+    float GetAttackSpeed() { return AttackSpeed; }
     float GetArmor() { return Armor; }
 
     float GetHpRatio() { return Hp / MaxHp; }

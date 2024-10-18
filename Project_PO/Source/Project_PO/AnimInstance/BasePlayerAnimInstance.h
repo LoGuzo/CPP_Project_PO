@@ -19,7 +19,6 @@ public:
 
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-	virtual void NativeInitializeAnimation() override;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
@@ -61,8 +60,4 @@ public:
 
 	E_WeaponType GetWeaponType(){ return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
-
-	UFUNCTION()
-	void AnimNotify_AttackHit();
-
 };

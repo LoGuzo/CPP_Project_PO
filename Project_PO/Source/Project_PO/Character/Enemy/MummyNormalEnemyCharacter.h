@@ -23,7 +23,7 @@ private:
 	virtual void SetUpBodyCollision() override;
 
 public:
-	virtual void Attack() override;
+	virtual void Attack(AActor* _Target) override;
 	virtual	AActor* SearchTarget() override;
-	virtual bool CanAttack(AActor const* _Target) override;
+	virtual bool CanAttack(AActor* _Target) override;
 };

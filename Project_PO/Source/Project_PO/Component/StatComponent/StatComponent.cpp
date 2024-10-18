@@ -7,6 +7,7 @@
 
 UStatComponent::UStatComponent()
 {
+	AttackSpeed = 1.f;
 }
 
 void UStatComponent::SetStat(int32 const& _ID)
