@@ -14,4 +14,6 @@ class PROJECT_PO_API ABaseBossAIController : public ABaseAIController
 {
 	GENERATED_BODY()
 	
+public:
+	ABaseBossAIController();
 };

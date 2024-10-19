@@ -15,11 +15,8 @@ bool UBTDecorator_CanAttack::CalculateRawConditionValue(UBehaviorTreeComponent& 
     bool bResult = Super::CalculateRawConditionValue(OwnerComp, NodeMemory);
 
     UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
-    if (!BlackboardComponent)
-        return false;
-
     ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
-    if (!AIController)
+    if (!BlackboardComponent || !AIController)
         return false;
 
     AActor* Target = Cast<AActor>(BlackboardComponent->GetValueAsObject(FName(TEXT("Target"))));

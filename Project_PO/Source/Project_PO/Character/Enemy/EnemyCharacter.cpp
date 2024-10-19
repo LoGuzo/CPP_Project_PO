@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
+#include "../../Component/SkillComponent/MonsterSkillComponent.h"
 #include "../../Controller/Player/BasePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 
@@ -14,6 +15,7 @@ AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
 {
 	StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
+	SkillComponent = CreateDefaultSubobject<UMonsterSkillComponent>("MonsterSkillComponent");
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
 	Tags.Add(TEXT("Enemy"));
 }
@@ -118,19 +120,21 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 	Params.AddIgnoredActor(this);
 	float AttackRange = Range * GetActorScale3D().X;
 	float AttackRadius = 50.f * GetActorScale3D().X;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+
 	bool bResult = GetWorld()->SweepMultiByChannel(
 		HitResults,
 		GetActorLocation(),
 		GetActorLocation() + (GetActorForwardVector()) * (AttackRange),
 		FQuat::Identity,
 		ECollisionChannel::ECC_GameTraceChannel3,
-		FCollisionShape::MakeSphere(AttackRadius),
+		FCollisionShape::MakeCapsule(AttackRadius, HalfHeight),
 		Params
 	);
 
 	FVector Vec = GetActorForwardVector() * AttackRange;
 	FVector Center = GetActorLocation() + Vec * 0.5f;
-	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+
 	FQuat Rotation = FRotationMatrix::MakeFromZ(Vec).ToQuat();
 	FColor DrawColor = FColor::Red;
 
@@ -154,6 +158,50 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
 }
 
+void AEnemyCharacter::ScopeAttackCheck(float const& Range, float const& Coefficient)
+{
+	TArray<FHitResult> HitResults;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	float AttackRange = Range * GetActorScale3D().X;
+	float AttackRadius = 0.5f * AttackRange;
+
+	FVector StartLocation = GetActorLocation();
+	FVector EndLocation = StartLocation + (GetActorForwardVector() * AttackRange);
+	FVector Center = (StartLocation + EndLocation) * 0.5f;
+
+	bool bResult = GetWorld()->SweepMultiByChannel(
+		HitResults,
+		Center,
+		Center,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel3,
+		FCollisionShape::MakeSphere(AttackRadius),
+		Params
+	);
+
+	FColor DrawColor = FColor::Red;
+
+	for (FHitResult hitResult : HitResults)
+	{
+		if (bResult && hitResult.GetActor())
+		{
+			if (hitResult.GetActor()->ActorHasTag(TEXT("Player")))
+			{
+				UGameplayStatics::ApplyPointDamage(
+					hitResult.GetActor(),
+					StatComponent->GetAttack() * Coefficient,
+					GetActorForwardVector(), hitResult,
+					GetController(),
+					this, UDamageType::StaticClass()
+				);
+				DrawColor = FColor::Green;
+			}
+		}
+	}
+	DrawDebugSphere(GetWorld(), Center, AttackRadius, 16, DrawColor, false, 2.f);
+}
+
 void AEnemyCharacter::AttackSkill(AActor* _Target, int32 const& SkillID)
 {
 	if (bIsDied || !_Target || bIsAttack)
@@ -174,16 +222,34 @@ AActor* AEnemyCharacter::SearchTarget()
 
 bool AEnemyCharacter::CanAttack(AActor* _Target)
 {
-	if (bIsDied || !_Target)
+	if (bIsDied || !_Target || bIsAttack)
 		return false;
 
-	return true;
+	UMonsterStatComponent* MonsterStatComponent = GetStatComponent<UMonsterStatComponent>();
+	if (!MonsterStatComponent)
+		return false;
+
+	float DistanceToTarget = FVector::Dist2D(GetActorLocation(), _Target->GetActorLocation());
+
+	bool bCanAttack = false;
+
+	float AttackRange = MonsterStatComponent->GetAttackRange() * GetActorScale3D().X;
+
+	if (DistanceToTarget <= AttackRange)
+		bCanAttack = true;
+
+	return bCanAttack;
 }
 
-bool AEnemyCharacter::CanUseSkill(AActor* _Target)
+bool AEnemyCharacter::CanUseSkill(AActor* _Target, int32& SkillID)
 {
-	if (bIsDied || !_Target)
-		return false;
+	UMonsterSkillComponent* MonsterSkillComponent = GetSkillComponent<UMonsterSkillComponent>();
 
-	return true;
+	if (bIsDied || !MonsterSkillComponent || bIsAttack)
+	{
+		SkillID = -1;
+		return false;
+	}
+
+	return MonsterSkillComponent->ChkSkillRange(_Target, SkillID);
 }

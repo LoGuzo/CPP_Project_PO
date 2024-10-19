@@ -40,6 +40,9 @@ void ABaseAIController::OnUnPossess()
 
 void ABaseAIController::Attack(AActor* _Target)
 {
+	if (!_Target)
+		return;
+
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)
 		return;
@@ -47,15 +50,21 @@ void ABaseAIController::Attack(AActor* _Target)
 	SetFocus(_Target);
 
 	EnemyCharacter->Attack(_Target);
+
+	ClearFocus(EAIFocusPriority::Gameplay);
+
 }
 
 void ABaseAIController::AttackSkill(AActor* _Target, int32 const& SkillID)
 {
+	if (!_Target)
+		return;
+
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)
 		return;
 
-	SetFocus(_Target);
+	ClearFocus(EAIFocusPriority::Gameplay);
 
 	EnemyCharacter->AttackSkill(_Target, SkillID);
 }
@@ -78,11 +87,14 @@ bool ABaseAIController::CanAttack(AActor* _Target)
 	return EnemyCharacter->CanAttack(_Target);
 }
 
-bool ABaseAIController::CanUseSkill(AActor* _Target)
+bool ABaseAIController::CanUseSkill(AActor* _Target, int32& SkillID)
 {
 	AEnemyCharacter* EnemyCharacter = Cast<AEnemyCharacter>(GetPawn());
 	if (!EnemyCharacter)
+	{
+		SkillID = -1;
 		return false;
+	}
 
-	return EnemyCharacter->CanUseSkill(_Target);
+	return EnemyCharacter->CanUseSkill(_Target, SkillID);
 }

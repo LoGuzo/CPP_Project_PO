@@ -53,6 +53,8 @@ void ABaseCharacter::ControlSkill(int32 const& SkillID)
 {
 	if (SkillComponent)
 		SkillComponent->UseSkill(SkillID);
+
+	bIsAttack = true;
 }
 
 void ABaseCharacter::PlaySkill(FString const& SkillName, float const& AttackSpeed)

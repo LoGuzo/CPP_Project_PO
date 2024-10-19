@@ -3,6 +3,8 @@
 
 #include "BTTask_MoveToCustom.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "../../Character/Enemy/EnemyCharacter.h"
+#include "../../Component/StatComponent/MonsterStatComponent.h"
 #include "../../Controller/AI/BaseAIController.h"
 
 UBTTask_MoveToCustom::UBTTask_MoveToCustom()
@@ -26,6 +28,17 @@ void UBTTask_MoveToCustom::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	if (!Target)
 		return;
 
-	if(AIController->CanAttack(Target))
+	int32 DummyInt;
+
+	if (AIController->CanUseSkill(Target, DummyInt))
+	{
+		AIController->StopMovement();
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
+
+	if (AIController->CanAttack(Target))
+	{
+		AIController->StopMovement();
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+	}
 }

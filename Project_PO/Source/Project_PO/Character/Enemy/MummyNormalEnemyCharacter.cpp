@@ -18,7 +18,7 @@ AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 	ID = 101;
 
 	SetUpCharacter();
-	GetCharacterMovement()->MaxWalkSpeed = 400.f;
+	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	AIControllerClass = ABaseNormalAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
@@ -65,32 +65,10 @@ void AMummyNormalEnemyCharacter::Attack(AActor* _Target)
 		return;
 
 	PlaySkill(TEXT("Mummy Attack"), 1.f);
+	bIsAttack = true;
 }
 
 AActor* AMummyNormalEnemyCharacter::SearchTarget()
 {
 	return Super::SearchTarget();
-}
-
-bool AMummyNormalEnemyCharacter::CanAttack(AActor* _Target)
-{
-	bool bChkParent = Super::CanAttack(_Target);
-
-	if (!bChkParent)
-		return false;
-
-	UMonsterStatComponent* MonsterStatComponent = GetStatComponent<UMonsterStatComponent>();
-	if (!MonsterStatComponent)
-		return false;
-
-	float DistanceToTarget = _Target->GetDistanceTo(this);
-
-	bool bCanAttack = false;
-
-	float AttackRange = MonsterStatComponent->GetAttackRange();
-
-	if (DistanceToTarget <= AttackRange)
-		bCanAttack = true;
-
-	return bCanAttack;
 }

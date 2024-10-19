@@ -25,5 +25,4 @@ private:
 public:
 	virtual void Attack(AActor* _Target) override;
 	virtual	AActor* SearchTarget() override;
-	virtual bool CanAttack(AActor* _Target) override;
 };

@@ -3,10 +3,32 @@
 
 #include "MonsterSkillComponent.h"
 
-void UMonsterSkillComponent::ChkSkillRange(AActor* _Target, int& SkillID)
+bool UMonsterSkillComponent::ChkSkillRange(AActor* _Target, int32& SkillID)
 {
-	
-	// 스킬 아이디는 따로 받는 내용
-	// 스킬 범위 체크후 내보내기
+	if (_Target)
+	{
+		for (TPair<int32, FBaseSkillData>& SkillPair : SkillMap)
+		{
+			int32 skillID = SkillPair.Key;
+			FBaseSkillData SkillData = SkillPair.Value;
 
+			if (GetOwner())
+			{
+				float DistanceToTarget = FVector::Dist2D(GetOwner()->GetActorLocation(), _Target->GetActorLocation());
+				float AttackRangeXScale = SkillData.AttackRange * (GetOwner()->GetActorScale3D().X);
+
+				if (SkillData.bIsReady)
+				{
+					if (DistanceToTarget <= AttackRangeXScale)
+					{
+						SkillID = skillID;
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	SkillID = -1;
+	return false;
 }

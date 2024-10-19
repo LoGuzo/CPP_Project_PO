@@ -15,11 +15,8 @@ void UBTService_SearchTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
     UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
-    if (!BlackboardComponent)
-        return;
-
     ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
-    if (!AIController)
+    if (!BlackboardComponent || !AIController)
         return;
 
     AActor* Target = AIController->SearchTarget();

@@ -56,10 +56,11 @@ public:
 	AActor* GetTarget() { return Target; }
 
 	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
+	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) override;
 
 	virtual void Attack(AActor* _Target) {};
 	void AttackSkill(AActor* _Target, int32 const& SkillID);
 	virtual AActor* SearchTarget();
 	virtual bool CanAttack(AActor* _Target);
-	virtual bool CanUseSkill(AActor* _Target);
+	bool CanUseSkill(AActor* _Target, int32& SkillID);
 };

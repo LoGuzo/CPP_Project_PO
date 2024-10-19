@@ -32,5 +32,5 @@ public:
 	virtual void AttackSkill(AActor* _Target, int32 const& SkillID);
 	virtual AActor* SearchTarget();
 	virtual bool CanAttack(AActor* _Target);
-	virtual bool CanUseSkill(AActor* _Target);
+	bool CanUseSkill(AActor* _Target, int32& SkillID);
 };

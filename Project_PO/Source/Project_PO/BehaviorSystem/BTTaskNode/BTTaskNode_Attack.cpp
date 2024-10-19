@@ -17,12 +17,8 @@ EBTNodeResult::Type UBTTaskNode_Attack::ExecuteTask(UBehaviorTreeComponent& Owne
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
 	UBlackboardComponent* BlackboardComponent = OwnerComp.GetBlackboardComponent();
-	if (!BlackboardComponent)
-		return EBTNodeResult::Failed;
-
-
 	ABaseAIController* AIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
-	if (!AIController)
+	if (!BlackboardComponent || !AIController)
 		return EBTNodeResult::Failed;
 
 	AActor* Target = Cast<AActor>(BlackboardComponent->GetValueAsObject(FName(TEXT("Target"))));

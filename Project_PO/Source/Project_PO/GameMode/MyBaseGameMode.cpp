@@ -48,11 +48,11 @@ void AMyBaseGameMode::BeginPlay()
 		{
 			FTransform Transform = FTransform();
 			Transform.SetLocation(FVector(-670.f, -15369.f, -512.f));
-			ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
-			Transform.SetLocation(FVector(-750.f, -16129.f, -730.f));
-			AEnemyCharacter* Enemy = ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Mummy, Transform);
+			AEnemyCharacter* Enemy = ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
 			if (Enemy)
+			{
 				Enemy->SetTarget(PlayerControllers[0]->GetPawn());
+			}
 		}
 	}
 }

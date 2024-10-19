@@ -17,5 +17,6 @@ class PROJECT_PO_API UBTTask_MoveToCustom : public UBTTask_MoveTo
 public:
 	UBTTask_MoveToCustom();
 
+protected:
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 };

@@ -4,23 +4,21 @@
 #include "GolemBossEnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
+#include "../../Controller/AI/BaseBossAIController.h"
 
 AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 {
 	SetActorRelativeScale3D(FVector(3.f, 3.f, 3.f));
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
-	
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 	MonsterType = E_MonsterType::E_Golem;
 	ID = 102;
 
 	SetUpCharacter();
 
-	SkillMontageMap.Emplace(TEXT("Attack"), 5301);
-	SkillMontageMap.Emplace(TEXT("Attack1"), 5302);
-	SkillMontageMap.Emplace(TEXT("Attack2"), 5303);
-	SkillMontageMap.Emplace(TEXT("Death"), 5304);
-	SkillMontageMap.Emplace(TEXT("Rise"), 5305);
+	AIControllerClass = ABaseBossAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()
@@ -85,4 +83,9 @@ void AGolemBossEnemyCharacter::SetUpBodyCollision()
 
 void AGolemBossEnemyCharacter::Attack(AActor* _Target)
 {
+	if (bIsAttack)
+		return;
+
+	PlaySkill(TEXT("Golem Attack"), 1.f);
+	bIsAttack = true;
 }

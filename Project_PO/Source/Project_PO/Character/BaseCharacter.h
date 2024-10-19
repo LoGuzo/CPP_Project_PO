@@ -44,6 +44,12 @@ public:
 		return Cast<T>(StatComponent);
 	}
 
+	template<typename T>
+	T* GetSkillComponent()
+	{
+		return Cast<T>(SkillComponent);
+	}
+
 	bool GetIsAttack() { return bIsAttack; }
 	void SetIsAttack(bool _bIsAttack) { bIsAttack = _bIsAttack; }
 
