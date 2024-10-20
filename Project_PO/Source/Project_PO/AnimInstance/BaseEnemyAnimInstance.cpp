@@ -2,11 +2,23 @@
 
 
 #include "BaseEnemyAnimInstance.h"
+#include "../Character/Enemy/EnemyCharacter.h"
 
 UBaseEnemyAnimInstance::UBaseEnemyAnimInstance()
-	: bIsWait(false)
+	: bIsReady(false)
 	, AttackIndex(0)
 {
+}
+
+void UBaseEnemyAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
+{
+	Super::NativeUpdateAnimation(DeltaSeconds);
+	if (OwnCharacter)
+	{
+		AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OwnCharacter);
+		if (Enemy)
+			bIsReady = Enemy->GetIsReady();
+	}
 }
 
 void UBaseEnemyAnimInstance::JumpToSection()
@@ -37,4 +49,14 @@ void UBaseEnemyAnimInstance::PlaySome(FBaseSkillData* Data, float AttackSpeed)
 	Super::PlaySome(Data, AttackSpeed);
 
 	JumpToSection();
+}
+
+void UBaseEnemyAnimInstance::AnimNotify_Ready()
+{
+	if (OwnCharacter)
+	{
+		AEnemyCharacter* Enemy = Cast<AEnemyCharacter>(OwnCharacter);
+		if (Enemy)
+			Enemy->SetIsReady(true);
+	}
 }

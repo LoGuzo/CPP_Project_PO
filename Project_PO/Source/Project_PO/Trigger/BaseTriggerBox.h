@@ -19,7 +19,7 @@ public:
 	
 protected:
 	UFUNCTION()
-	void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
+	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
 
 	virtual void BeginPlay() override;
 
@@ -35,4 +35,6 @@ protected:
 protected:
 	virtual void SetUpTrigger();
 	virtual void SpawnMonster() {};
+
+	void AddRemoveWidget(FString const& WidgetName);
 };

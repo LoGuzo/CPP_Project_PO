@@ -34,5 +34,6 @@ private:
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
 
-	void VisibleWidget(FString const& WidgetName);
+	void AddRemoveWidget(FString const& WidgetName);
+	void ShowHideWidget(FString const& WidgetName);
 };

@@ -10,6 +10,8 @@
 
 AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 {
+	bIsReady = true;
+
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 70.f);
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -73.f), FRotator(0.f, -90.f, 0.f));

@@ -3,6 +3,18 @@
 
 #include "StatueTriggerBox.h"
 #include "../Actor/Spawner/InfiniteSpawnerActor.h"
+#include "../Actor/Protect/StatueProtectActor.h"
+
+
+
+void AStatueTriggerBox::SetUpTrigger()
+{
+	SetUpStatue();
+
+	Super::SetUpTrigger();
+	
+	AddRemoveWidget(TEXT("BossHp"));
+}
 
 void AStatueTriggerBox::SpawnMonster()
 {
@@ -16,6 +28,13 @@ void AStatueTriggerBox::SpawnMonster()
 			InfiniteSpawner->SetIsSpawn(true);
 		}
 	}
+}
+
+void AStatueTriggerBox::SetUpStatue()
+{
+	AStatueProtectActor* Statue = Cast<AStatueProtectActor>(Target);
+	if (Statue)
+		Statue->DelaySetUp();
 }
 
 void AStatueTriggerBox::DeSpawnMonster()

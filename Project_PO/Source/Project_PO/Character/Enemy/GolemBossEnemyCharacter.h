@@ -17,6 +17,9 @@ class PROJECT_PO_API AGolemBossEnemyCharacter : public ABossEnemyCharacter
 public:
 	AGolemBossEnemyCharacter();
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	virtual void SetCharacterMesh() override;
 	virtual void SetUpHeadCollision() override;

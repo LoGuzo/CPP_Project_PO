@@ -2,6 +2,7 @@
 
 
 #include "BaseTriggerBox.h"
+#include "../GameMode/MyBaseGameMode.h"
 
 ABaseTriggerBox::ABaseTriggerBox()
 	: ActiveCnt(0)
@@ -14,6 +15,13 @@ void ABaseTriggerBox::SetUpTrigger()
 {
 	SpawnMonster();
 	OnActorBeginOverlap.RemoveDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
+}
+
+void ABaseTriggerBox::AddRemoveWidget(FString const& WidgetName)
+{
+	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+		GameMode->AddRemoveControllerWidget(WidgetName);
 }
 
 void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)

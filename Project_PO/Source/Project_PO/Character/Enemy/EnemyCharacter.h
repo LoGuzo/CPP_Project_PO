@@ -26,6 +26,9 @@ protected:
 protected:
 	E_MonsterType MonsterType;
 
+	bool bIsReady;
+
+protected:
 	UPROPERTY()
 	class UBaseEnemyAnimInstance* AnimInstance;
 
@@ -68,6 +71,9 @@ public:
 
 	void SetTarget(AActor* _Target) { Target = _Target; }
 	AActor* GetTarget() { return Target; }
+
+	bool GetIsReady() { return bIsReady; }
+	void SetIsReady(bool _bIsReady) { bIsReady = _bIsReady; }
 
 	void AttackSkill(AActor* _Target, int32 const& SkillID);
 	bool CanUseSkill(AActor* _Target, int32& SkillID);

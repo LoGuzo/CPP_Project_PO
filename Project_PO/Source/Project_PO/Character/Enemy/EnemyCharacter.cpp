@@ -15,7 +15,8 @@
 #include "../../Manager/ObjectPoolManager.h"
 
 AEnemyCharacter::AEnemyCharacter()
-	: AnimInstance(nullptr)
+	: bIsReady(false)
+	, AnimInstance(nullptr)
 {
 	StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
 	SkillComponent = CreateDefaultSubobject<UMonsterSkillComponent>("MonsterSkillComponent");
@@ -212,7 +213,7 @@ void AEnemyCharacter::ScopeAttackCheck(float const& Range, float const& Coeffici
 
 void AEnemyCharacter::AttackSkill(AActor* _Target, int32 const& SkillID)
 {
-	if (bIsDied || !_Target || bIsAttack)
+	if (bIsDied || !_Target || bIsAttack || !bIsReady)
 		return;
 
 	Target = _Target;
@@ -222,7 +223,7 @@ void AEnemyCharacter::AttackSkill(AActor* _Target, int32 const& SkillID)
 
 AActor* AEnemyCharacter::SearchTarget()
 {
-	if (bIsDied || !Target)
+	if (bIsDied || !Target || !bIsReady)
 		return nullptr;
 
 	return Target;
@@ -230,7 +231,7 @@ AActor* AEnemyCharacter::SearchTarget()
 
 bool AEnemyCharacter::CanAttack(AActor* _Target)
 {
-	if (bIsDied || !_Target || bIsAttack)
+	if (bIsDied || !_Target || bIsAttack || !bIsReady)
 		return false;
 
 	UMonsterStatComponent* MonsterStatComponent = GetStatComponent<UMonsterStatComponent>();
@@ -240,6 +241,8 @@ bool AEnemyCharacter::CanAttack(AActor* _Target)
 	float DistanceToTarget = FVector::Dist2D(GetActorLocation(), _Target->GetActorLocation()) - GetComponentWidth(_Target);
 
 	bool bCanAttack = false;
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), DistanceToTarget);
 
 	float AttackRange = MonsterStatComponent->GetAttackRange() * GetActorScale3D().X;
 
@@ -253,7 +256,7 @@ bool AEnemyCharacter::CanUseSkill(AActor* _Target, int32& SkillID)
 {
 	UMonsterSkillComponent* MonsterSkillComponent = GetSkillComponent<UMonsterSkillComponent>();
 
-	if (bIsDied || !MonsterSkillComponent || bIsAttack)
+	if (bIsDied || !MonsterSkillComponent || bIsAttack || !bIsReady)
 	{
 		SkillID = -1;
 		return false;
@@ -271,7 +274,7 @@ float AEnemyCharacter::GetComponentWidth(AActor* _Target)
 		if (Component)
 		{
 			FVector ComponentExtent = Component->Bounds.BoxExtent;
-			float ComponentWidth = ComponentExtent.Y * 2.f;
+			float ComponentWidth = ComponentExtent.Y * 0.5f;
 
 			return ComponentWidth;
 		}

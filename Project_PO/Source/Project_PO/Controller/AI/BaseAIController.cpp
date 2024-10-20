@@ -34,8 +34,11 @@ void ABaseAIController::OnUnPossess()
         BehaviorTreeComponent->StopTree(EBTStopMode::Safe);
 
     UBlackboardComponent* BlackboardComponent = GetBlackboardComponent();
-    if (BlackboardComponent)
-        BlackboardComponent->ClearValue("Target");
+	if (BlackboardComponent)
+	{
+		BlackboardComponent->ClearValue(TEXT("Target"));
+		BlackboardComponent->ClearValue(TEXT("SkillID"));
+	}
 }
 
 void ABaseAIController::LookAtPlayer(FVector const& TargetLocation)

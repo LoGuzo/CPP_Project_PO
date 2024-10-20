@@ -20,6 +20,13 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 	AIControllerClass = ABaseBossAIController::StaticClass();
 }
 
+void AGolemBossEnemyCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlaySkill(TEXT("Golem Rise"));
+}
+
 void AGolemBossEnemyCharacter::SetCharacterMesh()
 {
 	Super::SetCharacterMesh();

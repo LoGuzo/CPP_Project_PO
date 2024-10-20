@@ -105,3 +105,19 @@ void AMyBaseGameMode::GrantReward(int32 QuestID)
 		}
 	}
 }
+
+void AMyBaseGameMode::AddRemoveControllerWidget(FString const& WidgetName)
+{
+	for (ABasePlayerController* PlayerController : PlayerControllers)
+	{
+		PlayerController->AddRemoveWidget(WidgetName);
+	}
+}
+
+void AMyBaseGameMode::ShowHideControllerWidget(FString const& WidgetName)
+{
+	for (ABasePlayerController* PlayerController : PlayerControllers)
+	{
+		PlayerController->ShowHideWidget(WidgetName);
+	}
+}

@@ -20,6 +20,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:
+protected:
 	void SetUpStatComponent();
+
+public:
+	void DelaySetUp();
 };

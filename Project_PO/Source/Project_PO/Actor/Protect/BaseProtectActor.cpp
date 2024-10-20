@@ -21,7 +21,7 @@ ABaseProtectActor::ABaseProtectActor()
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("StaticComponent");
 	StaticMeshComponent->SetupAttachment(RootComponent);
 
-	Statcomponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
+	StatComponent = CreateDefaultSubobject<UMonsterStatComponent>("StatComponent");
 
 	Tags.Add(TEXT("Player"));
 }
@@ -43,14 +43,17 @@ float ABaseProtectActor::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	if (Statcomponent->GetHp() <= 0)
+	if (StatComponent)
 	{
-		bIsDied = true;
-		SetState(false);
-	}
-	else
-	{
-		Statcomponent->TakeDamage(Damage);
+		if (StatComponent->GetHp() <= 0)
+		{
+			bIsDied = true;
+			SetState(false);
+		}
+		else
+		{
+			StatComponent->TakeDamage(Damage);
+		}
 	}
 
 	return Damage;

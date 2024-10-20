@@ -431,9 +431,7 @@ void APlayerCharacter::SetupStatComponent()
 void APlayerCharacter::SetupInventoryComponent()
 {
 	if (InventoryComponent && PotionQuickSlotComponent)
-	{
 		InventoryComponent->SetQuickSlotComponent(PotionQuickSlotComponent);
-	}
 }
 
 void APlayerCharacter::DisplayCrosshair()
@@ -492,9 +490,7 @@ void APlayerCharacter::AttackMontage()
 
 void APlayerCharacter::ShotAttackCheck()
 {
-	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
-	if (Weapon)
-		Weapon->Fire();
+	AttackCheck();
 }
 
 void APlayerCharacter::Died()

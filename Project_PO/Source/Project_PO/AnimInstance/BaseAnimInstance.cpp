@@ -29,6 +29,7 @@ void UBaseAnimInstance::NativeInitializeAnimation()
 void UBaseAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+
 	if (OwnCharacter)
 	{
 		OwnerVelocity = OwnCharacter->GetVelocity();
@@ -80,16 +81,6 @@ void UBaseAnimInstance::ColliderNotify()
 		break;
 	default:
 		break;
-	}
-}
-
-void UBaseAnimInstance::PlayMontage(TSoftObjectPtr<UAnimMontage> Montage, float AttackSpeed)
-{
-	UAnimMontage* AnimMontage = Montage.LoadSynchronous();
-	if (AnimMontage)
-	{
-		if (!Montage_IsPlaying(AnimMontage))
-			Montage_Play(AnimMontage, 1.f * AttackSpeed);
 	}
 }
 

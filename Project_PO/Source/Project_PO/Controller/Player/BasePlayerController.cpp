@@ -91,7 +91,7 @@ void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector 
 	}
 }
 
-void ABasePlayerController::VisibleWidget(FString const& WidgetName)
+void ABasePlayerController::AddRemoveWidget(FString const& WidgetName)
 {
 	if (IsLocalController())
 	{
@@ -104,6 +104,24 @@ void ABasePlayerController::VisibleWidget(FString const& WidgetName)
 				UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(WidgetName);
 				if (NowWidget)
 					NowWidget->SetAddRemove();
+			}
+		}
+	}
+}
+
+void ABasePlayerController::ShowHideWidget(FString const& WidgetName)
+{
+	if (IsLocalController())
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
+			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			if (WidgetManager)
+			{
+				UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(WidgetName);
+				if (NowWidget)
+					NowWidget->SetShowHidden();
 			}
 		}
 	}

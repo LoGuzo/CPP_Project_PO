@@ -35,11 +35,15 @@ protected:
 
 private:
 	void SetUpBossHp();
-	void VisibleWidget();
 
 protected:
 	virtual void SetUpArmCollision() override;
 	virtual void SetUpLegCollision() override;
 
 	virtual void SetState(bool NowState) override;
+
+	virtual AActor* SearchTarget() override;
+
+public:
+	void DelaySetUp();
 };

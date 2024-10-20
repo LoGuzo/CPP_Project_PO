@@ -43,6 +43,9 @@ protected:
 
 public:
 	TArray<class ABasePlayerController*> GetPlayerControllers() { return PlayerControllers; }
+
+	void AddRemoveControllerWidget(FString const& WidgetName);
+	void ShowHideControllerWidget(FString const& WidgetName);
 };
 
 

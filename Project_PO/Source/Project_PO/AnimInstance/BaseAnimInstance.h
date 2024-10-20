@@ -18,6 +18,10 @@ class PROJECT_PO_API UBaseAnimInstance : public UAnimInstance
 public:
 	UBaseAnimInstance();
 
+protected:
+	virtual void NativeInitializeAnimation() override;
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
 private:
 	class UCharacterMovementComponent* MovementComponent;
 
@@ -30,12 +34,6 @@ protected:
 	float GroundSpeed;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = MovementData, Meta = (AllowPrivateAccess = true))
 	FVector OwnerVelocity;
-
-protected:
-	virtual void NativeInitializeAnimation() override;
-	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
-
-private:
 	UPROPERTY()
 	class ABaseCharacter* OwnCharacter;
 
@@ -52,8 +50,6 @@ public:
 	void SetOwnCharacter(class ABaseCharacter* _OwnCharacter) { OwnCharacter = _OwnCharacter; }
 
 	class ABaseCharacter* GetOwnCharacter() { return OwnCharacter; }
-
-	void PlayMontage(TSoftObjectPtr<UAnimMontage> Montage, float AttackSpeed);
 
 	virtual void PlaySome(FBaseSkillData* Data, float AttackSpeed);
 

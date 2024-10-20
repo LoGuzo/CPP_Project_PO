@@ -3,10 +3,11 @@
 
 #include "BossEnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "../../Controller/Player/BasePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
-
+#include "../../GameMode/MyBaseGameMode.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
 
 ABossEnemyCharacter::ABossEnemyCharacter()
@@ -17,12 +18,14 @@ void ABossEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/*FTimerHandle TimerHandle;
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossEnemyCharacter::SetUpBossHp, 2.f, false);*/
+	DelaySetUp();
 }
 
 void ABossEnemyCharacter::SetUpBossHp()
 {
+	if (!StatComponent)
+		return;
+
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
@@ -31,13 +34,11 @@ void ABossEnemyCharacter::SetUpBossHp()
 		{
 			UBossHpMainWidget* BossHp = WidgetManager->GetWidget<UBossHpMainWidget>(TEXT("BossHp"));
 			if (BossHp)
-			{
 				BossHp->SetBossHp(StatComponent);
-			}
 		}
 	}
-	if (StatComponent)
-		GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
+
+	GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
 }
 
 void ABossEnemyCharacter::SetUpArmCollision()
@@ -73,4 +74,40 @@ void ABossEnemyCharacter::SetUpLegCollision()
 void ABossEnemyCharacter::SetState(bool NowState)
 {
 	Super::SetState(NowState);
+}
+
+AActor* ABossEnemyCharacter::SearchTarget()
+{
+	if (!bIsReady)
+		return nullptr;
+
+	AActor* CurTarget = Super::SearchTarget();
+
+	if (!CurTarget)
+	{
+		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+
+		if (GameMode)
+		{
+			TArray<ABasePlayerController*> PlayerControllers;
+			PlayerControllers = GameMode->GetPlayerControllers();
+
+			if (PlayerControllers.Num() > 0)
+			{
+				int32 RandomInt = FMath::RandRange(0, PlayerControllers.Num() - 1);
+
+				CurTarget = PlayerControllers[RandomInt]->GetPawn();
+
+				return CurTarget ? CurTarget : nullptr;
+			}
+		}
+	}
+
+	return CurTarget;
+}
+
+void ABossEnemyCharacter::DelaySetUp()
+{
+	FTimerHandle TimerHandle;
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossEnemyCharacter::SetUpBossHp, 2.f, false);
 }

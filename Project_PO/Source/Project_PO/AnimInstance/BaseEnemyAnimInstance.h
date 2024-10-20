@@ -17,20 +17,24 @@ class PROJECT_PO_API UBaseEnemyAnimInstance : public UBaseAnimInstance
 public:
 	UBaseEnemyAnimInstance();
 
+protected:
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon, meta = (AllowPrivateAccess = "true"))
-	bool bIsWait;
+	bool bIsReady;
 
 	int32 AttackIndex;
 
 public:
-	bool GetIsWait() { return bIsWait; }
-	void SetIsWait(bool _bIsWait) { bIsWait = _bIsWait; }
+	bool GetIsReady() { return bIsReady; }
+	void SetIsReady(bool _bIsReady) { bIsReady = _bIsReady; }
 
 	void JumpToSection();
 	FName GetAnimMontageName(int32 SectionIndex);
 
 	virtual void PlaySome(FBaseSkillData* Data, float AttackSpeed) override;
 
-	//Die 노티파이 정의
+	UFUNCTION()
+	void AnimNotify_Ready();
 };

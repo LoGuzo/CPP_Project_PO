@@ -30,7 +30,7 @@ private:
 
 protected:
 	UPROPERTY()
-	class UMonsterStatComponent* Statcomponent;
+	class UMonsterStatComponent* StatComponent;
 
 	int32 ActorID;
 protected:
