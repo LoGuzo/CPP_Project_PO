@@ -38,6 +38,9 @@ protected:
 	UPROPERTY()
 	class AActor* Target;
 
+	UPROPERTY()
+	class AAIController* AIController;
+
 private:
 	void SetUpDamageWidget(class AController* PlayerController, E_DamageType const & Type, FVector const& Location, int32 const& Damage);
 
@@ -50,17 +53,24 @@ protected:
 	virtual void SetUpLegCollision() {};
 
 public:
+	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
+	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) override;
+
+	virtual void Attack(AActor* _Target) {};
+	virtual AActor* SearchTarget();
+	virtual bool CanAttack(AActor* _Target);
+
+	virtual void Died() override;
+	virtual void DiedNotify() override;
+	virtual void SetState(bool NowState) override;
+public:
 	E_MonsterType GetMonsterType() { return MonsterType; }
 
 	void SetTarget(AActor* _Target) { Target = _Target; }
 	AActor* GetTarget() { return Target; }
 
-	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
-	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) override;
-
-	virtual void Attack(AActor* _Target) {};
 	void AttackSkill(AActor* _Target, int32 const& SkillID);
-	virtual AActor* SearchTarget();
-	virtual bool CanAttack(AActor* _Target);
 	bool CanUseSkill(AActor* _Target, int32& SkillID);
+
+	float GetComponentWidth(AActor* _Target);
 };

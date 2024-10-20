@@ -11,6 +11,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "../AnimInstance/BaseAnimInstance.h"
+#include "../Component/StatComponent/StatComponent.h"
 #include "../Component/SkillComponent/SkillComponent.h"
 #include "../Manager/BaseGameInstance.h"
 
@@ -93,11 +94,38 @@ void ABaseCharacter::AddSkillMap(TArray<int32> SkillIDs)
 		SkillComponent->SetUpSkillMap(SkillIDs);
 }
 
+void ABaseCharacter::Died()
+{
+	bIsDied = true;
+}
+
+void ABaseCharacter::DiedNotify()
+{
+	SetState(false);
+}
+
 void ABaseCharacter::SetState(bool NowState)
 {
+	bIsDied = !NowState;
+
 	SetActorHiddenInGame(!NowState);
 	SetActorEnableCollision(NowState);
 	SetActorTickEnabled(NowState);
+
+	if (NowState)
+	{
+		GetCharacterMovement()->GravityScale = 1.f;
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	}
+	else
+	{
+		if (StatComponent)
+			StatComponent->ResetStat();
+
+		GetCharacterMovement()->GravityScale = 0.f;
+		GetCharacterMovement()->DisableMovement();
+	}
+
 }
 
 

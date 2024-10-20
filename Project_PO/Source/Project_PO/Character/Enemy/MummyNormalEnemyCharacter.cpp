@@ -20,7 +20,6 @@ AMummyNormalEnemyCharacter::AMummyNormalEnemyCharacter()
 	SetUpCharacter();
 	GetCharacterMovement()->MaxWalkSpeed = 300.f;
 	AIControllerClass = ABaseNormalAIController::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void AMummyNormalEnemyCharacter::SetCharacterMesh()
@@ -59,12 +58,19 @@ void AMummyNormalEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, 0.f));
 }
 
+void AMummyNormalEnemyCharacter::Died()
+{
+	Super::Died();
+
+	PlaySkill(TEXT("Mummy Death"));
+}
+
 void AMummyNormalEnemyCharacter::Attack(AActor* _Target)
 {
 	if (bIsAttack)
 		return;
 
-	PlaySkill(TEXT("Mummy Attack"), 1.f);
+	PlaySkill(TEXT("Mummy Attack"));
 	bIsAttack = true;
 }
 

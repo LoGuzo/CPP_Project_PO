@@ -37,6 +37,7 @@ private:
 
 public:
     virtual void SetStat(int32 const& _ID) override;
+
     void SetLevel(int32 const& _Level);
 
     void TakedExp(float const& TakedExp);

@@ -11,13 +11,13 @@
 
 AMyBaseGameMode::AMyBaseGameMode()
 	: bIsHavingFirstPlayer(false)
+	, FirstQuestID(-1)
 {
-	// set default pawn class to our Blueprinted character
 	static ConstructorHelpers::FClassFinder<APlayerCharacter> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/Character/Player/BP_PlayCharacter.BP_PlayCharacter_C"));
 	if (PlayerPawnBPClass.Succeeded())
-	{
 		DefaultPawnClass = PlayerPawnBPClass.Class;
-	}
+
+	PlayerControllerClass = ABasePlayerController::StaticClass();
 }
 
 void AMyBaseGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
@@ -30,8 +30,6 @@ void AMyBaseGameMode::PostLogin(APlayerController* NewPlayer)
 	Super::PostLogin(NewPlayer);
 
 	InitPlayerController(NewPlayer);
-
-	GetWorld()->GetTimerManager().SetTimer(ResetTimer, this, &AMyBaseGameMode::StartQuest, 1.f, false);
 }
 
 void AMyBaseGameMode::BeginPlay()
@@ -40,21 +38,7 @@ void AMyBaseGameMode::BeginPlay()
 
 	BindingReward();
 
-	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
-	if (GameInstance)
-	{
-		auto ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
-		if (ObjectPoolManager)
-		{
-			FTransform Transform = FTransform();
-			Transform.SetLocation(FVector(-670.f, -15369.f, -512.f));
-			AEnemyCharacter* Enemy = ObjectPoolManager->GetMonster(GetWorld(), E_MonsterType::E_Golem, Transform);
-			if (Enemy)
-			{
-				Enemy->SetTarget(PlayerControllers[0]->GetPawn());
-			}
-		}
-	}
+	GetWorld()->GetTimerManager().SetTimer(ResetTimer, this, &AMyBaseGameMode::StartQuest, 1.f, false);
 }
 
 void AMyBaseGameMode::InitPlayerController(APlayerController* NewPlayer)
@@ -78,12 +62,15 @@ void AMyBaseGameMode::InitPlayerController(APlayerController* NewPlayer)
 
 void AMyBaseGameMode::StartQuest()
 {
+	if (FirstQuestID == -1)
+		return;
+
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
 		auto QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
 		if (QuestManager)
-			QuestManager->StartQuest(3000);
+			QuestManager->StartQuest(FirstQuestID);
 	}
 }
 
@@ -100,6 +87,9 @@ void AMyBaseGameMode::BindingReward()
 
 void AMyBaseGameMode::GrantReward(int32 QuestID)
 {
+	if (QuestID == -1)
+		return;
+
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{

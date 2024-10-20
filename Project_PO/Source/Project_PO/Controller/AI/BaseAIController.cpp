@@ -38,6 +38,24 @@ void ABaseAIController::OnUnPossess()
         BlackboardComponent->ClearValue("Target");
 }
 
+void ABaseAIController::LookAtPlayer(FVector const& TargetLocation)
+{
+	if (!GetPawn())
+		return;
+
+	FVector PlayerLocation = TargetLocation;
+	FVector AILocation = GetPawn()->GetActorLocation();
+	FVector Direction = (PlayerLocation - AILocation).GetSafeNormal();
+
+	FRotator LookAtRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+	LookAtRotation.Pitch = 0.0f;
+	LookAtRotation.Roll = 0.0f;
+
+	GetPawn()->SetActorRotation(LookAtRotation);
+
+	SetControlRotation(LookAtRotation);
+}
+
 void ABaseAIController::Attack(AActor* _Target)
 {
 	if (!_Target)
@@ -47,12 +65,9 @@ void ABaseAIController::Attack(AActor* _Target)
 	if (!EnemyCharacter)
 		return;
 
-	SetFocus(_Target);
+	LookAtPlayer(_Target->GetActorLocation());
 
 	EnemyCharacter->Attack(_Target);
-
-	ClearFocus(EAIFocusPriority::Gameplay);
-
 }
 
 void ABaseAIController::AttackSkill(AActor* _Target, int32 const& SkillID)
@@ -64,7 +79,7 @@ void ABaseAIController::AttackSkill(AActor* _Target, int32 const& SkillID)
 	if (!EnemyCharacter)
 		return;
 
-	ClearFocus(EAIFocusPriority::Gameplay);
+	LookAtPlayer(_Target->GetActorLocation());
 
 	EnemyCharacter->AttackSkill(_Target, SkillID);
 }

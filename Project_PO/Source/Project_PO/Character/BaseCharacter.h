@@ -62,10 +62,13 @@ public:
 	void SetID(int32 _ID) { ID = _ID; }
 
 	virtual void ControlSkill(int32 const& SkillID);
-	virtual void PlaySkill(FString const& SkillName, float const& AttackSpeed);
+	virtual void PlaySkill(FString const& SkillName, float const& AttackSpeed = 1.f);
 	void AddSkillMap(TArray<int32> SkillIDs);
 
 	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) {};
 	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) {};
 	virtual void ShotAttackCheck() {};
+
+	virtual void Died();
+	virtual void DiedNotify();
 };

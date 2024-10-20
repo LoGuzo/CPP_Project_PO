@@ -45,7 +45,8 @@ protected:
     float MaxMp;
 
 public:
-    virtual void SetStat(int32 const& _ID);
+    virtual void SetStat(int32 const& _ID) {};
+    void ResetStat();
 
     float GetHp() { return Hp; }
     void SetHp(float const& _Hp);

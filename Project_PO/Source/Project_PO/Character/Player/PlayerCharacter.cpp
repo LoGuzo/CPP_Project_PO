@@ -497,6 +497,11 @@ void APlayerCharacter::ShotAttackCheck()
 		Weapon->Fire();
 }
 
+void APlayerCharacter::Died()
+{
+
+}
+
 void APlayerCharacter::SetEquip(int32 ItemID)
 {
 	if (EquipComponent)

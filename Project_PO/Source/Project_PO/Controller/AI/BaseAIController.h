@@ -27,6 +27,9 @@ protected:
 	UPROPERTY()
 	class UBlackboardData* EnemyBlackboradData;
 
+protected:
+	void LookAtPlayer(FVector const& TargetLocation);
+
 public:
 	virtual void Attack(AActor* _Target);
 	virtual void AttackSkill(AActor* _Target, int32 const& SkillID);

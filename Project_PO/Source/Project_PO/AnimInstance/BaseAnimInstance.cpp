@@ -118,3 +118,9 @@ void UBaseAnimInstance::AnimNotify_AttackEnd()
 	if (OwnCharacter)
 		OwnCharacter->SetIsAttack(false);
 }
+
+void UBaseAnimInstance::AnimNotify_Dead()
+{
+	if (OwnCharacter)
+		OwnCharacter->DiedNotify();
+}

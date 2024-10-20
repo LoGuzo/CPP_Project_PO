@@ -2,6 +2,7 @@
 
 
 #include "BasePlayerAnimInstance.h"
+#include "KismetAnimationLibrary.h"
 #include "../Character/Player/PlayerCharacter.h"
 
 UBasePlayerAnimInstance::UBasePlayerAnimInstance()
@@ -31,7 +32,7 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			//JointTargetLocation = Player->JointTargetLocation;
 
 			FRotator Rotation = Player->GetActorRotation();
-			PlayerRotation = CalculateDirection(OwnerVelocity, Rotation);
+			PlayerRotation = UKismetAnimationLibrary::CalculateDirection(OwnerVelocity, Rotation);
 		}
 	}
 }

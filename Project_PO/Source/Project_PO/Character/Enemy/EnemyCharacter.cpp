@@ -2,7 +2,9 @@
 
 
 #include "EnemyCharacter.h"
+#include "AIController.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/PrimitiveComponent.h"
 #include "Engine/DamageEvents.h"
 #include "Kismet/GameplayStatics.h"
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
@@ -10,6 +12,7 @@
 #include "../../Component/SkillComponent/MonsterSkillComponent.h"
 #include "../../Controller/Player/BasePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
+#include "../../Manager/ObjectPoolManager.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: AnimInstance(nullptr)
@@ -18,6 +21,8 @@ AEnemyCharacter::AEnemyCharacter()
 	SkillComponent = CreateDefaultSubobject<UMonsterSkillComponent>("MonsterSkillComponent");
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("EnemyMain"));
 	Tags.Add(TEXT("Enemy"));
+
+	AutoPossessAI = EAutoPossessAI::Spawned;
 }
 
 void AEnemyCharacter::BeginPlay()
@@ -26,6 +31,9 @@ void AEnemyCharacter::BeginPlay()
 
 	if (StatComponent)
 		GetStatComponent<UMonsterStatComponent>()->SetStat(ID);
+
+	if (Controller && !AIController)
+		AIController = Cast<AAIController>(Controller);
 }
 
 float AEnemyCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -229,7 +237,7 @@ bool AEnemyCharacter::CanAttack(AActor* _Target)
 	if (!MonsterStatComponent)
 		return false;
 
-	float DistanceToTarget = FVector::Dist2D(GetActorLocation(), _Target->GetActorLocation());
+	float DistanceToTarget = FVector::Dist2D(GetActorLocation(), _Target->GetActorLocation()) - GetComponentWidth(_Target);
 
 	bool bCanAttack = false;
 
@@ -252,4 +260,51 @@ bool AEnemyCharacter::CanUseSkill(AActor* _Target, int32& SkillID)
 	}
 
 	return MonsterSkillComponent->ChkSkillRange(_Target, SkillID);
+}
+
+float AEnemyCharacter::GetComponentWidth(AActor* _Target)
+{
+	if (_Target)
+	{
+		UPrimitiveComponent* Component = Cast<UPrimitiveComponent>(GetComponentByClass(UPrimitiveComponent::StaticClass()));
+
+		if (Component)
+		{
+			FVector ComponentExtent = Component->Bounds.BoxExtent;
+			float ComponentWidth = ComponentExtent.Y * 2.f;
+
+			return ComponentWidth;
+		}
+	}
+
+	return -1;
+}
+
+void AEnemyCharacter::Died()
+{
+	Super::Died();
+
+	if(AIController)
+		AIController->UnPossess();
+}
+
+void AEnemyCharacter::DiedNotify()
+{
+	Super::DiedNotify();
+
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
+		if (ObjectPoolManager)
+			ObjectPoolManager->ReleaseMonster(this);
+	}
+}
+
+void AEnemyCharacter::SetState(bool NowState)
+{
+	Super::SetState(NowState);
+
+	if (NowState && AIController)
+		AIController->Possess(this);
 }

@@ -31,4 +31,6 @@ public:
 	FName GetAnimMontageName(int32 SectionIndex);
 
 	virtual void PlaySome(FBaseSkillData* Data, float AttackSpeed) override;
+
+	//Die 노티파이 정의
 };

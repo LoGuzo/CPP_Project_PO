@@ -59,3 +59,10 @@ void ANormalEnemyCharacter::VisibleHpBar()
 			OnlyHpBar->SetRenderOpacity(0.f);
 	}
 }
+
+void ANormalEnemyCharacter::Died()
+{
+	Super::Died();
+
+	VisibleHpBar();
+}

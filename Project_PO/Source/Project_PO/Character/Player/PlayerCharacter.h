@@ -216,6 +216,7 @@ public:
 
 	virtual void ShotAttackCheck() override;
 
+	virtual void Died() override;
 public:
 	void SetEquip(int32 ID);
 

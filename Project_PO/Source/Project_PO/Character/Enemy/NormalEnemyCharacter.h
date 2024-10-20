@@ -22,13 +22,15 @@ protected:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 private:
-	void VisibleHpBar();
-
-private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UWidgetComponent* HpBar;
 
 	UPROPERTY()
 	class UBaseHpInfoWidget* OnlyHpBar;
 
+private:
+	void VisibleHpBar();
+
+public:
+	virtual void Died() override;
 };

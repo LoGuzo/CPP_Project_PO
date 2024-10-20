@@ -10,8 +10,10 @@ UStatComponent::UStatComponent()
 	AttackSpeed = 1.f;
 }
 
-void UStatComponent::SetStat(int32 const& _ID)
+void UStatComponent::ResetStat()
 {
+	SetHp(MaxHp);
+	SetMp(MaxMp);
 }
 
 void UStatComponent::TakeDamage(float const& TakedDamage)
@@ -28,7 +30,7 @@ void UStatComponent::TakeDamage(float const& TakedDamage)
 		ABaseCharacter* OwnCharacter = Cast<ABaseCharacter>(GetOwner());
 		if (OwnCharacter)
 			if (!OwnCharacter->GetIsDied())
-				OwnCharacter->SetIsDied(true);
+				OwnCharacter->Died();
 	}
 	SetHp(CurHp);
 }

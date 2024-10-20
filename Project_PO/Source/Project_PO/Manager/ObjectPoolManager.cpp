@@ -20,6 +20,7 @@ AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType con
 		{
 			AEnemyCharacter* Monster = AvailableMonsters[i];
 			Monster->SetState(true);
+			Monster->SetActorTransform(Transform);
 			AvailableMonsters.Remove(Monster);
 			InUseMonsters.Add(Monster);
 			return Monster;

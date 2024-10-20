@@ -26,9 +26,12 @@ private:
 	FTimerHandle ResetTimer;
 
 	bool bIsHavingFirstPlayer;
+
 protected:
 	UPROPERTY()
 	TArray<class ABasePlayerController*> PlayerControllers;
+
+	int32 FirstQuestID;
 
 private:
 	void InitPlayerController(APlayerController* NewPlayer);
@@ -37,6 +40,9 @@ protected:
 	void StartQuest();
 	void BindingReward();
 	void GrantReward(int32 QuestID);
+
+public:
+	TArray<class ABasePlayerController*> GetPlayerControllers() { return PlayerControllers; }
 };
 
 

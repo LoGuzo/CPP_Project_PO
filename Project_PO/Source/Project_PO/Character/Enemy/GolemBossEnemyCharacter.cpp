@@ -18,7 +18,6 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 	SetUpCharacter();
 
 	AIControllerClass = ABaseBossAIController::StaticClass();
-	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()
@@ -79,6 +78,13 @@ void AGolemBossEnemyCharacter::SetUpBodyCollision()
 	BodyCollision->InitCapsuleSize(30.f,50.f);
 	BodyCollision->SetRelativeLocation(FVector(32.f, 4.f, 0.f));
 	BodyCollision->SetRelativeRotation(FRotator(90.f, 0.f, -11.f));
+}
+
+void AGolemBossEnemyCharacter::Died()
+{
+	Super::Died();
+
+	PlaySkill(TEXT("Golem Death"));
 }
 
 void AGolemBossEnemyCharacter::Attack(AActor* _Target)
