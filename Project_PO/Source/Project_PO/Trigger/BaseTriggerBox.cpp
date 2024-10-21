@@ -3,10 +3,12 @@
 
 #include "BaseTriggerBox.h"
 #include "../GameMode/MyBaseGameMode.h"
+#include "../Controller/Player/BasePlayerController.h"
 
 ABaseTriggerBox::ABaseTriggerBox()
 	: ActiveCnt(0)
 	, CurActiveCnt(0)
+	, TimerTime(0.f)
 {
 
 }
@@ -14,7 +16,20 @@ ABaseTriggerBox::ABaseTriggerBox()
 void ABaseTriggerBox::SetUpTrigger()
 {
 	SpawnMonster();
-	OnActorBeginOverlap.RemoveDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
+	SetUpTimer();
+}
+
+void ABaseTriggerBox::SetUpTimer()
+{
+	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+	{
+		TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+		for (ABasePlayerController* PlayerController : PlayerControllers)
+		{
+			PlayerController->SetUpTimerWidget(TimerTime);
+		}
+	}
 }
 
 void ABaseTriggerBox::AddRemoveWidget(FString const& WidgetName)
@@ -35,7 +50,10 @@ void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor
 			CurActiveCnt++;
 
 		if (CurActiveCnt == ActiveCnt)
+		{
 			SetUpTrigger();
+			OnActorBeginOverlap.RemoveDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
+		}
 	}
 }
 

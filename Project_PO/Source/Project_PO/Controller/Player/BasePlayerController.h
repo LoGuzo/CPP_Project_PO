@@ -27,12 +27,14 @@ private:
 	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
 	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
 	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
+	TSubclassOf<class UTimerWidget> TimerWidget;
 
 private:
 	void SetUpWidget();
 
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
+	void SetUpTimerWidget(float const& RemainingTime);
 
 	void AddRemoveWidget(FString const& WidgetName);
 	void ShowHideWidget(FString const& WidgetName);

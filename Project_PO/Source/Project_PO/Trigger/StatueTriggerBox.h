@@ -14,6 +14,9 @@ class PROJECT_PO_API AStatueTriggerBox : public ABaseTriggerBox
 {
 	GENERATED_BODY()
 
+public:
+	AStatueTriggerBox();
+
 protected:
 	virtual void SetUpTrigger() override;
 

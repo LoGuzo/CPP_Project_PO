@@ -14,6 +14,9 @@ class PROJECT_PO_API ABossTriggerBox : public ABaseTriggerBox
 {
 	GENERATED_BODY()
 
+public:
+	ABossTriggerBox();
+
 protected:
 	virtual void SpawnMonster() override;
 };

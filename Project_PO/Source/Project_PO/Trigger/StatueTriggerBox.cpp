@@ -5,7 +5,10 @@
 #include "../Actor/Spawner/InfiniteSpawnerActor.h"
 #include "../Actor/Protect/StatueProtectActor.h"
 
-
+AStatueTriggerBox::AStatueTriggerBox()
+{
+	TimerTime = 120.f;
+}
 
 void AStatueTriggerBox::SetUpTrigger()
 {

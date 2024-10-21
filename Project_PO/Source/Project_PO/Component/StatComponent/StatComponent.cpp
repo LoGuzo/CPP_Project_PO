@@ -43,8 +43,6 @@ void UStatComponent::HealHp(float const& HealedHp)
 	float CurHp = Hp;
 	CurHp += HealedHp;
 
-	UE_LOG(LogTemp, Warning, TEXT("Healed %f, CurHp %f"), HealedHp, CurHp);
-
 	if (CurHp >= MaxHp)
 		CurHp = MaxHp;
 
@@ -54,8 +52,6 @@ void UStatComponent::HealHp(float const& HealedHp)
 void UStatComponent::SetHp(float const& _Hp)
 {
 	Hp = _Hp;
-
-	UE_LOG(LogTemp, Warning, TEXT("CurHp %f"), Hp);
 
 	OnHpChanged.Broadcast();
 }

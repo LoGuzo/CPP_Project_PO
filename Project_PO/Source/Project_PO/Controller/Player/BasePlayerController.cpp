@@ -6,6 +6,7 @@
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
+#include "../../Widget/Etc/TimerWidget.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 #include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 #include "../../Widget/PopUp/DamagePopUpWidget.h"
@@ -33,6 +34,10 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>BossHpWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/CharInfo/WBP_BossHpMain.WBP_BossHpMain_C"));
 	if (BossHpWidget.Succeeded())
 		BossHpMainWidget = BossHpWidget.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>Timer(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_Timer.WBP_Timer_C"));
+	if (Timer.Succeeded())
+		TimerWidget = Timer.Class;
 }
 
 void ABasePlayerController::BeginPlay()
@@ -66,6 +71,9 @@ void ABasePlayerController::SetUpWidget()
 
 				if (BossHpMainWidget)
 					WidgetManager->CreateAndAddWidget<APlayerController, UBossHpMainWidget>(this, TEXT("BossHp"), BossHpMainWidget);
+
+				if (TimerWidget)
+					WidgetManager->CreateAndAddWidget<APlayerController, UTimerWidget>(this, TEXT("Timer"), TimerWidget);
 			}
 		}
 	}
@@ -86,6 +94,27 @@ void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector 
 
 				UGameplayStatics::ProjectWorldToScreen(this, Location, ScreenPosition);
 				ObjectPoolManager->GetWidget(GetWorld(), Type, DamagePopUpWidget, ScreenPosition, Damage);
+			}
+		}
+	}
+}
+
+void ABasePlayerController::SetUpTimerWidget(float const& RemainingTime)
+{
+	if (IsLocalController())
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+		{
+			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+			if (WidgetManager)
+			{
+				UTimerWidget* NowWidget = WidgetManager->GetWidget<UTimerWidget>(TEXT("Timer"));
+				if (NowWidget)
+				{
+					NowWidget->SetReminingTime(RemainingTime);
+					NowWidget->SetAddRemove();
+				}
 			}
 		}
 	}

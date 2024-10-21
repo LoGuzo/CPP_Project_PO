@@ -32,8 +32,11 @@ protected:
 
 	int32 CurActiveCnt;
 
+	float TimerTime;
+
 protected:
 	virtual void SetUpTrigger();
+	void SetUpTimer();
 	virtual void SpawnMonster() {};
 
 	void AddRemoveWidget(FString const& WidgetName);
