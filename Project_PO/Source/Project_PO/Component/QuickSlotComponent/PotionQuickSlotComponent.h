@@ -23,6 +23,8 @@ private:
 	UPROPERTY()
 	class UInventoryComponent* InventoryComponent;
 
+	class ABaseItemActor* CurItem;
+
 private:
 	int32 SlotIndex;
 
@@ -39,4 +41,6 @@ public:
 	void SetupQuickSlotWidget();
 	void UpdateQuickSlotWidget();
 	void UpdateQuickSlotAmount();
+
+	void SetUpQuickItem();
 };

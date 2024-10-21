@@ -86,6 +86,14 @@ enum class E_ItemType : uint8
 };
 
 UENUM(BlueprintType)
+enum class E_CunsumableType : uint8
+{
+	E_Hp UMETA(DisplayName = "Hp"),
+	E_Mp UMETA(DisplayName = "Mp"),
+	E_None UMETA(DisplayName = "None"),
+};
+
+UENUM(BlueprintType)
 enum class E_MonsterType : uint8
 {
 	E_Mummy UMETA(DisplayName = "Mummy"),

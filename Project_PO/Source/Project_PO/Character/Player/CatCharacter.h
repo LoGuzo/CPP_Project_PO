@@ -22,4 +22,7 @@ protected:
 
 private:
 	void SetCharacterMesh();
+
+protected:
+	virtual void UsePotion() override;
 };

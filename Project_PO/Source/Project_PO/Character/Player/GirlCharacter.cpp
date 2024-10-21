@@ -43,3 +43,8 @@ void AGirlCharacter::SetCharacterMesh()
 	if (MainAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MainAsset.Object);
 }
+
+void AGirlCharacter::UsePotion()
+{
+	PlaySkill(TEXT("Girl Drink Potion"));
+}

@@ -262,6 +262,9 @@ struct FCunsumItemData : public FItemData
     GENERATED_BODY()
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
+    E_CunsumableType CunsumType;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")
     float RestoreAmount;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Consumable")

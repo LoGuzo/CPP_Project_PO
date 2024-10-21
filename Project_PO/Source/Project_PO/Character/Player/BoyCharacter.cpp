@@ -41,3 +41,8 @@ void ABoyCharacter::SetCharacterMesh()
 	if (MainAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MainAsset.Object);
 }
+
+void ABoyCharacter::UsePotion()
+{
+	PlaySkill(TEXT("Boy Drink Potion"));
+}

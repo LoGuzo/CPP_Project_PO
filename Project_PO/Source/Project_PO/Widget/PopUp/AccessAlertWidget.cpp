@@ -10,7 +10,6 @@
 UAccessAlertWidget::UAccessAlertWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	bIsFocusable = true;
 }
 
 void UAccessAlertWidget::NativeConstruct()

@@ -38,3 +38,8 @@ void ACatCharacter::SetCharacterMesh()
 	if (MainAsset.Succeeded())
 		GetMesh()->SetSkeletalMesh(MainAsset.Object);
 }
+
+void ACatCharacter::UsePotion()
+{
+	PlaySkill(TEXT("Cat Drink Potion"));
+}

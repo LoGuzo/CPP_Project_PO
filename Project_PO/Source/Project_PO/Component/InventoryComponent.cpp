@@ -5,6 +5,7 @@
 #include "EquipComponent.h"
 #include "InteractionComponent.h"
 #include "ItemComponent/EquipItemComponent.h"
+#include "StatComponent/StatComponent.h"
 #include "QuickSlotComponent/PotionQuickSlotComponent.h"
 #include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
 #include "../Actor/Item/InstallItemActor.h"
@@ -255,6 +256,32 @@ void UInventoryComponent::UseItem(int32 Index, FSpawnItemType Type)
 
 void UInventoryComponent::UseCunsumItem(int32 Index, E_ItemType Type)
 {
+	FSlot CunsumSlot = GetSlot(Index, Type);
+
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		TWeakPtr<FCunsumItemData> ItemData = GameInstance->GetDatabaseMap<FCunsumItemData>(E_ManagerType::E_ItemDatabaseManager ,CunsumSlot.ItemID);
+		if (ItemData.IsValid())
+		{
+			float RestoreAmount = ItemData.Pin()->RestoreAmount;
+
+			if (StatComponent)
+			{
+				switch (ItemData.Pin()->CunsumType)
+				{
+				case E_CunsumableType::E_Hp:
+					StatComponent->HealHp(RestoreAmount);
+					break;
+				case E_CunsumableType::E_Mp:
+					StatComponent->HealMp(RestoreAmount);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
 	CheckSlotAmount(Index, Type);
 	if (QuickSlotComponent)
 		QuickSlotComponent->OnQuickSlotUpdated.Broadcast();
@@ -271,7 +298,6 @@ void UInventoryComponent::UseEtcItem(int32 Index, FSpawnItemType Type)
 	default:
 		break;
 	}
-	
 }
 
 void UInventoryComponent::UseInstallEtcItem(int32 Index, E_ItemType Type)
@@ -316,16 +342,25 @@ void UInventoryComponent::RegisterQuickSlot(int32 Index)
 		QuickSlotComponent->RegisterQuickSlot(Index, this);
 }
 
-int32 UInventoryComponent::CheckFullItemAmount(int32 ItemID)
+FMinResult UInventoryComponent::CheckFullItemAmount(int32 ItemID)
 {
 	int32 index = 0;
-	int32 Amount = 0;
+	int32 Amount = INT32_MAX;
+
+	FMinResult MinSlot;
 
 	for (const FSlot& Slot : *SlotMap.Find(E_ItemType::E_Cunsumable)) {
 		if (Slot.ItemID == ItemID)
-			Amount += Slot.Amount;
+		{
+			if (Slot.Amount <= Amount)
+			{
+				MinSlot.Index = index;
+				Amount = Slot.Amount;
+			}
+			MinSlot.Amount += Slot.Amount;
+		}
 		index++;
 	}
 
-	return Amount;
+	return MinSlot;
 }

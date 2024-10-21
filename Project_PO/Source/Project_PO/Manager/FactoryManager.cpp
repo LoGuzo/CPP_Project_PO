@@ -125,7 +125,7 @@ ABaseItemActor* UFactoryManager::ItemFactory(UWorld* World, FSpawnItemType const
 		Item = EquipFactory(World, Type, Transform);
 		break;
 	case E_ItemType::E_Cunsumable:
-		Item = GetWorld()->SpawnActor<ACunsumItemActor>(ACunsumItemActor::StaticClass(), Transform, SpawnParameters);
+		Item = World->SpawnActor<ACunsumItemActor>(ACunsumItemActor::StaticClass(), Transform, SpawnParameters);
 		break;
 	case E_ItemType::E_Etc:
 		Item = InstallItemFactory(World, Type, Transform);

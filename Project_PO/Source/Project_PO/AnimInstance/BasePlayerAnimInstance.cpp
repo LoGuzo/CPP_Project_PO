@@ -4,6 +4,7 @@
 #include "BasePlayerAnimInstance.h"
 #include "KismetAnimationLibrary.h"
 #include "../Character/Player/PlayerCharacter.h"
+#include "../Component/QuickSlotComponent/PotionQuickSlotComponent.h"
 
 UBasePlayerAnimInstance::UBasePlayerAnimInstance()
 	: bIsArmed(false)
@@ -34,6 +35,16 @@ void UBasePlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 			FRotator Rotation = Player->GetActorRotation();
 			PlayerRotation = UKismetAnimationLibrary::CalculateDirection(OwnerVelocity, Rotation);
 		}
+	}
+}
+
+void UBasePlayerAnimInstance::AnimNotify_PotionEnd()
+{
+	APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwnCharacter());
+	if (Player)
+	{
+		Player->GetPotionQuickSlotComponent()->SetUpQuickItem();
+		Player->SetIsUseQuick(false);
 	}
 }
 

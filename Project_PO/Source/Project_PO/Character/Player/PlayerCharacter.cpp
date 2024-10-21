@@ -147,6 +147,9 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 		//Inven
 		EnhancedInputComponent->BindAction(InvenAction, ETriggerEvent::Started, this, &APlayerCharacter::ShowInven);
+
+		//QuickSlot
+		EnhancedInputComponent->BindAction(Quickslot1Action, ETriggerEvent::Started, this, &APlayerCharacter::UseQuickSlot);
 	}
 }
 
@@ -207,9 +210,7 @@ void APlayerCharacter::Interact(const FInputActionValue& Value)
 	else
 	{
 		if (InteractionComponent)
-		{
 			InteractionComponent->InstallObject(FVector(), FRotator());
-		}
 	}
 }
 
@@ -219,42 +220,25 @@ void APlayerCharacter::TriggeredAiming(const FInputActionValue& Value)
 	{
 		if (bIsSprint)
 			return;
-		if (!bIsAiming)
-		{
-			bIsAiming = true;
-			GetCharacterMovement()->bOrientRotationToMovement = false;
 
-			if (CameraTimeline)
-				CameraTimeline->Play();
-			DisplayCrosshair();
-		}
+		if (bIsUseQuick)
+			return;
+
+		if (!bIsAiming)
+			SetUpAiming();
 	}
 }
 
 void APlayerCharacter::CanceledAiming(const FInputActionValue& Value)
 {
 	if (bIsAiming)
-	{
-		bIsAiming = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-
-		if (CameraTimeline)
-			CameraTimeline->Reverse();
-		DisplayCrosshair();
-	}
+		SetUpAiming();
 }
 
 void APlayerCharacter::CompletedAiming(const FInputActionValue& Value)
 {
 	if (bIsAiming)
-	{
-		bIsAiming = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-
-		if (CameraTimeline)
-			CameraTimeline->Reverse();
-		DisplayCrosshair();
-	}
+		SetUpAiming();
 }
 
 void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
@@ -273,13 +257,9 @@ void APlayerCharacter::TriggeredSprint(const FInputActionValue& Value)
 
 			bIsSprint = true;
 			GetCharacterMovement()->MaxWalkSpeed = PlayerComponent->GetSpeed() + 200.f;
+			
 			if (bIsAiming)
-			{
-				bIsAiming = false;
-				if (CameraTimeline)
-					CameraTimeline->Reverse();
-				DisplayCrosshair();
-			}
+				SetUpAiming();
 		}
 	}
 }
@@ -331,6 +311,21 @@ void APlayerCharacter::ShowInven(const FInputActionValue& Value)
 	}
 }
 
+void APlayerCharacter::UseQuickSlot(const FInputActionValue& Value)
+{
+	if (bIsUseQuick)
+		return;
+
+	if (PotionQuickSlotComponent)
+	{
+		PotionQuickSlotComponent->UseSlot();
+		bIsUseQuick = true;
+	}
+
+	if (bIsAiming)
+		SetUpAiming();
+}
+
 void APlayerCharacter::BindInputAction()
 {
 	// Input Asset Load
@@ -380,8 +375,13 @@ void APlayerCharacter::BindInputAction()
 
 	// Inven Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> InvenActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Inven.IA_Inven"));
-	if (SkillActionObject.Succeeded())
+	if (InvenActionObject.Succeeded())
 		InvenAction = InvenActionObject.Object;
+
+	// Inven Action Asset Load
+	static ConstructorHelpers::FObjectFinder<UInputAction> QuickSlot1ActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_QuickSlot1.IA_QuickSlot1"));
+	if (QuickSlot1ActionObject.Succeeded())
+		Quickslot1Action = QuickSlot1ActionObject.Object;
 }
 
 void APlayerCharacter::SetupCurve()
@@ -430,8 +430,11 @@ void APlayerCharacter::SetupStatComponent()
 
 void APlayerCharacter::SetupInventoryComponent()
 {
-	if (InventoryComponent && PotionQuickSlotComponent)
+	if (InventoryComponent && PotionQuickSlotComponent && StatComponent)
+	{
 		InventoryComponent->SetQuickSlotComponent(PotionQuickSlotComponent);
+		InventoryComponent->SetStatComponent(StatComponent);
+	}
 }
 
 void APlayerCharacter::DisplayCrosshair()
@@ -467,26 +470,26 @@ void APlayerCharacter::AttackMontage()
 	}
 }
 
-/*FTransform APlayerCharacter::GetLeftHandSocketTransform()
+void APlayerCharacter::SetUpAiming()
 {
-	FTransform OutPutTransform;
-	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
-	if (Weapon)
+	bIsAiming = !bIsAiming;
+	GetCharacterMovement()->bOrientRotationToMovement = !bIsAiming;
+
+	if (bIsAiming)
 	{
-		FVector OutputLocation = OutPutTransform.GetLocation();
-		FRotator OutputRotation = OutPutTransform.GetRotation().Rotator();
-
-		FTransform WeaponTransform = Weapon->GetSkeletalMesh()->GetSocketTransform(TEXT("LeftHandIK"));
-		GetMesh()->TransformFromBoneSpace(TEXT("hand_r")
-			, WeaponTransform.GetLocation(), WeaponTransform.GetRotation().Rotator()
-			, OutputLocation, OutputRotation
-		);
-
-		OutPutTransform.SetLocation(OutputLocation);
-		OutPutTransform.SetRotation(FQuat(OutputRotation));
+		if (CameraTimeline)
+			CameraTimeline->Play();
 	}
-	return OutPutTransform;
-}*/
+	else
+	{
+		if (CameraTimeline)
+			CameraTimeline->Reverse();
+
+		bIsAttack = false;
+	}
+
+	DisplayCrosshair();
+}
 
 void APlayerCharacter::ShotAttackCheck()
 {
@@ -513,3 +516,24 @@ void APlayerCharacter::AttackCheck()
 	if (Weapon)
 		Weapon->Fire();
 }
+
+/*FTransform APlayerCharacter::GetLeftHandSocketTransform()
+{
+	FTransform OutPutTransform;
+	ABaseWeaponActor* Weapon = EquipComponent->GetCurrentWeapon();
+	if (Weapon)
+	{
+		FVector OutputLocation = OutPutTransform.GetLocation();
+		FRotator OutputRotation = OutPutTransform.GetRotation().Rotator();
+
+		FTransform WeaponTransform = Weapon->GetSkeletalMesh()->GetSocketTransform(TEXT("LeftHandIK"));
+		GetMesh()->TransformFromBoneSpace(TEXT("hand_r")
+			, WeaponTransform.GetLocation(), WeaponTransform.GetRotation().Rotator()
+			, OutputLocation, OutputRotation
+		);
+
+		OutPutTransform.SetLocation(OutputLocation);
+		OutPutTransform.SetRotation(FQuat(OutputRotation));
+	}
+	return OutPutTransform;
+}*/

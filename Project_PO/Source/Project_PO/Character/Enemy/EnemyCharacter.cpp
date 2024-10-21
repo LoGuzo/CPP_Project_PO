@@ -242,8 +242,6 @@ bool AEnemyCharacter::CanAttack(AActor* _Target)
 
 	bool bCanAttack = false;
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), DistanceToTarget);
-
 	float AttackRange = MonsterStatComponent->GetAttackRange() * GetActorScale3D().X;
 
 	if (DistanceToTarget <= AttackRange)

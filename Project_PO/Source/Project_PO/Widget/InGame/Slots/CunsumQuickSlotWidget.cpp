@@ -10,11 +10,9 @@ void UCunsumQuickSlotWidget::SetUpSlot()
 	if (PotionQuickSlotComponent)
 	{
 		Slot = PotionQuickSlotComponent->GetSlot();
-		if (Slot.ItemID != -1)
-		{
-			SetUpWidget(Slot.ItemID);
-			SetText();
-		}
+
+		SetUpWidget(Slot.ItemID);
+		SetText();
 	}
 }
 

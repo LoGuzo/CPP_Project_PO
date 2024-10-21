@@ -28,6 +28,11 @@ void UQuickSlotWidget::SetUpWidget(int32 const& _ID)
 					Box_Slot->SetVisibility(ESlateVisibility::Visible);
 			}
 		}
+		else
+		{
+			if (Box_Slot)
+				Box_Slot->SetVisibility(ESlateVisibility::Hidden);
+		}
 	}
 }
 

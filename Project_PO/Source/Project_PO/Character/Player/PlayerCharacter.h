@@ -80,8 +80,13 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* UseSkillAction;
 
+	/** Inventory Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* InvenAction;
+
+	/** QuickSlot1 Input Action */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Quickslot1Action;
 
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -111,6 +116,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsSprint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
+	bool bIsUseQuick;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Debug, meta = (AllowPrivateAccess = "true"))
 	bool bIsMoveFront;
@@ -165,6 +173,9 @@ protected:
 	/** Called for Attack input */
 	void ShowInven(const FInputActionValue& Value);
 
+	/** Called for Attack input */
+	void UseQuickSlot(const FInputActionValue& Value);
+
 private:
 	void BindInputAction();
 
@@ -181,6 +192,8 @@ private:
 	void DisplayCrosshair();
 
 	void AttackMontage();
+
+	void SetUpAiming();
 
 public:
 	UPROPERTY(EditAnywhere)
@@ -202,6 +215,9 @@ public:
 	bool GetIsSprint() { return bIsSprint; }
 	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
 
+	bool GetIsUseQuick() { return bIsUseQuick; }
+	void SetIsUseQuick(bool _bIsUseQuick) { bIsUseQuick = _bIsUseQuick; }
+
 	bool GetIsFirstPlayer() { return bIsFirstPlayer; }
 	void SetIsFirstPlayer(bool _bIsFirstPlayer) { bIsFirstPlayer = _bIsFirstPlayer; }
 
@@ -211,12 +227,14 @@ public:
 	class UEquipComponent* GetEquipComponent(){ return EquipComponent; }
 	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }
 	class UInteractionComponent* GetInteractionComponent() { return InteractionComponent; }
+	class UPotionQuickSlotComponent* GetPotionQuickSlotComponent() { return PotionQuickSlotComponent; }
 
 	//FTransform GetLeftHandSocketTransform();
 
 	virtual void ShotAttackCheck() override;
 
 	virtual void Died() override;
+	virtual void UsePotion() {};
 
 public:
 	void SetEquip(int32 ID);

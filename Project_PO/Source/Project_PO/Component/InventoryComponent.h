@@ -14,12 +14,21 @@ struct FResult
 {
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere)
 	int32 Index;
 
-	UPROPERTY(VisibleAnywhere)
 	bool IsFindItem;
 };
+
+USTRUCT()
+struct FMinResult
+{
+	GENERATED_BODY()
+
+	int32 Index = -1;
+
+	int32 Amount = 0;
+};
+
 
 UCLASS()
 class PROJECT_PO_API UInventoryComponent : public UBaseActorComponent
@@ -37,6 +46,9 @@ private:
 	UPROPERTY()
 	class UPotionQuickSlotComponent* QuickSlotComponent;
 
+	UPROPERTY()
+	class UStatComponent* StatComponent;
+
 private:
 	int32 InventorySize;
 	E_ItemType ItemType;
@@ -53,6 +65,9 @@ private:
 	void IncreaseSlotStack(int32 Index, int32 Amount, E_ItemType Type);
 	void AddToNewSlot(int32 ItemID, int32 ItemAmount, FSpawnItemType Type);
 	void CheckSlotAmount(int32 Index, E_ItemType Type);
+
+	void UseCunsumItem(int32 Index, E_ItemType Type);
+	void UseEtcItem(int32 Index, FSpawnItemType Type);
 
 public:
 	FOnInventoryUpdated OnInventoryUpdated;
@@ -87,14 +102,14 @@ public:
 
 	void SetItemType(E_ItemType _ItemType) { ItemType = _ItemType; }
 	void SetQuickSlotComponent(class UPotionQuickSlotComponent* _QuickSlotComponent) { QuickSlotComponent = _QuickSlotComponent; }
+	void SetStatComponent(class UStatComponent* _StatComponent) { StatComponent = _StatComponent; }
 
 	void ChangeEquip(int32 Index,int32 ItemID);
 	void UseItem(int32 Index, FSpawnItemType Type);
-	void UseCunsumItem(int32 Index, E_ItemType Type);
-	void UseEtcItem(int32 Index, FSpawnItemType Type);
+
 	void UseInstallEtcItem(int32 Index, E_ItemType Type);
 	void CheckUseItemAmount(int32 ItemID, E_ItemType Type);
 
 	void RegisterQuickSlot(int32 Index);
-	int32 CheckFullItemAmount(int32 ItemID);
+	FMinResult CheckFullItemAmount(int32 ItemID);
 };

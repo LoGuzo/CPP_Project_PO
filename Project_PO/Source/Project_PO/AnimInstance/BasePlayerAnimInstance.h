@@ -60,4 +60,7 @@ public:
 
 	E_WeaponType GetWeaponType(){ return WeaponType; }
 	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
+
+	UFUNCTION()
+	void AnimNotify_PotionEnd();
 };

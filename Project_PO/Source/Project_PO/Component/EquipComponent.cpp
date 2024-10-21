@@ -3,9 +3,6 @@
 
 #include "EquipComponent.h"
 #include "../Actor/Item/Equip/Weapon/BaseWeaponActor.h"
-#include "../Actor/Item/Equip/Weapon/Pistol/BasePistolWeaponActor.h"
-#include "../Actor/Item/Equip/Weapon/Rifle/BaseRifleWeaponActor.h"
-#include "../Actor/Item/Equip/Weapon/Shotgun/BaseShotgunWeaponActor.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/ObjectPoolManager.h"
