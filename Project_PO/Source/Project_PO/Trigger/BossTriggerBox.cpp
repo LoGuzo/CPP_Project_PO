@@ -15,6 +15,19 @@ void ABossTriggerBox::SpawnMonster()
 	{
 		Spawner->SpawnMonster();
 	}
+}
+
+void ABossTriggerBox::DeSpawnMonster()
+{
+	for (ABaseSpawnerActor* Spawner : Spawners)
+	{
+		Spawner->DeSpawnMonster();
+	}
+}
+
+void ABossTriggerBox::SetUpTrigger()
+{
+	Super::SetUpTrigger();
 
 	AddRemoveWidget(TEXT("BossHp"));
 }

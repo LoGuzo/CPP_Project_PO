@@ -5,10 +5,11 @@
 #include "CoreMinimal.h"
 #include "InteractActor.h"
 #include "../../Interface/Interactable.h"
+#include "../../Interface/Teleportable.h"
 #include "OwlTeleportActor.generated.h"
 
 UCLASS()
-class PROJECT_PO_API AOwlTeleportActor : public AInteractActor, public IInteractable
+class PROJECT_PO_API AOwlTeleportActor : public AInteractActor, public IInteractable, public ITeleportable
 {
 	GENERATED_BODY()
 	
@@ -18,6 +19,7 @@ public:
 
 public:
 	virtual void Interact(class AActor* PlayerCharacter) override;
+	virtual void Teleport() override;
 
 private:
 	UPROPERTY()

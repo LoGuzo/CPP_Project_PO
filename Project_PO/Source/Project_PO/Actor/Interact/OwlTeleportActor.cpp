@@ -7,6 +7,8 @@
 #include "Components/WidgetComponent.h"
 #include "Engine/StaticMesh.h"
 #include "../../Character/Player/PlayerCharacter.h"
+#include "../../Controller/Player/BasePlayerController.h"
+#include "../../GameMode/MyBaseGameMode.h"
 #include "../../Widget/Interaction/OwlInteractionWidget.h"
 
 // Sets default values
@@ -42,9 +44,22 @@ void AOwlTeleportActor::Interact(AActor* PlayerCharacter)
 	if (PlayerCharacter)
 	{
 		if (CheckingRequiredItem(PlayerCharacter))
-		{
-			PlayerCharacter->SetActorLocation(TeleportLocation);
-		}
+			Teleport();
 	}
 }
 
+void AOwlTeleportActor::Teleport()
+{
+	if (HasAuthority())
+	{
+		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+			for (ABasePlayerController* PlayerController : PlayerControllers)
+			{
+				PlayerController->GetPawn()->SetActorLocation(TeleportLocation);
+			}
+		}
+	}
+}

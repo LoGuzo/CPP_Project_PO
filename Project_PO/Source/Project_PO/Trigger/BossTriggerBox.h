@@ -19,4 +19,6 @@ public:
 
 protected:
 	virtual void SpawnMonster() override;
+	virtual void DeSpawnMonster() override;
+	virtual void SetUpTrigger() override;
 };

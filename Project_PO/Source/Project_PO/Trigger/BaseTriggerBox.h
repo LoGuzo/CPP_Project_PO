@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
+#include "../Interface/Teleportable.h"
 #include "BaseTriggerBox.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox
+class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox, public ITeleportable
 {
 	GENERATED_BODY()
 	
@@ -18,9 +19,7 @@ public:
 	ABaseTriggerBox();
 	
 protected:
-	UFUNCTION()
-	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
-
+	virtual void Teleport() override;
 	virtual void BeginPlay() override;
 
 protected:
@@ -30,14 +29,25 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Spawn", meta = (AllowPrivateAccess = true))
 	TArray<class ABaseSpawnerActor*> Spawners;
 
+	UPROPERTY(EditAnywhere, Category = "Spawn", meta = (AllowPrivateAccess = true))
+	float TimerTime;
+	
+	UPROPERTY(EditAnywhere, Category = "Teleport", meta = (AllowPrivateAccess = true))
+	FVector TeleportLocation;
+
 	int32 CurActiveCnt;
 
-	float TimerTime;
+	FTimerHandle RemainTimer;
 
 protected:
+	UFUNCTION()
+	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
+
 	virtual void SetUpTrigger();
-	void SetUpTimer();
 	virtual void SpawnMonster() {};
+	virtual void DeSpawnMonster() {};
+	virtual void TearDownTrigger();
+	void SetUpTimer();
 
 	void AddRemoveWidget(FString const& WidgetName);
 };

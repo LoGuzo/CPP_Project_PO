@@ -19,14 +19,10 @@ public:
 
 protected:
 	virtual void SetUpTrigger() override;
-
 	virtual void SpawnMonster() override;
-
+	virtual void DeSpawnMonster() override;
 	UPROPERTY(EditAnywhere, Category = "Target", meta = (AllowPrivateAccess = true))
 	AActor* Target;
 
 	void SetUpStatue();
-
-public:
-	void DeSpawnMonster();
 };

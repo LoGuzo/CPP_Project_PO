@@ -61,8 +61,6 @@ void ABaseSpawnerActor::SpawnMonster()
 
 void ABaseSpawnerActor::DeSpawnMonster()
 {
-    TArray<class AEnemyCharacter*> RemoveEnemy;
-
     for (int32 i = SpawnEnemies.Num() - 1; i >= 0; i--)
     {
         if (!SpawnEnemies[i]->GetIsDied())

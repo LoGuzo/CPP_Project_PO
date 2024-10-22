@@ -2,13 +2,13 @@
 
 
 #include "BaseTriggerBox.h"
-#include "../GameMode/MyBaseGameMode.h"
 #include "../Controller/Player/BasePlayerController.h"
+#include "../GameMode/MyBaseGameMode.h"
 
 ABaseTriggerBox::ABaseTriggerBox()
 	: ActiveCnt(0)
-	, CurActiveCnt(0)
 	, TimerTime(0.f)
+	, CurActiveCnt(0)
 {
 
 }
@@ -19,8 +19,19 @@ void ABaseTriggerBox::SetUpTrigger()
 	SetUpTimer();
 }
 
+void ABaseTriggerBox::TearDownTrigger()
+{
+	GetWorld()->GetTimerManager().ClearTimer(RemainTimer);
+	AddRemoveWidget(TEXT("BossHp"));
+
+	Teleport();
+	DeSpawnMonster();
+}
+
 void ABaseTriggerBox::SetUpTimer()
 {
+	GetWorld()->GetTimerManager().SetTimer(RemainTimer, this, &ABaseTriggerBox::TearDownTrigger, TimerTime, false);
+
 	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
@@ -57,9 +68,26 @@ void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor
 	}
 }
 
+void ABaseTriggerBox::Teleport()
+{
+	if (HasAuthority())
+	{
+		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+			for (ABasePlayerController* PlayerController : PlayerControllers)
+			{
+				PlayerController->GetPawn()->SetActorLocation(TeleportLocation);
+			}
+		}
+	}
+}
+
 void ABaseTriggerBox::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorBeginOverlap.AddDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
+	if (HasAuthority())
+		OnActorBeginOverlap.AddDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
 }

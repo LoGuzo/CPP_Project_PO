@@ -46,6 +46,9 @@ void AStatueTriggerBox::DeSpawnMonster()
 	{
 		AInfiniteSpawnerActor* InfiniteSpawner = Cast<AInfiniteSpawnerActor>(Spawner);
 		if (InfiniteSpawner)
+		{
 			InfiniteSpawner->SetIsSpawn(false);
+			InfiniteSpawner->DeSpawnMonster();
+		}
 	}
 }
