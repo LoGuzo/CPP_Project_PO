@@ -68,6 +68,8 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 						else
 							OnQuestUpdated.Broadcast(-1);
 
+						NowQuests.Remove(QuestID);
+
 						OnQuestClear.Broadcast(QuestID);
 					}
 
@@ -81,8 +83,6 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 
 void UQuestManager::CheckingObjective(int32 const& TargetID, int32 const& Amount)
 {
-	TArray<int32> QuestsToRemove;
-
 	for (const TPair<int32, TWeakPtr<FQuestData>>& QuestPair : NowQuests)
 	{
 		int32 QuestID = QuestPair.Key;
@@ -93,13 +93,9 @@ void UQuestManager::CheckingObjective(int32 const& TargetID, int32 const& Amount
 			for (const int32& ObjectiveID : WeakQuestData.Pin()->ObjectiveIDs)
 				CompleteObjective(ObjectiveID, TargetID, Amount);
 
-			if (IsCompleteQuest(QuestID))
-				QuestsToRemove.Add(QuestID);
+			IsCompleteQuest(QuestID);
 		}
 	}
-
-	for (int32 QuestID : QuestsToRemove)
-		NowQuests.Remove(QuestID);
 }
 
 void UQuestManager::CompleteObjective(int32 const& ObjectiveID, int32 const& TargetID, int32 const& Amount)

@@ -183,7 +183,6 @@ void UInventoryComponent::CheckSlotAmount(int32 Index, E_ItemType Type)
 {
 	TArray<FSlot>& ArrayRef = SlotMap[Type];
 	ArrayRef[Index].Amount -= 1;
-	UE_LOG(LogTemp, Warning, TEXT("%d"), ArrayRef[Index].Amount);
 	if (ArrayRef[Index].Amount == 0)
 		DropItem(Index, Type);
 }
