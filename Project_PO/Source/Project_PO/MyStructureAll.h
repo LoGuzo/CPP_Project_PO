@@ -352,6 +352,17 @@ struct FSkillData : public FBaseSkillData
     UTexture2D* SkillImg;
 };
 
+USTRUCT(BlueprintType)
+struct FSequenceData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sequence")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sequence")
+    TSoftObjectPtr<class ULevelSequence> SequenceClass;
+};
 
 USTRUCT()
 struct FSlot

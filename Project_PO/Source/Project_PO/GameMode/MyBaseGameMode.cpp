@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "MyBaseGameMode.h"
+#include "LevelSequence.h"
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
 #include "UObject/ConstructorHelpers.h"
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Character/Player/PlayerCharacter.h"
@@ -108,16 +111,59 @@ void AMyBaseGameMode::GrantReward(int32 QuestID)
 
 void AMyBaseGameMode::AddRemoveControllerWidget(FString const& WidgetName)
 {
-	for (ABasePlayerController* PlayerController : PlayerControllers)
-	{
-		PlayerController->AddRemoveWidget(WidgetName);
-	}
+	GetWorld()->GetTimerManager().ClearTimer(ResetTimer);
+
+	GetWorld()->GetTimerManager().SetTimer(ResetTimer, [this, WidgetName] {
+		for (ABasePlayerController* PlayerController : PlayerControllers)
+		{
+			if(PlayerController)
+				PlayerController->AddRemoveWidget(WidgetName);
+		}
+		}, 2.f, false);
 }
 
 void AMyBaseGameMode::ShowHideControllerWidget(FString const& WidgetName)
 {
-	for (ABasePlayerController* PlayerController : PlayerControllers)
+	GetWorld()->GetTimerManager().ClearTimer(ResetTimer);
+
+	GetWorld()->GetTimerManager().SetTimer(ResetTimer, [this, WidgetName] {
+		for (ABasePlayerController* PlayerController : PlayerControllers)
+		{
+			if (PlayerController)
+				PlayerController->ShowHideWidget(WidgetName);
+		}
+		}, 2.f, false);
+}
+
+ULevelSequencePlayer* AMyBaseGameMode::PlaySequence(int32 const& SequenceID)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
 	{
-		PlayerController->ShowHideWidget(WidgetName);
+		TWeakPtr<FSequenceData> SequenceData = GameInstance->GetDatabaseMap<FSequenceData>(E_ManagerType::E_SequenceDatabaseManager, SequenceID);
+		if (SequenceData.IsValid())
+		{
+			ULevelSequence* LevelSequence = SequenceData.Pin()->SequenceClass.LoadSynchronous();
+			if (LevelSequence)
+			{
+				ALevelSequenceActor* SequenceActor;
+				ULevelSequencePlayer* SequencePlayer = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), LevelSequence, FMovieSceneSequencePlaybackSettings(), SequenceActor);
+
+				if (SequencePlayer)
+				{
+					for (ABasePlayerController* PlayerController : PlayerControllers)
+					{
+						if (PlayerController)
+						{
+							PlayerController->PlaySequence(SequencePlayer);
+						}
+					}
+
+					return SequencePlayer;
+				}
+			}
+		}
 	}
+
+	return nullptr;
 }

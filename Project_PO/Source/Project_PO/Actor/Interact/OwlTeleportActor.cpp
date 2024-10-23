@@ -2,6 +2,7 @@
 
 
 #include "OwlTeleportActor.h"
+#include "LevelSequencePlayer.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/WidgetComponent.h"
@@ -16,7 +17,6 @@ AOwlTeleportActor::AOwlTeleportActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	SetBoxComponent();
 	SetActorMesh();
 }
@@ -38,13 +38,30 @@ void AOwlTeleportActor::SetActorMesh()
 	}
 }
 
+void AOwlTeleportActor::SetLevelSequence()
+{
+	if (HasAuthority())
+	{
+		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->PlaySequence(8001);
+
+			FTimerHandle Timer;
+			GetWorld()->GetTimerManager().SetTimer(Timer, this, &AOwlTeleportActor::Teleport, 2.f, false);
+		}
+	}
+}
+
 
 void AOwlTeleportActor::Interact(AActor* PlayerCharacter)
 {
 	if (PlayerCharacter)
 	{
 		if (CheckingRequiredItem(PlayerCharacter))
-			Teleport();
+		{
+			SetLevelSequence();
+		}
 	}
 }
 

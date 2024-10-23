@@ -6,9 +6,8 @@
 #include "EnemyCharacter.h"
 #include "BossEnemyCharacter.generated.h"
 
-/**
- * 
- */
+DECLARE_MULTICAST_DELEGATE(FOnBossDied);
+
 UCLASS()
 class PROJECT_PO_API ABossEnemyCharacter : public AEnemyCharacter
 {
@@ -19,6 +18,9 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	FOnBossDied OnBossDied;
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Collision, meta = (AllowPrivateAccess = "true"))
@@ -39,6 +41,7 @@ private:
 protected:
 	virtual void SetUpArmCollision() override;
 	virtual void SetUpLegCollision() override;
+	virtual void Died() override;
 
 	virtual void SetState(bool NowState) override;
 

@@ -2,6 +2,9 @@
 
 
 #include "BasePlayerController.h"
+#include "LevelSequence.h"
+#include "LevelSequenceActor.h"
+#include "LevelSequencePlayer.h"
 #include "Kismet/GameplayStatics.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
@@ -79,6 +82,16 @@ void ABasePlayerController::SetUpWidget()
 	}
 }
 
+void ABasePlayerController::SequenceFinished()
+{
+	if (Sequence)
+	{
+		ShowHideWidget(TEXT("HUD"));
+		Sequence->OnFinished.Clear();
+		Sequence = nullptr;
+	}
+}
+
 void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage)
 {
 	if (IsLocalController())
@@ -113,7 +126,9 @@ void ABasePlayerController::SetUpTimerWidget(float const& RemainingTime)
 				if (NowWidget)
 				{
 					NowWidget->SetReminingTime(RemainingTime);
-					NowWidget->SetAddRemove();
+
+					if(!NowWidget->IsInViewport())
+						NowWidget->AddToViewport();
 				}
 			}
 		}
@@ -153,5 +168,17 @@ void ABasePlayerController::ShowHideWidget(FString const& WidgetName)
 					NowWidget->SetShowHidden();
 			}
 		}
+	}
+}
+
+void ABasePlayerController::PlaySequence(ULevelSequencePlayer* SequencePlayer)
+{
+	if (!Sequence)
+	{
+		Sequence = SequencePlayer;
+
+		ShowHideWidget(TEXT("HUD"));
+		Sequence->OnFinished.AddDynamic(this, &ABasePlayerController::SequenceFinished);
+		Sequence->Play();
 	}
 }

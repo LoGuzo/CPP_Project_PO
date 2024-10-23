@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "BaseProtectActor.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnDestruct);
+
 UCLASS()
 class PROJECT_PO_API ABaseProtectActor : public AActor
 {
@@ -21,6 +23,15 @@ protected:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
+public:
+	FOnDestruct OnDestruct;
+
+protected:
+	UPROPERTY()
+	class UMonsterStatComponent* StatComponent;
+
+	int32 ActorID;
+
 private:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UCapsuleComponent* CapsuleCollision;
@@ -29,13 +40,10 @@ private:
 	class UStaticMeshComponent* StaticMeshComponent;
 
 protected:
-	UPROPERTY()
-	class UMonsterStatComponent* StatComponent;
-
-	int32 ActorID;
-protected:
 	bool bIsDied;
 
 public:
 	void SetState(bool NowState);
+
+	int32 GetActorID() { return ActorID; }
 };

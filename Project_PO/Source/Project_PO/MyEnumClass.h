@@ -40,6 +40,7 @@ enum class E_ManagerType : uint8
 	E_QuestObjectiveDatabaseManager UMETA(DisplayName = "QuestObjectiveDatabaseManager"),
 	E_QuestRewardDatabaseManager UMETA(DisplayName = "QuestRewardDatabaseManager"),
 	E_SkillDatabaseManager UMETA(DisplayName = "SkillDatabaseManager"),
+	E_SequenceDatabaseManager UMETA(DisplayName = "SequenceDatabaseManager"),
 };
 
 UENUM(BlueprintType)

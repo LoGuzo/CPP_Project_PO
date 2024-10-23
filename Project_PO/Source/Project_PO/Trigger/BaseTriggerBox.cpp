@@ -2,6 +2,7 @@
 
 
 #include "BaseTriggerBox.h"
+#include "LevelSequencePlayer.h"
 #include "../Controller/Player/BasePlayerController.h"
 #include "../GameMode/MyBaseGameMode.h"
 
@@ -9,14 +10,29 @@ ABaseTriggerBox::ABaseTriggerBox()
 	: ActiveCnt(0)
 	, TimerTime(0.f)
 	, CurActiveCnt(0)
+	, bIsFailed(false)
 {
 
 }
 
 void ABaseTriggerBox::SetUpTrigger()
 {
+	bIsFailed = false;
+
 	SpawnMonster();
-	SetUpTimer();
+	SetUpTimer(TimerTime);
+}
+
+void ABaseTriggerBox::QuestClear()
+{
+	if(!bIsFailed)
+		TearDownTrigger();
+}
+
+void ABaseTriggerBox::QuestFailed()
+{
+	bIsFailed = true;
+	TearDownTrigger();
 }
 
 void ABaseTriggerBox::TearDownTrigger()
@@ -24,21 +40,21 @@ void ABaseTriggerBox::TearDownTrigger()
 	GetWorld()->GetTimerManager().ClearTimer(RemainTimer);
 	AddRemoveWidget(TEXT("BossHp"));
 
-	Teleport();
 	DeSpawnMonster();
+
+	GetWorld()->GetTimerManager().SetTimer(RemainTimer, this, &ABaseTriggerBox::SetLevelSequence, 10.f, false);
+	SetUpTimer(10.f);
 }
 
-void ABaseTriggerBox::SetUpTimer()
+void ABaseTriggerBox::SetUpTimer(float const& Time)
 {
-	GetWorld()->GetTimerManager().SetTimer(RemainTimer, this, &ABaseTriggerBox::TearDownTrigger, TimerTime, false);
-
 	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
 		TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
 		for (ABasePlayerController* PlayerController : PlayerControllers)
 		{
-			PlayerController->SetUpTimerWidget(TimerTime);
+			PlayerController->SetUpTimerWidget(Time);
 		}
 	}
 }
@@ -50,6 +66,26 @@ void ABaseTriggerBox::AddRemoveWidget(FString const& WidgetName)
 		GameMode->AddRemoveControllerWidget(WidgetName);
 }
 
+void ABaseTriggerBox::SetLevelSequence()
+{
+	if (HasAuthority())
+	{
+		AddRemoveWidget(TEXT("Timer"));
+
+		CurActiveCnt = 0.f;
+
+		OnActorBeginOverlap.AddDynamic(this, &ABaseTriggerBox::OnOverlapBegin);
+
+		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		if (GameMode)
+		{
+			GameMode->PlaySequence(8001);
+			FTimerHandle Timer;
+			GetWorld()->GetTimerManager().SetTimer(Timer, this, &ABaseTriggerBox::Teleport, 2.f, false);
+		}
+	}
+}
+
 void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
 	if (HasAuthority())
@@ -57,7 +93,7 @@ void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor
 		if (!OtherActor)
 			return;
 
-		if(OtherActor->ActorHasTag("Player"))
+		if (OtherActor->ActorHasTag("Player"))
 			CurActiveCnt++;
 
 		if (CurActiveCnt == ActiveCnt)

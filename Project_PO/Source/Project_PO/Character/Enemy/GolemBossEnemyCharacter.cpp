@@ -8,7 +8,7 @@
 
 AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 {
-	SetActorRelativeScale3D(FVector(3.f, 3.f, 3.f));
+	SetActorScale3D(FVector(3.f, 3.f, 3.f));
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -96.f), FRotator(0.f, -90.f, 0.f));
 	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
@@ -101,4 +101,15 @@ void AGolemBossEnemyCharacter::Attack(AActor* _Target)
 
 	PlaySkill(TEXT("Golem Attack"), 1.f);
 	bIsAttack = true;
+}
+
+void AGolemBossEnemyCharacter::SetState(bool NowState)
+{
+	if (NowState)
+		SetActorScale3D(FVector(3.f, 3.f, 3.f));
+
+	Super::SetState(NowState);
+
+	if (NowState)
+		PlaySkill(TEXT("Golem Rise"));
 }

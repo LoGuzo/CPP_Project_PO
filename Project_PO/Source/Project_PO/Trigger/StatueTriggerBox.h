@@ -18,11 +18,17 @@ public:
 	AStatueTriggerBox();
 
 protected:
-	virtual void SetUpTrigger() override;
-	virtual void SpawnMonster() override;
-	virtual void DeSpawnMonster() override;
 	UPROPERTY(EditAnywhere, Category = "Target", meta = (AllowPrivateAccess = true))
 	AActor* Target;
 
+protected:
+	virtual void SetUpTrigger() override;
+	virtual void SpawnMonster() override;
+	virtual void DeSpawnMonster() override;
+	virtual void QuestClear() override;
+
+protected:
 	void SetUpStatue();
+
+	void ClearBroadCast();
 };

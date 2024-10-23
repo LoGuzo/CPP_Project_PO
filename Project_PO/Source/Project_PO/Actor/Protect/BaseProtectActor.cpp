@@ -30,6 +30,8 @@ ABaseProtectActor::ABaseProtectActor()
 void ABaseProtectActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SetState(false);
 }
 
 float ABaseProtectActor::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -49,6 +51,7 @@ float ABaseProtectActor::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 		{
 			bIsDied = true;
 			SetState(false);
+			OnDestruct.Broadcast();
 		}
 		else
 		{

@@ -28,6 +28,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Target", meta = (AllowPrivateAccess = true))
 	AActor* Target;
 
+	UPROPERTY(EditAnywhere, Category = "Owner", meta = (AllowPrivateAccess = true))
+	class ABaseTriggerBox* OwnerTrigger;
+
 protected:
 	TArray<class AEnemyCharacter*> SpawnEnemies;
 
@@ -36,4 +39,5 @@ public:
 	void DeSpawnMonster();
 
 	void SetTarget(AActor* _Target) { Target = _Target; }
+	void SetOwnerTrigger(class ABaseTriggerBox* _OwnerTrigger) { OwnerTrigger = _OwnerTrigger; }
 };

@@ -7,9 +7,9 @@
 #include "../../MyStructureAll.h"
 #include "EnemyCharacter.generated.h"
 
-/**
- * 
- */
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDied, int32);
+
 UCLASS()
 class PROJECT_PO_API AEnemyCharacter : public ABaseCharacter
 {
@@ -22,6 +22,9 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+public:
+	FOnDied OnDied;
 
 protected:
 	E_MonsterType MonsterType;
@@ -44,17 +47,6 @@ protected:
 	UPROPERTY()
 	class AAIController* AIController;
 
-private:
-	void SetUpDamageWidget(class AController* PlayerController, E_DamageType const & Type, FVector const& Location, int32 const& Damage);
-
-protected:
-	void SetUpCharacter();
-	virtual void SetCharacterMesh() {};
-	virtual void SetUpHeadCollision();
-	virtual void SetUpBodyCollision();
-	virtual void SetUpArmCollision() {};
-	virtual void SetUpLegCollision() {};
-
 public:
 	virtual void MeleeAttackCheck(float const& Range, float const& Coefficient) override;
 	virtual void ScopeAttackCheck(float const& Range, float const& Coefficient) override;
@@ -66,6 +58,15 @@ public:
 	virtual void Died() override;
 	virtual void DiedNotify() override;
 	virtual void SetState(bool NowState) override;
+
+protected:
+	void SetUpCharacter();
+	virtual void SetCharacterMesh() {};
+	virtual void SetUpHeadCollision();
+	virtual void SetUpBodyCollision();
+	virtual void SetUpArmCollision() {};
+	virtual void SetUpLegCollision() {};
+
 public:
 	E_MonsterType GetMonsterType() { return MonsterType; }
 
@@ -79,4 +80,9 @@ public:
 	bool CanUseSkill(AActor* _Target, int32& SkillID);
 
 	float GetComponentWidth(AActor* _Target);
+
+private:
+	void SetUpDamageWidget(class AController* PlayerController, E_DamageType const& Type, FVector const& Location, int32 const& Damage);
+
+	void UnPossesAIController();
 };

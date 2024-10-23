@@ -97,6 +97,12 @@ void AEnemyCharacter::SetUpDamageWidget(AController* PlayerController, E_DamageT
 	}
 }
 
+void AEnemyCharacter::UnPossesAIController()
+{
+	if (AIController)
+		AIController->UnPossess();
+}
+
 void AEnemyCharacter::SetUpCharacter()
 {
 	SetCharacterMesh();
@@ -284,14 +290,19 @@ float AEnemyCharacter::GetComponentWidth(AActor* _Target)
 void AEnemyCharacter::Died()
 {
 	Super::Died();
+	
+	OnDied.Broadcast(ID);
 
-	if(AIController)
-		AIController->UnPossess();
+	UnPossesAIController();
 }
 
 void AEnemyCharacter::DiedNotify()
 {
 	Super::DiedNotify();
+
+	bIsDied = true;
+
+	UnPossesAIController();
 
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)

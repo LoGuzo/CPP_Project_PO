@@ -16,10 +16,10 @@ void UBaseUserWidget::InitializeWidget()
 
 void UBaseUserWidget::SetShowHidden()
 {
-	if (GetVisibility() == ESlateVisibility::Visible)
-		SetVisibility(ESlateVisibility::Hidden);
-	else
+	if (GetVisibility() == ESlateVisibility::Hidden)
 		SetVisibility(ESlateVisibility::Visible);
+	else
+		SetVisibility(ESlateVisibility::Hidden);
 }
 
 void UBaseUserWidget::SetAddRemove()

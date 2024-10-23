@@ -7,9 +7,8 @@
 #include "../Interface/Teleportable.h"
 #include "BaseTriggerBox.generated.h"
 
-/**
- * 
- */
+
+
 UCLASS()
 class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox, public ITeleportable
 {
@@ -19,8 +18,11 @@ public:
 	ABaseTriggerBox();
 	
 protected:
-	virtual void Teleport() override;
 	virtual void BeginPlay() override;
+
+protected:
+	UFUNCTION()
+	virtual void Teleport() override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Gameplay", meta = (AllowPrivateAccess = true))
@@ -39,6 +41,12 @@ protected:
 
 	FTimerHandle RemainTimer;
 
+	bool bIsFailed;
+
+public:
+	virtual void QuestClear();
+	virtual void QuestFailed();
+
 protected:
 	UFUNCTION()
 	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
@@ -46,8 +54,14 @@ protected:
 	virtual void SetUpTrigger();
 	virtual void SpawnMonster() {};
 	virtual void DeSpawnMonster() {};
+
 	virtual void TearDownTrigger();
-	void SetUpTimer();
+
+protected:
+	void SetUpTimer(float const& Time);
 
 	void AddRemoveWidget(FString const& WidgetName);
+
+private:
+	void SetLevelSequence();
 };

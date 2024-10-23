@@ -71,6 +71,12 @@ void ABossEnemyCharacter::SetUpLegCollision()
 	LeftLegCollision->CanCharacterStepUpOn = ECanBeCharacterBase::ECB_Owner;
 }
 
+void ABossEnemyCharacter::Died()
+{
+	Super::Died();
+	OnBossDied.Broadcast();
+}
+
 void ABossEnemyCharacter::SetState(bool NowState)
 {
 	Super::SetState(NowState);

@@ -19,6 +19,9 @@ public:
 
 public:
 	virtual void Interact(class AActor* PlayerCharacter) override;
+
+private:
+	UFUNCTION()
 	virtual void Teleport() override;
 
 private:
@@ -28,10 +31,11 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Teleport, meta = (AllowPrivateAccess = "true"))
 	FVector TeleportLocation;
 
+public:
+	class UStaticMeshComponent* GetMesh() { return Mesh; }
+
 private:
 	void SetBoxComponent();
 	void SetActorMesh();
-
-public:
-	class UStaticMeshComponent* GetMesh() { return Mesh; }
+	void SetLevelSequence();
 };

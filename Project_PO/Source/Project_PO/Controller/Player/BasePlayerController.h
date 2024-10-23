@@ -29,8 +29,13 @@ private:
 	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
 	TSubclassOf<class UTimerWidget> TimerWidget;
 
+	UPROPERTY()
+	class ULevelSequencePlayer* Sequence;
+
 private:
 	void SetUpWidget();
+	UFUNCTION()
+	void SequenceFinished();
 
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
@@ -38,4 +43,6 @@ public:
 
 	void AddRemoveWidget(FString const& WidgetName);
 	void ShowHideWidget(FString const& WidgetName);
+
+	void PlaySequence(class ULevelSequencePlayer* SequencePlayer);
 };

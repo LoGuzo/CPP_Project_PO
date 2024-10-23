@@ -19,8 +19,8 @@ AEnemyCharacter* UObjectPoolManager::GetMonster(UWorld* World, E_MonsterType con
 		if (AvailableMonsters[i] && AvailableMonsters[i]->GetMonsterType() == Type)
 		{
 			AEnemyCharacter* Monster = AvailableMonsters[i];
-			Monster->SetState(true);
 			Monster->SetActorTransform(Transform);
+			Monster->SetState(true);
 			AvailableMonsters.Remove(Monster);
 			InUseMonsters.Add(Monster);
 			return Monster;
