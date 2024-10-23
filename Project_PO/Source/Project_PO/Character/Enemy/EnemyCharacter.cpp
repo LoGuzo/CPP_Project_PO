@@ -13,6 +13,7 @@
 #include "../../Controller/Player/BasePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
+#include "../../Manager/QuestManager.h"
 
 AEnemyCharacter::AEnemyCharacter()
 	: bIsReady(false)
@@ -291,7 +292,7 @@ void AEnemyCharacter::Died()
 {
 	Super::Died();
 	
-	OnDied.Broadcast(ID);
+	QuestCheck();
 
 	UnPossesAIController();
 }
@@ -319,4 +320,16 @@ void AEnemyCharacter::SetState(bool NowState)
 
 	if (NowState && AIController)
 		AIController->Possess(this);
+}
+
+
+void AEnemyCharacter::QuestCheck()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UQuestManager* QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
+		if (QuestManager)
+			QuestManager->CheckingObjective(ID, 1);
+	}
 }

@@ -12,10 +12,13 @@ AInstallPlaceInteractActor::AInstallPlaceInteractActor()
 
 void AInstallPlaceInteractActor::Interact(AActor* PlayerCharacter)
 {
-	APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
-	if (playerCharacter)
+	if (bIsInstall)
 	{
-		playerCharacter->GetInteractionComponent()->InstallObject(GetActorLocation(), GetActorRotation());
-		bIsInstall = false;
+		APlayerCharacter* playerCharacter = Cast<APlayerCharacter>(PlayerCharacter);
+		if (playerCharacter)
+		{
+			playerCharacter->GetInteractionComponent()->InstallObject(GetActorLocation(), GetActorRotation());
+			bIsInstall = false;
+		}
 	}
 }

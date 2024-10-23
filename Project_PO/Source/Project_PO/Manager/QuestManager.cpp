@@ -136,6 +136,9 @@ void UQuestManager::GrantRewards(int32 const& QuestID, class APlayerCharacter* P
 		{
 			if (QuestData.Pin()->QuestState == E_QuestState::E_Completed)
 			{
+				if (QuestData.Pin()->RewardID == -1)
+					return;
+
 				TWeakPtr<FQuestReward> RewardData = GameInstance->GetDatabaseMap<FQuestReward>(E_ManagerType::E_QuestRewardDatabaseManager, QuestData.Pin()->RewardID);
 				if (RewardData.IsValid())
 				{

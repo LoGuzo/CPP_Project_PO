@@ -183,6 +183,7 @@ void UInventoryComponent::CheckSlotAmount(int32 Index, E_ItemType Type)
 {
 	TArray<FSlot>& ArrayRef = SlotMap[Type];
 	ArrayRef[Index].Amount -= 1;
+	UE_LOG(LogTemp, Warning, TEXT("%d"), ArrayRef[Index].Amount);
 	if (ArrayRef[Index].Amount == 0)
 		DropItem(Index, Type);
 }
@@ -293,9 +294,9 @@ void UInventoryComponent::UseEtcItem(int32 Index, FSpawnItemType Type)
 	{
 	case E_EquipType::E_Installable:
 		UseInstallEtcItem(Index, Type.ItemType);
-	case E_EquipType::E_None:
-		CheckSlotAmount(Index, Type.ItemType);
+		break;
 	default:
+		CheckSlotAmount(Index, Type.ItemType);
 		break;
 	}
 }
@@ -331,7 +332,7 @@ void UInventoryComponent::CheckUseItemAmount(int32 ItemID, E_ItemType Type)
 {
 	FResult Result;
 
-	Result = FindSlot(ItemID, Type);
+	Result = FindItem(ItemID, Type);
 	if (Result.IsFindItem)
 		CheckSlotAmount(Result.Index, Type);
 }

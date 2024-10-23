@@ -19,6 +19,8 @@ void UAccessAlertWidget::NativeConstruct()
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
+		SetIsFocusable(true);
+
 		FInputModeUIOnly InputMode;
 		InputMode.SetWidgetToFocus(TakeWidget());
 		PlayerController->SetInputMode(InputMode);
@@ -36,6 +38,8 @@ void UAccessAlertWidget::NativeDestruct()
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
+		SetIsFocusable(false);
+
 		PlayerController->SetInputMode(FInputModeGameOnly());
 		PlayerController->bShowMouseCursor = false;
 

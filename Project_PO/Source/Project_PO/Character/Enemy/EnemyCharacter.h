@@ -7,9 +7,6 @@
 #include "../../MyStructureAll.h"
 #include "EnemyCharacter.generated.h"
 
-
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnDied, int32);
-
 UCLASS()
 class PROJECT_PO_API AEnemyCharacter : public ABaseCharacter
 {
@@ -22,9 +19,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
-
-public:
-	FOnDied OnDied;
 
 protected:
 	E_MonsterType MonsterType;
@@ -83,6 +77,8 @@ public:
 
 private:
 	void SetUpDamageWidget(class AController* PlayerController, E_DamageType const& Type, FVector const& Location, int32 const& Damage);
+	
+	void QuestCheck();
 
 	void UnPossesAIController();
 };

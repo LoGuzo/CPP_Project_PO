@@ -13,10 +13,10 @@ UCLASS()
 class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox, public ITeleportable
 {
 	GENERATED_BODY()
-	
+
 public:
 	ABaseTriggerBox();
-	
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -33,15 +33,13 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Spawn", meta = (AllowPrivateAccess = true))
 	float TimerTime;
-	
+
 	UPROPERTY(EditAnywhere, Category = "Teleport", meta = (AllowPrivateAccess = true))
 	FVector TeleportLocation;
 
 	int32 CurActiveCnt;
 
 	FTimerHandle RemainTimer;
-
-	bool bIsFailed;
 
 public:
 	virtual void QuestClear();

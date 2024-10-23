@@ -5,33 +5,30 @@
 #include "LevelSequencePlayer.h"
 #include "../Controller/Player/BasePlayerController.h"
 #include "../GameMode/MyBaseGameMode.h"
+#include "../Manager/BaseGameInstance.h"
+#include "../Manager/QuestManager.h"
 
 ABaseTriggerBox::ABaseTriggerBox()
 	: ActiveCnt(0)
 	, TimerTime(0.f)
 	, CurActiveCnt(0)
-	, bIsFailed(false)
 {
 
 }
 
 void ABaseTriggerBox::SetUpTrigger()
 {
-	bIsFailed = false;
-
 	SpawnMonster();
 	SetUpTimer(TimerTime);
 }
 
 void ABaseTriggerBox::QuestClear()
 {
-	if(!bIsFailed)
-		TearDownTrigger();
+	TearDownTrigger();
 }
 
 void ABaseTriggerBox::QuestFailed()
 {
-	bIsFailed = true;
 	TearDownTrigger();
 }
 

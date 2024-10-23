@@ -13,8 +13,8 @@ void ABossTriggerBox::SpawnMonster()
 {
 	for (ABaseSpawnerActor* Spawner : Spawners)
 	{
-		Spawner->SpawnMonster();
 		Spawner->SetOwnerTrigger(this);
+		Spawner->SpawnMonster();
 	}
 }
 
