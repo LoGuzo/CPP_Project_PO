@@ -104,13 +104,18 @@ void ABaseCharacter::DiedNotify()
 	SetState(false);
 }
 
+void ABaseCharacter::SetActorState(bool const& NowState)
+{
+	SetActorHiddenInGame(!NowState);
+	SetActorEnableCollision(NowState);
+	SetActorTickEnabled(NowState);
+}
+
 void ABaseCharacter::SetState(bool NowState)
 {
 	bIsDied = !NowState;
 
-	SetActorHiddenInGame(!NowState);
-	SetActorEnableCollision(NowState);
-	SetActorTickEnabled(NowState);
+	SetActorState(NowState);
 
 	if (NowState)
 	{
@@ -125,7 +130,6 @@ void ABaseCharacter::SetState(bool NowState)
 		GetCharacterMovement()->GravityScale = 0.f;
 		GetCharacterMovement()->DisableMovement();
 	}
-
 }
 
 

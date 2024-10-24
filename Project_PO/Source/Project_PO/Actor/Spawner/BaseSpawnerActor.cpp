@@ -7,7 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "../../Character/Enemy/EnemyCharacter.h"
 #include "../../Character/Enemy/BossEnemyCharacter.h"
-#include "../../Trigger/BaseTriggerBox.h"
+#include "../../Trigger/BaseSpawnTriggerBox.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
 
@@ -56,7 +56,7 @@ void ABaseSpawnerActor::SpawnMonster()
 
                     ABossEnemyCharacter* Boss = Cast<ABossEnemyCharacter>(Enemy);
                     if (Boss)
-                        Boss->OnBossDied.AddUObject(OwnerTrigger, &ABaseTriggerBox::QuestClear);
+                        Boss->OnBossDied.AddUObject(OwnerTrigger, &ABaseSpawnTriggerBox::QuestClear);
 
                     SpawnEnemies.Emplace(Enemy);
                 }

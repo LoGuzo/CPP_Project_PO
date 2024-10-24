@@ -46,6 +46,7 @@ public:
 
 	void AddRemoveControllerWidget(FString const& WidgetName);
 	void ShowHideControllerWidget(FString const& WidgetName);
+	void SetUpTimerWidget(float const& Time);
 
 	class ULevelSequencePlayer* PlaySequence(int32 const& SequenceID);
 };

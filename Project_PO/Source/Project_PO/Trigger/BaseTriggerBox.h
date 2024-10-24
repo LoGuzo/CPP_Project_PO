@@ -4,13 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
-#include "../Interface/Teleportable.h"
 #include "BaseTriggerBox.generated.h"
 
 
-
 UCLASS()
-class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox, public ITeleportable
+class PROJECT_PO_API ABaseTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
 
@@ -21,45 +19,23 @@ protected:
 	virtual void BeginPlay() override;
 
 protected:
-	UFUNCTION()
-	virtual void Teleport() override;
-
-protected:
 	UPROPERTY(EditAnywhere, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	int32 ActiveCnt;
-
-	UPROPERTY(EditAnywhere, Category = "Spawn", meta = (AllowPrivateAccess = true))
-	TArray<class ABaseSpawnerActor*> Spawners;
-
-	UPROPERTY(EditAnywhere, Category = "Spawn", meta = (AllowPrivateAccess = true))
-	float TimerTime;
-
-	UPROPERTY(EditAnywhere, Category = "Teleport", meta = (AllowPrivateAccess = true))
-	FVector TeleportLocation;
-
 	int32 CurActiveCnt;
 
-	FTimerHandle RemainTimer;
-
-public:
-	virtual void QuestClear();
-	virtual void QuestFailed();
+	UPROPERTY(EditAnywhere, Category = "Gameplay", meta = (AllowPrivateAccess = true))
+	int32 SequenceID;
 
 protected:
 	UFUNCTION()
 	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
 
-	virtual void SetUpTrigger();
-	virtual void SpawnMonster() {};
-	virtual void DeSpawnMonster() {};
+	UFUNCTION()
+	virtual void SetUpTrigger() {};
+	virtual void TearDownTrigger() {};
 
-	virtual void TearDownTrigger();
+	virtual void SetLevelSequence() {};
 
 protected:
-	void SetUpTimer(float const& Time);
-
-	void AddRemoveWidget(FString const& WidgetName);
-
-private:
-	void SetLevelSequence();
+	class ULevelSequencePlayer* GetPlaySequence(int32 const& _SequenceID);
 };

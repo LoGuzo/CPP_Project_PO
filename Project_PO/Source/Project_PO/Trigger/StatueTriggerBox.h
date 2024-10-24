@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseTriggerBox.h"
+#include "BaseSpawnTriggerBox.h"
 #include "StatueTriggerBox.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT_PO_API AStatueTriggerBox : public ABaseTriggerBox
+class PROJECT_PO_API AStatueTriggerBox : public ABaseSpawnTriggerBox
 {
 	GENERATED_BODY()
 
@@ -26,6 +26,7 @@ protected:
 	virtual void SpawnMonster() override;
 	virtual void DeSpawnMonster() override;
 	virtual void QuestClear() override;
+	virtual void SetLevelSequence() override;
 
 protected:
 	void SetUpStatue();

@@ -135,6 +135,15 @@ void AMyBaseGameMode::ShowHideControllerWidget(FString const& WidgetName)
 		}, 2.f, false);
 }
 
+void AMyBaseGameMode::SetUpTimerWidget(float const& Time)
+{
+	for (ABasePlayerController* PlayerController : PlayerControllers)
+	{
+		if (PlayerController)
+			PlayerController->SetUpTimerWidget(Time);
+	}
+}
+
 ULevelSequencePlayer* AMyBaseGameMode::PlaySequence(int32 const& SequenceID)
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());

@@ -69,6 +69,11 @@ void AStatueTriggerBox::QuestClear()
 	ClearBroadCast();
 }
 
+void AStatueTriggerBox::SetLevelSequence()
+{
+	SetUpTrigger();
+}
+
 void AStatueTriggerBox::ClearBroadCast()
 {
 	AStatueProtectActor* Statue = Cast<AStatueProtectActor>(Target);

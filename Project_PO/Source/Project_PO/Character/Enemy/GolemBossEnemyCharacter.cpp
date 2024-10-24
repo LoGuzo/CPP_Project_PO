@@ -15,6 +15,8 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 	MonsterType = E_MonsterType::E_Golem;
 	ID = 102;
 
+	bIsReady = true;
+
 	SetUpCharacter();
 
 	AIControllerClass = ABaseBossAIController::StaticClass();
@@ -23,8 +25,6 @@ AGolemBossEnemyCharacter::AGolemBossEnemyCharacter()
 void AGolemBossEnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-
-	PlaySkill(TEXT("Golem Rise"));
 }
 
 void AGolemBossEnemyCharacter::SetCharacterMesh()
@@ -109,7 +109,4 @@ void AGolemBossEnemyCharacter::SetState(bool NowState)
 		SetActorScale3D(FVector(3.f, 3.f, 3.f));
 
 	Super::SetState(NowState);
-
-	if (NowState)
-		PlaySkill(TEXT("Golem Rise"));
 }

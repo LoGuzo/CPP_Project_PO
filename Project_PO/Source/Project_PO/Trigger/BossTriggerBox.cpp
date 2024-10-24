@@ -2,6 +2,7 @@
 
 
 #include "BossTriggerBox.h"
+#include "LevelSequencePlayer.h"
 #include "../Actor/Spawner/BossSpawnerActor.h"
 
 ABossTriggerBox::ABossTriggerBox()
@@ -36,7 +37,12 @@ void ABossTriggerBox::SetUpTrigger()
 	GetWorld()->GetTimerManager().SetTimer(RemainTimer, this, &ABossTriggerBox::QuestFailed, TimerTime, false);
 }
 
-void ABossTriggerBox::QuestClear()
+void ABossTriggerBox::SetLevelSequence()
 {
-	Super::QuestClear();
+	ULevelSequencePlayer* SequencePlayer = GetPlaySequence(SequenceID);
+	if(SequencePlayer)
+	{
+		SequencePlayer->OnFinished.Clear();
+		SequencePlayer->OnFinished.AddDynamic(this, &ABossTriggerBox::SetUpTrigger);
+	}
 }
