@@ -10,10 +10,8 @@
 #include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/Etc/TimerWidget.h"
-#include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
-#include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
+#include "../../Widget/Etc/WeaponSelectWidget.h"
 #include "../../Widget/PopUp/DamagePopUpWidget.h"
-#include "../../Widget/PopUp/AccessAlertWidget.h"
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABasePlayerController::ABasePlayerController()
@@ -21,26 +19,14 @@ ABasePlayerController::ABasePlayerController()
 	static ConstructorHelpers::FClassFinder<UUserWidget>MainHUD(TEXT("/Game/ThirdPerson/Blueprints/Widget/HUD/WBP_HUDWidget.WBP_HUDWidget_C"));
 	if (MainHUD.Succeeded())
 		HUDWidget = MainHUD.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget>Inventory(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/Inventory/WBP_MainInventory.WBP_MainInventory_C"));
-	if (Inventory.Succeeded())
-		InventoryWidget = Inventory.Class;
-
+	
 	static ConstructorHelpers::FClassFinder<UUserWidget>DamageWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_DamagePopUp.WBP_DamagePopUp_C"));
 	if (DamageWidget.Succeeded())
 		DamagePopUpWidget = DamageWidget.Class;
 
-	static ConstructorHelpers::FClassFinder<UUserWidget>AlertWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/Alert/WBP_AccessAlertWidget.WBP_AccessAlertWidget_C"));
-	if (AlertWidget.Succeeded())
-		AccessAlertWidget = AlertWidget.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget>BossHpWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/CharInfo/WBP_BossHpMain.WBP_BossHpMain_C"));
-	if (BossHpWidget.Succeeded())
-		BossHpMainWidget = BossHpWidget.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget>Timer(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_Timer.WBP_Timer_C"));
-	if (Timer.Succeeded())
-		TimerWidget = Timer.Class;
+	static ConstructorHelpers::FClassFinder<UUserWidget>WeaponSelect(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_WeaponSelect.WBP_WeaponSelect_C"));
+	if (WeaponSelect.Succeeded())
+		WeaponSelectWidget = WeaponSelect.Class;
 }
 
 void ABasePlayerController::BeginPlay()
@@ -65,18 +51,6 @@ void ABasePlayerController::SetUpWidget()
 					if (HUD)
 						HUD->SetAddRemove();
 				}
-
-				if (InventoryWidget)
-					WidgetManager->CreateAndAddWidget<APlayerController, UMainInventoryWidget>(this, TEXT("Inven"), InventoryWidget);
-
-				if (AccessAlertWidget)
-					WidgetManager->CreateAndAddWidget<APlayerController, UAccessAlertWidget>(this, TEXT("Alert"), AccessAlertWidget);
-
-				if (BossHpMainWidget)
-					WidgetManager->CreateAndAddWidget<APlayerController, UBossHpMainWidget>(this, TEXT("BossHp"), BossHpMainWidget);
-
-				if (TimerWidget)
-					WidgetManager->CreateAndAddWidget<APlayerController, UTimerWidget>(this, TEXT("Timer"), TimerWidget);
 			}
 		}
 	}
@@ -181,4 +155,14 @@ void ABasePlayerController::PlaySequence(ULevelSequencePlayer* SequencePlayer)
 		Sequence->OnFinished.AddDynamic(this, &ABasePlayerController::SequenceFinished);
 		Sequence->Play();
 	}
+}
+
+void ABasePlayerController::SetUpWeaponSelectWidget()
+{
+	FTimerHandle WeaponTimer;
+	GetWorld()->GetTimerManager().SetTimer(WeaponTimer, [this] {
+		UWeaponSelectWidget* SelectWeapon = CreateWidget<UWeaponSelectWidget>(this, WeaponSelectWidget);
+		if (SelectWeapon && !SelectWeapon->IsInViewport())
+			SelectWeapon->AddToViewport();
+		}, 2.f, false);
 }

@@ -16,4 +16,7 @@ class PROJECT_PO_API AFirstStageGameMode : public AMyBaseGameMode
 	
 public:
 	AFirstStageGameMode();
+
+protected:
+	virtual void PostLogin(APlayerController* NewPlayer) override;
 };

@@ -18,6 +18,15 @@ class PROJECT_PO_API UMyHUDWidget : public UBaseHUDWidget
 public:
 	UMyHUDWidget(const FObjectInitializer& ObjectInitializer);
 
+public:
+	virtual void NativeConstruct() override;
+
+private:
+	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
+	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
+	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
+	TSubclassOf<class UTimerWidget> TimerWidget;
+
 private:
 	UPROPERTY(meta = (BindWidget))
 	class UCharInfoWidget* WBP_CharInfo;
@@ -35,6 +44,7 @@ private:
 	class UQuestMainWidget* WBP_QuestMain;
 
 public:
+	void SetUpWidget();
 	void SetUpCharInfo(class UStatComponent* StatComponent);
 	void SetUpCunsumQuickSlot(class UPotionQuickSlotComponent* PotionQuickSlotComponent);
 	void SetUpWeaponSlot(int32 const& ID);

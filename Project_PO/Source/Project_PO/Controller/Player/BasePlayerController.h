@@ -23,11 +23,8 @@ protected:
 
 private:
 	TSubclassOf<class UMyHUDWidget> HUDWidget;
-	TSubclassOf<class UMainInventoryWidget> InventoryWidget;
 	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
-	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
-	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
-	TSubclassOf<class UTimerWidget> TimerWidget;
+	TSubclassOf<class UWeaponSelectWidget> WeaponSelectWidget;
 
 	UPROPERTY()
 	class ULevelSequencePlayer* Sequence;
@@ -45,4 +42,6 @@ public:
 	void ShowHideWidget(FString const& WidgetName);
 
 	void PlaySequence(class ULevelSequencePlayer* SequencePlayer);
+
+	void SetUpWeaponSelectWidget();
 };
