@@ -44,4 +44,7 @@ private:
 
 	UFUNCTION()
 	void SelectWeapon();
+
+	void UpdateSelectButtonState();
+
 };

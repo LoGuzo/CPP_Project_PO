@@ -32,6 +32,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Teleport", meta = (AllowPrivateAccess = true))
 	FVector TeleportLocation;
 
+	UPROPERTY(EditAnywhere, Category = "Audio", meta = (AllowPrivateAccess = true))
+	FString SoundName;
+
 	FTimerHandle RemainTimer;
 
 public:

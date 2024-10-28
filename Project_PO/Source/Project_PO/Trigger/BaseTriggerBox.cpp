@@ -19,7 +19,7 @@ ULevelSequencePlayer* ABaseTriggerBox::GetPlaySequence(int32 const& _SequenceID)
 {
 	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
-		return GameMode->PlaySequence(SequenceID);
+		return GameMode->PlaySequence(_SequenceID);
 
 	return nullptr;
 }

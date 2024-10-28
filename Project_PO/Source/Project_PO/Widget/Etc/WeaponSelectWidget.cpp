@@ -13,6 +13,8 @@ void UWeaponSelectWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	WeaponID = 0;
+
 	APlayerController* PlayerController = GetOwningPlayer();
 	if (PlayerController)
 	{
@@ -38,6 +40,8 @@ void UWeaponSelectWidget::NativeConstruct()
 
 	if (Btn_Select)
 		Btn_Select->OnClicked.AddDynamic(this, &UWeaponSelectWidget::SelectWeapon);
+
+	UpdateSelectButtonState();
 }
 
 void UWeaponSelectWidget::NativeDestruct()
@@ -60,16 +64,22 @@ void UWeaponSelectWidget::NativeDestruct()
 void UWeaponSelectWidget::PistolBtn()
 {
 	WeaponID = 1000;
+
+	UpdateSelectButtonState();
 }
 
 void UWeaponSelectWidget::RifleBtn()
 {
 	WeaponID = 1001;
+
+	UpdateSelectButtonState();
 }
 
 void UWeaponSelectWidget::ShotgunBtn()
 {
 	WeaponID = 1002;
+
+	UpdateSelectButtonState();
 }
 
 void UWeaponSelectWidget::SelectWeapon()
@@ -81,4 +91,15 @@ void UWeaponSelectWidget::SelectWeapon()
 	PlayerCharacter->SetEquip(WeaponID);
 
 	RemoveFromParent();
+}
+
+void UWeaponSelectWidget::UpdateSelectButtonState()
+{
+	if (Btn_Select)
+	{
+		if (WeaponID != 0)
+			Btn_Select->SetIsEnabled(true);
+		else
+			Btn_Select->SetIsEnabled(false);
+	}
 }

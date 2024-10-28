@@ -9,6 +9,13 @@ AFirstStageGameMode::AFirstStageGameMode()
 	FirstQuestID = 3000;
 }
 
+void AFirstStageGameMode::BeginPlay()
+{
+	Super::BeginPlay();
+
+	PlayBackGound(TEXT("First Stage"));
+}
+
 void AFirstStageGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);

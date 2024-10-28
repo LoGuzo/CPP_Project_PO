@@ -42,7 +42,6 @@ void ABossTriggerBox::SetLevelSequence()
 	ULevelSequencePlayer* SequencePlayer = GetPlaySequence(SequenceID);
 	if(SequencePlayer)
 	{
-		SequencePlayer->OnFinished.Clear();
 		SequencePlayer->OnFinished.AddDynamic(this, &ABossTriggerBox::SetUpTrigger);
 	}
 }

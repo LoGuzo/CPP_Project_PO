@@ -364,6 +364,21 @@ struct FSequenceData : public FTableRowBase
     TSoftObjectPtr<class ULevelSequence> SequenceClass;
 };
 
+USTRUCT(BlueprintType)
+struct FSoundData : public FTableRowBase
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+    int32 ID;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+    FString Name;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Audio")
+    TSoftObjectPtr<class USoundCue> SoundClass;
+};
+
 USTRUCT()
 struct FSlot
 {

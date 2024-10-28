@@ -72,6 +72,8 @@ void AOwlTeleportActor::Teleport()
 		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
+			GameMode->PlayBackGound(SoundName);
+
 			TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
 			for (ABasePlayerController* PlayerController : PlayerControllers)
 			{

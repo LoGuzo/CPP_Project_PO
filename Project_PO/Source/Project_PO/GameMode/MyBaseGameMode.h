@@ -49,6 +49,7 @@ public:
 	void SetUpTimerWidget(float const& Time);
 
 	class ULevelSequencePlayer* PlaySequence(int32 const& SequenceID);
+	void PlayBackGound(FString const& SoundName);
 };
 
 

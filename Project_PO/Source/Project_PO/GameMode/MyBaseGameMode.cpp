@@ -8,6 +8,7 @@
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Controller/Player/BasePlayerController.h"
+#include "../Manager/AudioManager.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/ObjectPoolManager.h"
 #include "../Manager/QuestManager.h"
@@ -71,7 +72,7 @@ void AMyBaseGameMode::StartQuest()
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
 	if (GameInstance)
 	{
-		auto QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
+		UQuestManager* QuestManager = GameInstance->GetManager<UQuestManager>(E_ManagerType::E_QuestManager);
 		if (QuestManager)
 			QuestManager->StartQuest(FirstQuestID);
 	}
@@ -106,6 +107,17 @@ void AMyBaseGameMode::GrantReward(int32 QuestID)
 					QuestManager->GrantRewards(QuestID, PlayerCharacter);
 			}
 		}
+	}
+}
+
+void AMyBaseGameMode::PlayBackGound(FString const& SoundName)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetGameInstance());
+	if (GameInstance)
+	{
+		UAudioManager* AudioManager = GameInstance->GetManager<UAudioManager>(E_ManagerType::E_AudioManager);
+		if (AudioManager)
+			AudioManager->PlayBackgroundMusic(GetWorld(), SoundName);
 	}
 }
 

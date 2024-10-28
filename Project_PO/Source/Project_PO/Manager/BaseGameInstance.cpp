@@ -2,6 +2,7 @@
 
 
 #include "BaseGameInstance.h"
+#include "AudioManager.h"
 #include "SingletonManager.h"
 #include "WidgetManager.h"
 #include "ObjectPoolManager.h"
@@ -18,6 +19,7 @@
 #include "DatabaseManager/QuestObjectiveDatabaseManager.h"
 #include "DatabaseManager/QuestRewardDatabaseManager.h"
 #include "DatabaseManager/SequenceDatabaseManager.h"
+#include "DatabaseManager/SoundDatabaseManager.h"
 
 UBaseGameInstance::UBaseGameInstance()
 {
@@ -25,6 +27,7 @@ UBaseGameInstance::UBaseGameInstance()
 
 void UBaseGameInstance::Init()
 {
+	ManagerMap.Emplace(E_ManagerType::E_AudioManager, NewObject<UAudioManager>(this));
 	ManagerMap.Emplace(E_ManagerType::E_WidgetManager, NewObject<UWidgetManager>(this));
 	ManagerMap.Emplace(E_ManagerType::E_ObjectPoolManager, NewObject<UObjectPoolManager>(this));
 	ManagerMap.Emplace(E_ManagerType::E_QuestManager, NewObject<UQuestManager>(this));
@@ -40,6 +43,7 @@ void UBaseGameInstance::Init()
     AddDataToDatabase(E_ManagerType::E_SkillDatabaseManager, SingletonManager::GetInstance<UBaseSkillDatabaseManager>()->GetDataMap<FBaseSkillData>());
     AddDataToDatabase(E_ManagerType::E_SkillDatabaseManager, SingletonManager::GetInstance<UPlayerSkillDatabaseManager>()->GetDataMap<FSkillData>());
     AddDataToDatabase(E_ManagerType::E_SequenceDatabaseManager, SingletonManager::GetInstance<USequenceDatabaseManager>()->GetDataMap<FSequenceData>());
+    AddDataToDatabase(E_ManagerType::E_SoundDatabaseManager, SingletonManager::GetInstance<USoundDatabaseManager>()->GetDataMap<FSoundData>());
 }
 
 void UBaseGameInstance::Shutdown()

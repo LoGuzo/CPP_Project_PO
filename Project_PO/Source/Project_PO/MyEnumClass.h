@@ -29,6 +29,7 @@ enum class E_WidgetType : uint8
 UENUM(BlueprintType)
 enum class E_ManagerType : uint8
 {
+	E_AudioManager UMETA(DisplayName = "AudioManager"),
 	E_WidgetManager UMETA(DisplayName = "WidgetManager"),
 	E_ObjectPoolManager UMETA(DisplayName = "ObjectMonager"),
 	E_QuestManager UMETA(DisplayName = "QuestManager"),
@@ -41,6 +42,7 @@ enum class E_ManagerType : uint8
 	E_QuestRewardDatabaseManager UMETA(DisplayName = "QuestRewardDatabaseManager"),
 	E_SkillDatabaseManager UMETA(DisplayName = "SkillDatabaseManager"),
 	E_SequenceDatabaseManager UMETA(DisplayName = "SequenceDatabaseManager"),
+	E_SoundDatabaseManager UMETA(DisplayName = "SoundDatabaseManager"),
 };
 
 UENUM(BlueprintType)
