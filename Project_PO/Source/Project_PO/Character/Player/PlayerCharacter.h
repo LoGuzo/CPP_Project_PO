@@ -88,17 +88,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Quickslot1Action;
 
-private:
-	UPROPERTY(VisibleAnywhere)
-	UTimelineComponent* CameraTimeline;
-
-	UPROPERTY(VisibleAnywhere)
-	FOnTimelineFloat InterpFunction;
-
-	UPROPERTY(VisibleAnywhere)
-	class UCurveFloat* CameraCurve;
-
-	E_WeaponType WeaponType;
+public:
+	UPROPERTY(EditAnywhere)
+	FVector JointTargetLocation;
 
 protected:
 	FVector InitailZoomLocation;
@@ -143,6 +135,18 @@ protected:
 
 	UPROPERTY()
 	TMap<E_WeaponType, FString> AttackMontageMap;
+
+private:
+	UPROPERTY(VisibleAnywhere)
+	UTimelineComponent* CameraTimeline;
+
+	UPROPERTY(VisibleAnywhere)
+	FOnTimelineFloat InterpFunction;
+
+	UPROPERTY(VisibleAnywhere)
+	class UCurveFloat* CameraCurve;
+
+	E_WeaponType WeaponType;
 
 protected:
 	/** Called for movement input */
@@ -196,9 +200,11 @@ private:
 	void SetUpAiming();
 
 public:
-	UPROPERTY(EditAnywhere)
-	FVector JointTargetLocation;
+	virtual void ShotAttackCheck() override;
+	virtual void UsePotion() {};
+	virtual void SetActorState(bool const& NowState) override;
 
+public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
@@ -230,11 +236,6 @@ public:
 	class UPotionQuickSlotComponent* GetPotionQuickSlotComponent() { return PotionQuickSlotComponent; }
 
 	//FTransform GetLeftHandSocketTransform();
-
-	virtual void ShotAttackCheck() override;
-
-	virtual void Died() override;
-	virtual void UsePotion() {};
 
 public:
 	void SetEquip(int32 ID);

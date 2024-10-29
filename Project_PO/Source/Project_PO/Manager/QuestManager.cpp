@@ -3,10 +3,12 @@
 
 #include "QuestManager.h"
 #include "BaseGameInstance.h"
+#include "WidgetManager.h"
 #include "Kismet/GameplayStatics.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Component/InventoryComponent.h"
 #include "../Component/StatComponent/PlayerStatComponent.h"
+#include "../Widget/Etc/QuestClearWidget.h"
 
 void UQuestManager::StartQuest(int32 const& QuestID)
 {
@@ -68,9 +70,9 @@ bool UQuestManager::IsCompleteQuest(int32 const& QuestID)
 						else
 							OnQuestUpdated.Broadcast(-1);
 
-						OnQuestClear.Broadcast(QuestID);
+						SetUpQuestClearWidget(QuestData.Pin()->RewardID);
 
-						//NowQuests.Remove(QuestID);
+						OnQuestClear.Broadcast(QuestID);
 					}
 
 					return true;
@@ -128,6 +130,24 @@ void UQuestManager::CompleteObjective(int32 const& ObjectiveID, int32 const& Tar
 					objectiveData->UpdateProgress(Amount);
 
 				OnObjectiveUpdated.Broadcast(ObjectiveID);
+			}
+		}
+	}
+}
+
+void UQuestManager::SetUpQuestClearWidget(int32 const& RewardID)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(UGameplayStatics::GetGameInstance(GetWorld()));
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UQuestClearWidget* QuestClearWidget = WidgetManager->GetWidget<UQuestClearWidget>(TEXT("QuestClear"));
+			if (QuestClearWidget)
+			{
+				QuestClearWidget->SetRewardID(RewardID);
+				QuestClearWidget->SetAddRemove();
 			}
 		}
 	}

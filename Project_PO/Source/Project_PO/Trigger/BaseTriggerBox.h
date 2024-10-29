@@ -26,6 +26,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Gameplay", meta = (AllowPrivateAccess = true))
 	int32 SequenceID;
 
+	UPROPERTY(EditAnywhere, Category = "Audio", meta = (AllowPrivateAccess = true))
+	FString SoundName;
+
 protected:
 	UFUNCTION()
 	virtual void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);

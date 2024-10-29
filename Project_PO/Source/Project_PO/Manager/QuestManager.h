@@ -28,6 +28,7 @@ private:
 	void GrantItem(int32 const& ItemID, int32 const& Amount, class APlayerCharacter* PlayerCharacter);
 	void GrantExp(float const& Exp, class APlayerCharacter* PlayerCharacter);
 	void CompleteObjective(int32 const& ObjectiveID, int32 const& TargetID, int32 const& Amount);
+	void SetUpQuestClearWidget(int32 const& RewardID);
 
 public:
 	void StartQuest(int32 const& QuestID);

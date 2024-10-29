@@ -6,6 +6,7 @@
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/Etc/TimerWidget.h"
+#include "../../Widget/Etc/QuestClearWidget.h"
 #include "../../Widget/PopUp/AccessAlertWidget.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 #include "../../Widget/InGame/CharInfo/CharInfoWidget.h"
@@ -33,6 +34,10 @@ UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 	static ConstructorHelpers::FClassFinder<UUserWidget>Timer(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_Timer.WBP_Timer_C"));
 	if (Timer.Succeeded())
 		TimerWidget = Timer.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>QuestClear(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_QuestClear.WBP_QuestClear_C"));
+	if (QuestClear.Succeeded())
+		QuestClearWidget = QuestClear.Class;
 }
 
 void UMyHUDWidget::NativeConstruct()
@@ -61,6 +66,9 @@ void UMyHUDWidget::SetUpWidget()
 
 			if (TimerWidget)
 				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UTimerWidget>(this, TEXT("Timer"), TimerWidget);
+
+			if (QuestClearWidget)
+				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UQuestClearWidget>(this, TEXT("QuestClear"), QuestClearWidget);
 		}
 	}
 }

@@ -18,10 +18,13 @@ UAudioManager::UAudioManager()
 
 void UAudioManager::PlayBackgroundMusic(UWorld const* World, FString const& MusicCueName, float const& FadeInDuration)
 {
-    if (!World || MusicCueName.IsEmpty()) 
+    if (!World) 
         return;
 
     StopBackgroundMusic(FadeInDuration);
+
+    if (MusicCueName.IsEmpty())
+        return;
 
     USoundCue* SoundCue = FindSoundCue(World, MusicCueName);
     if (SoundCue)

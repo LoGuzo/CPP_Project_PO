@@ -496,9 +496,11 @@ void APlayerCharacter::ShotAttackCheck()
 	AttackCheck();
 }
 
-void APlayerCharacter::Died()
+void APlayerCharacter::SetActorState(bool const& NowState)
 {
+	Super::SetActorState(NowState);
 
+	EquipComponent->GetCurrentWeapon()->SetState(NowState);
 }
 
 void APlayerCharacter::SetEquip(int32 ItemID)

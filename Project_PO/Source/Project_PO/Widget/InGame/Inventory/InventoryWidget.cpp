@@ -29,23 +29,25 @@ void UInventoryWidget::NativeConstruct()
 
 void UInventoryWidget::UpdateSlots(const TArray<FSlot>& Slots)
 {
-	int32 index = 0;
-	Wrap_Item->ClearChildren();
-
-	for (const FSlot& slot : Slots)
+	if (Wrap_Item)
 	{
-		UInventorySlotWidget* SlotsWidget = CreateWidget<UInventorySlotWidget>(this, SlotWidget);
-		if (SlotsWidget)
+		int32 index = 0;
+		Wrap_Item->ClearChildren();
+
+		for (FSlot const& slot : Slots)
 		{
-			SlotsWidget->SetItemID(slot.ItemID);
-			SlotsWidget->SetAmount(slot.Amount);
-			SlotsWidget->SetType(slot.Type);
-			SlotsWidget->SetConIndex(index);
-			SlotsWidget->SetInvetoryComponent(InventoryComponent);
-			//SlotsWidget->OnCloseItemPop.AddUObject(this, &UW_Inventory::ClosePop);
+			UInventorySlotWidget* SlotsWidget = CreateWidget<UInventorySlotWidget>(this, SlotWidget);
+			if (SlotsWidget)
+			{
+				SlotsWidget->SetItemID(slot.ItemID);
+				SlotsWidget->SetAmount(slot.Amount);
+				SlotsWidget->SetType(slot.Type);
+				SlotsWidget->SetConIndex(index);
+				SlotsWidget->SetInvetoryComponent(InventoryComponent);
+			}
+			Wrap_Item->AddChild(SlotsWidget);
+			index++;
 		}
-		Wrap_Item->AddChild(SlotsWidget);
-		index++;
 	}
 }
 

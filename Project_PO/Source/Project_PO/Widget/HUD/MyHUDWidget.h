@@ -26,6 +26,7 @@ private:
 	TSubclassOf<class UAccessAlertWidget> AccessAlertWidget;
 	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
 	TSubclassOf<class UTimerWidget> TimerWidget;
+	TSubclassOf<class UQuestClearWidget> QuestClearWidget;
 
 private:
 	UPROPERTY(meta = (BindWidget))
