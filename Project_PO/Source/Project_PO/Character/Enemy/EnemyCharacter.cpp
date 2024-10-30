@@ -10,7 +10,7 @@
 #include "../../AnimInstance/BaseEnemyAnimInstance.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
 #include "../../Component/SkillComponent/MonsterSkillComponent.h"
-#include "../../Controller/Player/BasePlayerController.h"
+#include "../../Controller/Player/BaseStagePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/QuestManager.h"
@@ -92,7 +92,7 @@ void AEnemyCharacter::SetUpDamageWidget(AController* PlayerController, E_DamageT
 {
 	if (PlayerController)
 	{
-		ABasePlayerController* playerController = Cast<ABasePlayerController>(PlayerController);
+		ABaseStagePlayerController* playerController = Cast<ABaseStagePlayerController>(PlayerController);
 		if (playerController)
 			playerController->SetUpDamageWidget(Type, Location, Damage);
 	}

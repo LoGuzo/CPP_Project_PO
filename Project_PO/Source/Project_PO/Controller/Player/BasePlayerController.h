@@ -22,26 +22,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	TSubclassOf<class UMyHUDWidget> HUDWidget;
-	TSubclassOf<class UDamagePopUpWidget> DamagePopUpWidget;
-	TSubclassOf<class UWeaponSelectWidget> WeaponSelectWidget;
-
-	UPROPERTY()
-	class ULevelSequencePlayer* Sequence;
+	TSubclassOf<class USettingsWidget> SettingsWidget;
 
 private:
-	void SetUpWidget();
-	UFUNCTION()
-	void SequenceFinished();
-
-public:
-	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location,int32 const& Damage);
-	void SetUpTimerWidget(float const& RemainingTime);
-
-	void AddRemoveWidget(FString const& WidgetName);
-	void ShowHideWidget(FString const& WidgetName);
-
-	void PlaySequence(class ULevelSequencePlayer* SequencePlayer);
-
-	void SetUpWeaponSelectWidget();
+	void SetUpSettingsWidget();
 };

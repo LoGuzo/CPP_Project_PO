@@ -4,7 +4,7 @@
 #include "BaseTriggerBox.h"
 #include "LevelSequencePlayer.h"
 #include "../Controller/Player/BasePlayerController.h"
-#include "../GameMode/MyBaseGameMode.h"
+#include "../GameMode/BaseStageGameMode.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/QuestManager.h"
 
@@ -17,7 +17,7 @@ ABaseTriggerBox::ABaseTriggerBox()
 
 ULevelSequencePlayer* ABaseTriggerBox::GetPlaySequence(int32 const& _SequenceID)
 {
-	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 		return GameMode->PlaySequence(_SequenceID);
 

@@ -10,6 +10,7 @@
 
 UAudioManager::UAudioManager()
 	: BackgroundMusicComponent(nullptr)
+    , VolumeSize(1.f)
 {
     NameMap.Emplace(TEXT("First Stage"), 9001);
     NameMap.Emplace(TEXT("Protect Statue"), 9002);
@@ -29,7 +30,7 @@ void UAudioManager::PlayBackgroundMusic(UWorld const* World, FString const& Musi
     USoundCue* SoundCue = FindSoundCue(World, MusicCueName);
     if (SoundCue)
     {
-        BackgroundMusicComponent = UGameplayStatics::SpawnSound2D(World, SoundCue, 1.0f, 1.0f, 0.0f);
+        BackgroundMusicComponent = UGameplayStatics::SpawnSound2D(World, SoundCue, VolumeSize, 1.f, 0.f);
         if (BackgroundMusicComponent)
             BackgroundMusicComponent->FadeIn(FadeInDuration);
     }
@@ -67,6 +68,14 @@ void UAudioManager::PlayEffectSound(UWorld const* World, FString const& EffectCu
     USoundCue* SoundCue = FindSoundCue(World, EffectCueName);
     if (SoundCue)
         UGameplayStatics::PlaySoundAtLocation(World, SoundCue, Location);
+}
+
+void UAudioManager::SetVolume(float const& _VolumeSize)
+{
+    VolumeSize = _VolumeSize;
+
+    if (BackgroundMusicComponent)
+        BackgroundMusicComponent->SetVolumeMultiplier(VolumeSize);
 }
 
 USoundCue* UAudioManager::FindSoundCue(UWorld const* World, FString const& SoundName)

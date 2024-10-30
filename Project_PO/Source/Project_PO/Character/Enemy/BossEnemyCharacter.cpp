@@ -3,11 +3,11 @@
 
 #include "BossEnemyCharacter.h"
 #include "Components/CapsuleComponent.h"
-#include "../../Controller/Player/BasePlayerController.h"
+#include "../../Controller/Player/BaseStagePlayerController.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
-#include "../../GameMode/MyBaseGameMode.h"
+#include "../../GameMode/BaseStageGameMode.h"
 #include "../../Component/StatComponent/MonsterStatComponent.h"
 
 ABossEnemyCharacter::ABossEnemyCharacter()
@@ -91,11 +91,11 @@ AActor* ABossEnemyCharacter::SearchTarget()
 
 	if (!CurTarget)
 	{
-		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 
 		if (GameMode)
 		{
-			TArray<ABasePlayerController*> PlayerControllers;
+			TArray<ABaseStagePlayerController*> PlayerControllers;
 			PlayerControllers = GameMode->GetPlayerControllers();
 
 			if (PlayerControllers.Num() > 0)

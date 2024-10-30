@@ -4,8 +4,8 @@
 #include "StageClearTriggerBox.h"
 #include "LevelSequencePlayer.h"
 #include "../Character/Player/PlayerCharacter.h"
-#include "../Controller/Player/BasePlayerController.h"
-#include "../GameMode/MyBaseGameMode.h"
+#include "../Controller/Player/BaseStagePlayerController.h"
+#include "../GameMode/BaseStageGameMode.h"
 
 AStageClearTriggerBox::AStageClearTriggerBox()
 {
@@ -29,13 +29,13 @@ void AStageClearTriggerBox::SetLevelSequence()
 
 void AStageClearTriggerBox::SetStateAllPlayer(bool const& bState)
 {
-	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 	{
 		GameMode->PlayBackGound(SoundName);
 
-		TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
-		for (ABasePlayerController* PlayerController : PlayerControllers)
+		TArray<ABaseStagePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+		for (ABaseStagePlayerController* PlayerController : PlayerControllers)
 		{
 			if (PlayerController)
 			{

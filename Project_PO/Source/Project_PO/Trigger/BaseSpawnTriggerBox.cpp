@@ -2,8 +2,8 @@
 
 
 #include "BaseSpawnTriggerBox.h"
-#include "../Controller/Player/BasePlayerController.h"
-#include "../GameMode/MyBaseGameMode.h"
+#include "../Controller/Player/BaseStagePlayerController.h"
+#include "../GameMode/BaseStageGameMode.h"
 #include "../Manager/BaseGameInstance.h"
 #include "../Manager/QuestManager.h"
 
@@ -42,14 +42,14 @@ void ABaseSpawnTriggerBox::TearDownTrigger()
 
 void ABaseSpawnTriggerBox::SetUpTimer(float const& Time)
 {
-	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 		GameMode->SetUpTimerWidget(Time);
 }
 
 void ABaseSpawnTriggerBox::AddRemoveWidget(FString const& WidgetName)
 {
-	AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 	if (GameMode)
 		GameMode->AddRemoveControllerWidget(WidgetName);
 }
@@ -73,13 +73,13 @@ void ABaseSpawnTriggerBox::Teleport()
 {
 	if (HasAuthority())
 	{
-		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
 			GameMode->PlayBackGound(SoundName);
 
-			TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
-			for (ABasePlayerController* PlayerController : PlayerControllers)
+			TArray<ABaseStagePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+			for (ABaseStagePlayerController* PlayerController : PlayerControllers)
 			{
 				PlayerController->GetPawn()->SetActorLocation(TeleportLocation);
 			}

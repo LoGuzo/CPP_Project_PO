@@ -2,7 +2,7 @@
 
 
 #include "FirstStageGameMode.h"
-#include "../Controller/Player/BasePlayerController.h"
+#include "../Controller/Player/BaseStagePlayerController.h"
 
 AFirstStageGameMode::AFirstStageGameMode()
 {
@@ -20,7 +20,7 @@ void AFirstStageGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	ABasePlayerController* PlayerController = Cast<ABasePlayerController>(NewPlayer);
+	ABaseStagePlayerController* PlayerController = Cast<ABaseStagePlayerController>(NewPlayer);
 	if (PlayerController)
 		PlayerController->SetUpWeaponSelectWidget();
 }

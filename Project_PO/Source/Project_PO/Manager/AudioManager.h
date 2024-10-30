@@ -17,6 +17,16 @@ class PROJECT_PO_API UAudioManager : public UObject
 public:
 	UAudioManager();
 
+private:
+    TMap<FString, int32> NameMap;
+
+    UPROPERTY()
+    UAudioComponent* BackgroundMusicComponent;
+
+private:
+    float VolumeSize;
+
+public:
     void PlayBackgroundMusic(UWorld const* World, FString const& MusicCueName, float const& FadeInDuration = 1.0f);
     void StopBackgroundMusic(float const& FadeOutDuration = 1.0f);
     void SetBackgroundMusicVolume(float const& Volume);
@@ -25,12 +35,11 @@ public:
 
     void PlayEffectSound(UWorld const* World, FString const& EffectCueName, FVector const& Location);
 
+
+    void SetVolume(float const& _VolumeSize);
+    float GetVolume() { return VolumeSize; }
+
 private:
     class USoundCue* FindSoundCue(UWorld const* World, FString const& SoundName);
 
-private:
-    TMap<FString, int32> NameMap;
-
-	UPROPERTY()
-	UAudioComponent* BackgroundMusicComponent;
 };

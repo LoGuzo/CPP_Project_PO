@@ -8,8 +8,8 @@
 #include "Components/WidgetComponent.h"
 #include "Engine/StaticMesh.h"
 #include "../../Character/Player/PlayerCharacter.h"
-#include "../../Controller/Player/BasePlayerController.h"
-#include "../../GameMode/MyBaseGameMode.h"
+#include "../../Controller/Player/BaseStagePlayerController.h"
+#include "../../GameMode/BaseStageGameMode.h"
 #include "../../Widget/Interaction/OwlInteractionWidget.h"
 
 // Sets default values
@@ -42,7 +42,7 @@ void AOwlTeleportActor::SetLevelSequence()
 {
 	if (HasAuthority())
 	{
-		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
 			GameMode->PlaySequence(8001);
@@ -69,13 +69,13 @@ void AOwlTeleportActor::Teleport()
 {
 	if (HasAuthority())
 	{
-		AMyBaseGameMode* GameMode = Cast<AMyBaseGameMode>(GetWorld()->GetAuthGameMode());
+		ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
 		if (GameMode)
 		{
 			GameMode->PlayBackGound(SoundName);
 
-			TArray<class ABasePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
-			for (ABasePlayerController* PlayerController : PlayerControllers)
+			TArray<class ABaseStagePlayerController*> PlayerControllers = GameMode->GetPlayerControllers();
+			for (ABaseStagePlayerController* PlayerController : PlayerControllers)
 			{
 				PlayerController->GetPawn()->SetActorLocation(TeleportLocation);
 			}

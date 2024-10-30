@@ -2,40 +2,25 @@
 
 
 #include "BasePlayerController.h"
-#include "LevelSequence.h"
-#include "LevelSequenceActor.h"
-#include "LevelSequencePlayer.h"
-#include "Kismet/GameplayStatics.h"
 #include "../../Manager/BaseGameInstance.h"
-#include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
-#include "../../Widget/Etc/TimerWidget.h"
-#include "../../Widget/Etc/WeaponSelectWidget.h"
-#include "../../Widget/PopUp/DamagePopUpWidget.h"
-#include "../../Widget/HUD/MyHUDWidget.h"
+#include "../../Widget/Etc/SettingsWidget.h"
 
 ABasePlayerController::ABasePlayerController()
 {
-	static ConstructorHelpers::FClassFinder<UUserWidget>MainHUD(TEXT("/Game/ThirdPerson/Blueprints/Widget/HUD/WBP_HUDWidget.WBP_HUDWidget_C"));
-	if (MainHUD.Succeeded())
-		HUDWidget = MainHUD.Class;
-	
-	static ConstructorHelpers::FClassFinder<UUserWidget>DamageWidget(TEXT("/Game/ThirdPerson/Blueprints/Widget/Popup/WBP_DamagePopUp.WBP_DamagePopUp_C"));
-	if (DamageWidget.Succeeded())
-		DamagePopUpWidget = DamageWidget.Class;
-
-	static ConstructorHelpers::FClassFinder<UUserWidget>WeaponSelect(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_WeaponSelect.WBP_WeaponSelect_C"));
-	if (WeaponSelect.Succeeded())
-		WeaponSelectWidget = WeaponSelect.Class;
+	static ConstructorHelpers::FClassFinder<UUserWidget>Settings(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/Settings/WBP_Settings.WBP_Settings_C"));
+	if (Settings.Succeeded())
+		SettingsWidget = Settings.Class;
 }
 
 void ABasePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetUpWidget();
+
+	SetUpSettingsWidget();
 }
 
-void ABasePlayerController::SetUpWidget()
+void ABasePlayerController::SetUpSettingsWidget()
 {
 	if (IsLocalController())
 	{
@@ -45,124 +30,9 @@ void ABasePlayerController::SetUpWidget()
 			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 			if (WidgetManager)
 			{
-				if (HUDWidget)
-				{
-					UMyHUDWidget* HUD = WidgetManager->CreateAndAddWidget<APlayerController, UMyHUDWidget>(this, TEXT("HUD"), HUDWidget);
-					if (HUD)
-						HUD->SetAddRemove();
-				}
+				if (SettingsWidget)
+					WidgetManager->CreateAndAddWidget<ABasePlayerController, USettingsWidget>(this, TEXT("Settings"), SettingsWidget);
 			}
 		}
 	}
-}
-
-void ABasePlayerController::SequenceFinished()
-{
-	if (Sequence)
-	{
-		ShowHideWidget(TEXT("HUD"));
-		Sequence->OnFinished.Clear();
-		Sequence = nullptr;
-	}
-}
-
-void ABasePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage)
-{
-	if (IsLocalController())
-	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (GameInstance)
-		{
-
-			UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
-			if (ObjectPoolManager)
-			{
-				FVector2D ScreenPosition;
-
-				UGameplayStatics::ProjectWorldToScreen(this, Location, ScreenPosition);
-				ObjectPoolManager->GetWidget(GetWorld(), Type, DamagePopUpWidget, ScreenPosition, Damage);
-			}
-		}
-	}
-}
-
-void ABasePlayerController::SetUpTimerWidget(float const& RemainingTime)
-{
-	if (IsLocalController())
-	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (GameInstance)
-		{
-			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
-			if (WidgetManager)
-			{
-				UTimerWidget* NowWidget = WidgetManager->GetWidget<UTimerWidget>(TEXT("Timer"));
-				if (NowWidget)
-				{
-					NowWidget->SetReminingTime(RemainingTime);
-
-					if(!NowWidget->IsInViewport())
-						NowWidget->AddToViewport();
-				}
-			}
-		}
-	}
-}
-
-void ABasePlayerController::AddRemoveWidget(FString const& WidgetName)
-{
-	if (IsLocalController())
-	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (GameInstance)
-		{
-			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
-			if (WidgetManager)
-			{
-				UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(WidgetName);
-				if (NowWidget)
-					NowWidget->SetAddRemove();
-			}
-		}
-	}
-}
-
-void ABasePlayerController::ShowHideWidget(FString const& WidgetName)
-{
-	if (IsLocalController())
-	{
-		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
-		if (GameInstance)
-		{
-			UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
-			if (WidgetManager)
-			{
-				UBaseUserWidget* NowWidget = WidgetManager->GetWidget<UBaseUserWidget>(WidgetName);
-				if (NowWidget)
-					NowWidget->SetShowHidden();
-			}
-		}
-	}
-}
-
-void ABasePlayerController::PlaySequence(ULevelSequencePlayer* SequencePlayer)
-{
-	if (!Sequence)
-	{
-		Sequence = SequencePlayer;
-
-		ShowHideWidget(TEXT("HUD"));
-		Sequence->OnFinished.AddDynamic(this, &ABasePlayerController::SequenceFinished);
-		Sequence->Play();
-	}
-}
-
-void ABasePlayerController::SetUpWeaponSelectWidget()
-{
-	FTimerHandle WeaponTimer;
-	GetWorld()->GetTimerManager().SetTimer(WeaponTimer, [this] {
-		UWeaponSelectWidget* SelectWeapon = CreateWidget<UWeaponSelectWidget>(this, WeaponSelectWidget);
-		if (SelectWeapon && !SelectWeapon->IsInViewport())
-			SelectWeapon->AddToViewport();
-		}, 2.f, false);
 }

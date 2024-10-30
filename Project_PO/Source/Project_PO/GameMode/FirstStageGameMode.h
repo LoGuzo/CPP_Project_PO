@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MyBaseGameMode.h"
+#include "BaseStageGameMode.h"
 #include "FirstStageGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PROJECT_PO_API AFirstStageGameMode : public AMyBaseGameMode
+class PROJECT_PO_API AFirstStageGameMode : public ABaseStageGameMode
 {
 	GENERATED_BODY()
 	
