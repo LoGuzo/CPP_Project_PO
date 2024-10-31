@@ -20,6 +20,9 @@ struct FClassStatData : public FTableRowBase
     E_ClassType ClassType;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    FText ClassName;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
     float Attack;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
@@ -42,6 +45,9 @@ struct FClassStatData : public FTableRowBase
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
     TArray<int32> SkillIDs;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stat")
+    TSoftObjectPtr<UTexture2D> ClassImage;
 };
 
 USTRUCT(BlueprintType)

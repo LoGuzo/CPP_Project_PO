@@ -3,7 +3,9 @@
 
 #include "StartHUDWidget.h"
 #include "Components/Button.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "../Etc/CharacterSelectWidget.h"
 #include "../Etc/SettingsWidget.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
@@ -11,6 +13,9 @@
 UStartHUDWidget::UStartHUDWidget(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	static ConstructorHelpers::FClassFinder<UUserWidget>CharSelect(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/CharacterSelect/WBP_CharacterSelect.WBP_CharacterSelect_C"));
+	if (CharSelect.Succeeded())
+		CharSelectWidget = CharSelect.Class;
 }
 
 void UStartHUDWidget::NativeConstruct()
@@ -52,6 +57,11 @@ void UStartHUDWidget::NativeDestruct()
 
 void UStartHUDWidget::ClickedStart()
 {
+	UCharacterSelectWidget* CharSelect = CreateWidget<UCharacterSelectWidget>(this, CharSelectWidget);
+	if (CharSelect)
+		CharSelect->SetAddRemove();
+
+	//UGameplayStatics::OpenLevel(this, FName("SelectCharacter"));
 }
 
 void UStartHUDWidget::ClickedSettings()

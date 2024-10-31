@@ -22,6 +22,7 @@
 #include "DatabaseManager/SoundDatabaseManager.h"
 
 UBaseGameInstance::UBaseGameInstance()
+    : ClassType(E_ClassType::E_Boy)
 {
 }
 

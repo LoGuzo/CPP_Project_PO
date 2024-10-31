@@ -7,6 +7,9 @@
 #include "UObject/ConstructorHelpers.h"
 #include "../Character/Enemy/EnemyCharacter.h"
 #include "../Character/Player/PlayerCharacter.h"
+#include "../Character/Player/BoyCharacter.h"
+#include "../Character/Player/CatCharacter.h"
+#include "../Character/Player/GirlCharacter.h"
 #include "../Controller/Player/BaseStagePlayerController.h"
 #include "../Manager/AudioManager.h"
 #include "../Manager/BaseGameInstance.h"
@@ -59,8 +62,17 @@ void ABaseStageGameMode::InitPlayerController(APlayerController* NewPlayer)
 			}
 		}
 		ABaseStagePlayerController* PlayerController = Cast<ABaseStagePlayerController>(NewPlayer);
-		if(PlayerController)
+		if (PlayerController)
+		{
+			if (PlayerController->GetClassType() == E_ClassType::E_Boy)
+				DefaultPawnClass = ABoyCharacter::StaticClass();
+			else if (PlayerController->GetClassType() == E_ClassType::E_Cat)
+				DefaultPawnClass = ACatCharacter::StaticClass();
+			else if (PlayerController->GetClassType() == E_ClassType::E_Girl)
+				DefaultPawnClass = AGirlCharacter::StaticClass();
+
 			PlayerControllers.Emplace(PlayerController);
+		}
 	}
 }
 

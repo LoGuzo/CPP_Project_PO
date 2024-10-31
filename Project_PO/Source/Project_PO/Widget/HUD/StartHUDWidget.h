@@ -31,6 +31,8 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	class UButton* Btn_Exit;
 
+	TSubclassOf<class UCharacterSelectWidget> CharSelectWidget;
+
 private:
 	UFUNCTION()
 	void ClickedStart();

@@ -15,6 +15,7 @@
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABaseStagePlayerController::ABaseStagePlayerController()
+	: ClassType(E_ClassType::E_Boy)
 {
 	static ConstructorHelpers::FClassFinder<UUserWidget>MainHUD(TEXT("/Game/ThirdPerson/Blueprints/Widget/HUD/WBP_HUDWidget.WBP_HUDWidget_C"));
 	if (MainHUD.Succeeded())
@@ -32,6 +33,7 @@ ABaseStagePlayerController::ABaseStagePlayerController()
 void ABaseStagePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+	SetupClassType();
 	SetUpWidget();
 }
 
@@ -66,6 +68,16 @@ void ABaseStagePlayerController::SequenceFinished()
 	}
 }
 
+void ABaseStagePlayerController::SetupClassType()
+{
+	if (IsLocalController())
+	{
+		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+		if (GameInstance)
+			SetClassType(GameInstance->GetClassType());
+	}
+}
+
 void ABaseStagePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage)
 {
 	if (IsLocalController())
@@ -73,7 +85,6 @@ void ABaseStagePlayerController::SetUpDamageWidget(E_DamageType const& Type, FVe
 		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 		if (GameInstance)
 		{
-
 			UObjectPoolManager* ObjectPoolManager = GameInstance->GetManager<UObjectPoolManager>(E_ManagerType::E_ObjectPoolManager);
 			if (ObjectPoolManager)
 			{

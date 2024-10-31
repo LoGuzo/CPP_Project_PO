@@ -27,6 +27,8 @@ private:
 
     TMap<E_ManagerType, TMap<int32, TSharedPtr<FTableRowBase>>> DatabaseMap;
 
+    E_ClassType ClassType;
+
 public:
     template<typename T>
     T* GetManager(E_ManagerType ManagerKey)
@@ -45,4 +47,7 @@ public:
     }
 
     void AddDataToDatabase(E_ManagerType ManagerType, TMap<int32, TSharedPtr<FTableRowBase>> NewData);
+
+    void SetClassType(E_ClassType const& _ClassType) { ClassType = _ClassType; }
+    E_ClassType GetClassType() { return ClassType; }
 };

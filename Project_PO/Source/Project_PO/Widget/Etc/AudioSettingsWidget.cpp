@@ -52,4 +52,6 @@ void UAudioSettingsWidget::ChangedVolume(float Volume)
 void UAudioSettingsWidget::MuteVolume()
 {
 	ChangedVolume(0);
+
+	SetUpSlider();
 }

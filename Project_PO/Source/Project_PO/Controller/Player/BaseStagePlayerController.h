@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BasePlayerController.h"
+#include "../../MyEnumClass.h"
 #include "BaseStagePlayerController.generated.h"
 
 /**
@@ -28,10 +29,14 @@ private:
 	UPROPERTY()
 	class ULevelSequencePlayer* Sequence;
 
+	E_ClassType ClassType;
+
 private:
 	void SetUpWidget();
 	UFUNCTION()
 	void SequenceFinished();
+
+	void SetupClassType();
 
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage);
@@ -43,4 +48,7 @@ public:
 	void PlaySequence(class ULevelSequencePlayer* SequencePlayer);
 
 	void SetUpWeaponSelectWidget();
+
+	void SetClassType(E_ClassType const& _ClassType) { ClassType = _ClassType; }
+	E_ClassType GetClassType() { return ClassType; }
 };
