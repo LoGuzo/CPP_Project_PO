@@ -34,6 +34,17 @@ void ABaseStageGameMode::InitGame(const FString& MapName, const FString& Options
 
 void ABaseStageGameMode::PostLogin(APlayerController* NewPlayer)
 {
+	ABaseStagePlayerController* PlayerController = Cast<ABaseStagePlayerController>(NewPlayer);
+	if (PlayerController)
+	{
+		if (PlayerController->GetClassType() == E_ClassType::E_Boy)
+			DefaultPawnClass = ABoyCharacter::StaticClass();
+		else if (PlayerController->GetClassType() == E_ClassType::E_Cat)
+			DefaultPawnClass = ACatCharacter::StaticClass();
+		else if (PlayerController->GetClassType() == E_ClassType::E_Girl)
+			DefaultPawnClass = AGirlCharacter::StaticClass();
+	}
+
 	Super::PostLogin(NewPlayer);
 
 	InitPlayerController(NewPlayer);
@@ -64,13 +75,6 @@ void ABaseStageGameMode::InitPlayerController(APlayerController* NewPlayer)
 		ABaseStagePlayerController* PlayerController = Cast<ABaseStagePlayerController>(NewPlayer);
 		if (PlayerController)
 		{
-			if (PlayerController->GetClassType() == E_ClassType::E_Boy)
-				DefaultPawnClass = ABoyCharacter::StaticClass();
-			else if (PlayerController->GetClassType() == E_ClassType::E_Cat)
-				DefaultPawnClass = ACatCharacter::StaticClass();
-			else if (PlayerController->GetClassType() == E_ClassType::E_Girl)
-				DefaultPawnClass = AGirlCharacter::StaticClass();
-
 			PlayerControllers.Emplace(PlayerController);
 		}
 	}

@@ -39,6 +39,9 @@ public:
 	void UpdatesSlots();
 
 	UFUNCTION()
+	void ClickedCharSelect();
+
+	UFUNCTION()
 	void ClickedBackBtn();
 
 	UFUNCTION()

@@ -30,10 +30,15 @@ ABaseStagePlayerController::ABaseStagePlayerController()
 		WeaponSelectWidget = WeaponSelect.Class;
 }
 
+void ABaseStagePlayerController::InitPlayerState()
+{
+	Super::InitPlayerState();
+	SetupClassType();
+}
+
 void ABaseStagePlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	SetupClassType();
 	SetUpWidget();
 }
 

@@ -3,7 +3,6 @@
 
 #include "StartHUDWidget.h"
 #include "Components/Button.h"
-#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "../Etc/CharacterSelectWidget.h"
 #include "../Etc/SettingsWidget.h"
@@ -60,8 +59,6 @@ void UStartHUDWidget::ClickedStart()
 	UCharacterSelectWidget* CharSelect = CreateWidget<UCharacterSelectWidget>(this, CharSelectWidget);
 	if (CharSelect)
 		CharSelect->SetAddRemove();
-
-	//UGameplayStatics::OpenLevel(this, FName("SelectCharacter"));
 }
 
 void UStartHUDWidget::ClickedSettings()

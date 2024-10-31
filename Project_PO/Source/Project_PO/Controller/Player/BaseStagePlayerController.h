@@ -19,6 +19,7 @@ public:
 	ABaseStagePlayerController();
 
 protected:
+	virtual void InitPlayerState() override;
 	virtual void BeginPlay() override;
 
 private:

@@ -5,6 +5,7 @@
 #include "CharacterSlotWidget.h"
 #include "Components/Button.h"
 #include "Components/WrapBox.h"
+#include "Kismet/GameplayStatics.h"
 
 
 UCharacterSelectWidget::UCharacterSelectWidget(const FObjectInitializer& ObjectInitializer)
@@ -20,7 +21,10 @@ void UCharacterSelectWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	if (Btn_Select)
+	{
+		Btn_Select->OnClicked.AddDynamic(this, &UCharacterSelectWidget::ClickedCharSelect);
 		Btn_Select->SetIsEnabled(false);
+	}
 
 	if (Btn_Back)
 		Btn_Back->OnClicked.AddDynamic(this, &UCharacterSelectWidget::ClickedBackBtn);
@@ -47,6 +51,11 @@ void UCharacterSelectWidget::UpdatesSlots()
 			}
 		}
 	}
+}
+
+void UCharacterSelectWidget::ClickedCharSelect()
+{
+	UGameplayStatics::OpenLevel(this, FName("Sky_Dungeon_Demo"));
 }
 
 void UCharacterSelectWidget::ClickedBackBtn()
