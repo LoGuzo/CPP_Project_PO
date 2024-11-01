@@ -119,14 +119,14 @@ void ABaseCharacter::SetState(bool NowState)
 
 	if (NowState)
 	{
+		if (StatComponent)
+			StatComponent->ResetStat();
+
 		GetCharacterMovement()->GravityScale = 1.f;
 		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	}
 	else
 	{
-		if (StatComponent)
-			StatComponent->ResetStat();
-
 		GetCharacterMovement()->GravityScale = 0.f;
 		GetCharacterMovement()->DisableMovement();
 	}

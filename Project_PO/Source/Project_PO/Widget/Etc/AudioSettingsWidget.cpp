@@ -24,6 +24,12 @@ void UAudioSettingsWidget::NativeDestruct()
 {
 	Super::NativeDestruct();
 
+	if (Slider_All)
+		Slider_All->OnValueChanged.RemoveDynamic(this, &UAudioSettingsWidget::ChangedVolume);
+
+	if (Btn_Mute)
+		Btn_Mute->OnClicked.RemoveDynamic(this, &UAudioSettingsWidget::MuteVolume);
+
 	if (AudioManager)
 		AudioManager = nullptr;
 }

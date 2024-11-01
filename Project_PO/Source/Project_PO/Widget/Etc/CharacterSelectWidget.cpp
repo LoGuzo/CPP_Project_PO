@@ -20,6 +20,14 @@ void UCharacterSelectWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController) {
+		SetIsFocusable(true);
+		FInputModeUIOnly InputMode;
+		InputMode.SetWidgetToFocus(TakeWidget());
+		PlayerController->SetInputMode(InputMode);
+	}
+
 	if (Btn_Select)
 	{
 		Btn_Select->OnClicked.AddDynamic(this, &UCharacterSelectWidget::ClickedCharSelect);

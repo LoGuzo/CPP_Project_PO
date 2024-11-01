@@ -43,3 +43,10 @@ void ACatCharacter::UsePotion()
 {
 	PlaySkill(TEXT("Cat Drink Potion"));
 }
+
+void ACatCharacter::Died()
+{
+	Super::Died();
+
+	PlaySkill(TEXT("Cat Death"));
+}

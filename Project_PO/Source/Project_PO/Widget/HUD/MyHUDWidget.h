@@ -27,6 +27,8 @@ private:
 	TSubclassOf<class UBossHpMainWidget> BossHpMainWidget;
 	TSubclassOf<class UTimerWidget> TimerWidget;
 	TSubclassOf<class UQuestClearWidget> QuestClearWidget;
+	TSubclassOf<class URespawnWidget> RespawnWidget;
+	TSubclassOf<class UMenuMainWidget> MenuMainWidget;
 
 private:
 	UPROPERTY(meta = (BindWidget))

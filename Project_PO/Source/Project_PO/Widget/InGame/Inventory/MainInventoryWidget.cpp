@@ -8,9 +8,11 @@
 
 void UMainInventoryWidget::NativeConstruct()
 {
-	APlayerController* PlayerController = GetOwningPlayer();
-	if (PlayerController) {
+	Super::NativeConstruct();
 
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController) 
+	{
 		FInputModeGameAndUI InputMode;
 		InputMode.SetWidgetToFocus(WBP_Inventory->TakeWidget());
 		InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
@@ -30,9 +32,11 @@ void UMainInventoryWidget::NativeConstruct()
 
 void UMainInventoryWidget::NativeDestruct()
 {
-	APlayerController* PlayerController = GetOwningPlayer();
-	if (PlayerController) {
+	Super::NativeDestruct();
 
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController) 
+	{
 		FInputModeGameOnly InputMode;
 		PlayerController->SetInputMode(InputMode);
 		PlayerController->SetShowMouseCursor(false);

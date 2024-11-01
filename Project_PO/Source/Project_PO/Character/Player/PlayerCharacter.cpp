@@ -75,6 +75,8 @@ void APlayerCharacter::BeginPlay()
 		}
 	}
 
+	RespawnLocation = GetActorLocation();
+
 	SetupCameraCurve();
 	SetupCamera();
 	SetupStatComponent();
@@ -150,6 +152,9 @@ void APlayerCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 
 		//QuickSlot
 		EnhancedInputComponent->BindAction(Quickslot1Action, ETriggerEvent::Started, this, &APlayerCharacter::UseQuickSlot);
+
+		//Menu
+		EnhancedInputComponent->BindAction(MenuAction, ETriggerEvent::Started, this, &APlayerCharacter::ShowMenu);
 	}
 }
 
@@ -298,13 +303,13 @@ void APlayerCharacter::UseSkill(const FInputActionValue& Value)
 
 void APlayerCharacter::ShowInven(const FInputActionValue& Value)
 {
-	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
 		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
-			UBaseUserWidget* InvenWidget = WidgetManager->GetWidget<UMainInventoryWidget>(TEXT("Inven"));
+			UBaseUserWidget* InvenWidget = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Inven"));
 			if (InvenWidget)
 				InvenWidget->SetAddRemove();
 		}
@@ -324,6 +329,21 @@ void APlayerCharacter::UseQuickSlot(const FInputActionValue& Value)
 
 	if (bIsAiming)
 		SetUpAiming();
+}
+
+void APlayerCharacter::ShowMenu(const FInputActionValue& Value)
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UBaseUserWidget* MenuWidget = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Menu"));
+			if (MenuWidget)
+				MenuWidget->SetAddRemove();
+		}
+	}
 }
 
 void APlayerCharacter::BindInputAction()
@@ -378,10 +398,15 @@ void APlayerCharacter::BindInputAction()
 	if (InvenActionObject.Succeeded())
 		InvenAction = InvenActionObject.Object;
 
-	// Inven Action Asset Load
+	// QuickSlot Action Asset Load
 	static ConstructorHelpers::FObjectFinder<UInputAction> QuickSlot1ActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_QuickSlot1.IA_QuickSlot1"));
 	if (QuickSlot1ActionObject.Succeeded())
 		Quickslot1Action = QuickSlot1ActionObject.Object;
+
+	// Menu Action Asset Load
+	static ConstructorHelpers::FObjectFinder<UInputAction> MenuActionObject(TEXT("/Game/ThirdPerson/Input/Actions/IA_Menu.IA_Menu"));
+	if (MenuActionObject.Succeeded())
+		MenuAction = MenuActionObject.Object;
 }
 
 void APlayerCharacter::SetupCurve()
@@ -439,7 +464,7 @@ void APlayerCharacter::SetupInventoryComponent()
 
 void APlayerCharacter::DisplayCrosshair()
 {
-	auto GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 	if (GameInstance)
 	{
 		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
@@ -448,6 +473,21 @@ void APlayerCharacter::DisplayCrosshair()
 			UBaseUserWidget* CrossWidget = WidgetManager->GetWidget<UCrosshairEtcWidget>(TEXT("CrosshairWidget"));
 			if (CrossWidget)
 				CrossWidget->SetShowHidden();
+		}
+	}
+}
+
+void APlayerCharacter::RespawnWidget()
+{
+	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
+	if (GameInstance)
+	{
+		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
+		if (WidgetManager)
+		{
+			UBaseUserWidget* Respawn = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Respawn"));
+			if (Respawn)
+				Respawn->SetAddRemove();
 		}
 	}
 }
@@ -501,6 +541,20 @@ void APlayerCharacter::SetActorState(bool const& NowState)
 	Super::SetActorState(NowState);
 
 	EquipComponent->GetCurrentWeapon()->SetState(NowState);
+}
+
+void APlayerCharacter::Died()
+{
+	Super::Died();
+	RespawnWidget();
+	OnPlayerDied.Broadcast();
+}
+
+void APlayerCharacter::Respawn()
+{
+	SetState(true);
+
+	OnPlayerRespawn.Broadcast();
 }
 
 void APlayerCharacter::SetEquip(int32 ItemID)

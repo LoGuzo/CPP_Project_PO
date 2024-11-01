@@ -9,9 +9,9 @@
 #include "../../MyEnumClass.h"
 #include "PlayerCharacter.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDied);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerRespawn);
+
 UCLASS()
 class PROJECT_PO_API APlayerCharacter : public ABaseCharacter
 {
@@ -88,9 +88,17 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Quickslot1Action;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* MenuAction;
 public:
 	UPROPERTY(EditAnywhere)
 	FVector JointTargetLocation;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerDied OnPlayerDied;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnPlayerRespawn OnPlayerRespawn;
 
 protected:
 	FVector InitailZoomLocation;
@@ -148,6 +156,8 @@ private:
 
 	E_WeaponType WeaponType;
 
+	FVector RespawnLocation;
+
 protected:
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
@@ -171,14 +181,17 @@ protected:
 	/** Called for Attack input */
 	void Attack(const FInputActionValue& Value);
 
-	/** Called for Attack input */
+	/** Called for Skill input */
 	void UseSkill(const FInputActionValue& Value);
 
-	/** Called for Attack input */
+	/** Called for Inven input */
 	void ShowInven(const FInputActionValue& Value);
 
-	/** Called for Attack input */
+	/** Called for Quick input */
 	void UseQuickSlot(const FInputActionValue& Value);
+
+	/** Called for Menu input */
+	void ShowMenu(const FInputActionValue& Value);
 
 private:
 	void BindInputAction();
@@ -194,6 +207,7 @@ private:
 	void SetupInventoryComponent();
 
 	void DisplayCrosshair();
+	void RespawnWidget();
 
 	void AttackMontage();
 
@@ -203,6 +217,8 @@ public:
 	virtual void ShotAttackCheck() override;
 	virtual void UsePotion() {};
 	virtual void SetActorState(bool const& NowState) override;
+	virtual void Died() override;
+	void Respawn();
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -213,22 +229,25 @@ public:
 	void SetInteractActor(class AActor* _InteractActor) { InteractActor = _InteractActor; }
 
 	bool GetIsArmed() { return bIsArmed; }
-	void SetIsArmed(bool _bIsArmed) { bIsArmed = _bIsArmed; }
+	void SetIsArmed(bool const& _bIsArmed) { bIsArmed = _bIsArmed; }
 
 	bool GetIsAiming() { return bIsAiming; }
-	void SetIsAiming(bool _bIsAiming) { bIsAiming = _bIsAiming; }
+	void SetIsAiming(bool const& _bIsAiming) { bIsAiming = _bIsAiming; }
 
 	bool GetIsSprint() { return bIsSprint; }
-	void SetIsSprint(bool _bIsSprint) { bIsSprint = _bIsSprint; }
+	void SetIsSprint(bool const& _bIsSprint) { bIsSprint = _bIsSprint; }
 
 	bool GetIsUseQuick() { return bIsUseQuick; }
-	void SetIsUseQuick(bool _bIsUseQuick) { bIsUseQuick = _bIsUseQuick; }
+	void SetIsUseQuick(bool const& _bIsUseQuick) { bIsUseQuick = _bIsUseQuick; }
 
 	bool GetIsFirstPlayer() { return bIsFirstPlayer; }
-	void SetIsFirstPlayer(bool _bIsFirstPlayer) { bIsFirstPlayer = _bIsFirstPlayer; }
+	void SetIsFirstPlayer(bool const& _bIsFirstPlayer) { bIsFirstPlayer = _bIsFirstPlayer; }
 
 	E_WeaponType GetWeaponType() { return WeaponType; }
-	void SetWeaponType(E_WeaponType _WeaponType) { WeaponType = _WeaponType; }
+	void SetWeaponType(E_WeaponType const& _WeaponType) { WeaponType = _WeaponType; }
+
+	FVector GetRespawnLocation() { return RespawnLocation; }
+	void SetRespawnLocation(FVector const& _RespawnLocation) { RespawnLocation = _RespawnLocation; }
 
 	class UEquipComponent* GetEquipComponent(){ return EquipComponent; }
 	class UInventoryComponent* GetInventoryComponent() { return InventoryComponent; }

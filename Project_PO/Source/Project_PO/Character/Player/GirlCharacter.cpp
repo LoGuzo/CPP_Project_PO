@@ -48,3 +48,10 @@ void AGirlCharacter::UsePotion()
 {
 	PlaySkill(TEXT("Girl Drink Potion"));
 }
+
+void AGirlCharacter::Died()
+{
+	Super::Died();
+
+	PlaySkill(TEXT("Girl Death"));
+}

@@ -17,7 +17,15 @@ USettingsWidget::USettingsWidget(const FObjectInitializer& ObjectInitializer)
 void USettingsWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
+
+	APlayerController* PlayerController = GetOwningPlayer();
+	if (PlayerController) {
+		SetIsFocusable(true);
+		FInputModeUIOnly InputMode;
+		InputMode.SetWidgetToFocus(TakeWidget());
+		PlayerController->SetInputMode(InputMode);
+	}
+
 	SetUpAudioWidget();
 
 	if (Btn_Audio)
@@ -25,6 +33,17 @@ void USettingsWidget::NativeConstruct()
 
 	if (Btn_Back)
 		Btn_Back->OnClicked.AddDynamic(this, &USettingsWidget::RemoveWidget);
+}
+
+void USettingsWidget::NativeDestruct()
+{
+	Super::NativeConstruct();
+
+	if (Btn_Audio)
+		Btn_Audio->OnClicked.RemoveDynamic(this, &USettingsWidget::SetUpAudioWidget);
+
+	if (Btn_Back)
+		Btn_Back->OnClicked.RemoveDynamic(this, &USettingsWidget::RemoveWidget);
 }
 
 void USettingsWidget::SetUpAudioWidget()

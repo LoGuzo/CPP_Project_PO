@@ -5,7 +5,6 @@
 #include "Components/Button.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "../Etc/CharacterSelectWidget.h"
-#include "../Etc/SettingsWidget.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/WidgetManager.h"
 
@@ -69,7 +68,7 @@ void UStartHUDWidget::ClickedSettings()
 		UWidgetManager* WidgetManager = GameInstance->GetManager<UWidgetManager>(E_ManagerType::E_WidgetManager);
 		if (WidgetManager)
 		{
-			USettingsWidget* SettingsWidget = WidgetManager->GetWidget<USettingsWidget>(TEXT("Settings"));
+			UBaseUserWidget* SettingsWidget = WidgetManager->GetWidget<UBaseUserWidget>(TEXT("Settings"));
 			if (SettingsWidget)
 				SettingsWidget->SetAddRemove();
 		}

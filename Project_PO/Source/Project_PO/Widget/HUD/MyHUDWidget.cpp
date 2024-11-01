@@ -7,9 +7,11 @@
 #include "../../Manager/WidgetManager.h"
 #include "../../Widget/Etc/TimerWidget.h"
 #include "../../Widget/Etc/QuestClearWidget.h"
+#include "../../Widget/Etc/RespawnWidget.h"
 #include "../../Widget/PopUp/AccessAlertWidget.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 #include "../../Widget/InGame/CharInfo/CharInfoWidget.h"
+#include "../../Widget/InGame/Menu/MenuMainWidget.h"
 #include "../../Widget/InGame/Inventory/MainInventoryWidget.h"
 #include "../../Widget/InGame/Slots/CunsumQuickSlotWidget.h"
 #include "../../Widget/InGame/Slots/SkillQuickSlotWidget.h"
@@ -38,6 +40,14 @@ UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 	static ConstructorHelpers::FClassFinder<UUserWidget>QuestClear(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_QuestClear.WBP_QuestClear_C"));
 	if (QuestClear.Succeeded())
 		QuestClearWidget = QuestClear.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>Respawn(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_RespawnWidget.WBP_RespawnWidget_C"));
+	if (Respawn.Succeeded())
+		RespawnWidget = Respawn.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>MenuMain(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/Menu/WBP_MenuMain.WBP_MenuMain_C"));
+	if (MenuMain.Succeeded())
+		MenuMainWidget = MenuMain.Class;
 }
 
 void UMyHUDWidget::NativeConstruct()
@@ -69,6 +79,12 @@ void UMyHUDWidget::SetUpWidget()
 
 			if (QuestClearWidget)
 				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UQuestClearWidget>(this, TEXT("QuestClear"), QuestClearWidget);
+
+			if (RespawnWidget)
+				WidgetManager->CreateAndAddWidget<UMyHUDWidget, URespawnWidget>(this, TEXT("Respawn"), RespawnWidget);
+
+			if (MenuMainWidget)
+				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UMenuMainWidget>(this, TEXT("Menu"), MenuMainWidget);
 		}
 	}
 }

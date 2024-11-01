@@ -20,9 +20,7 @@ ABaseStageGameMode::ABaseStageGameMode()
 	: bIsHavingFirstPlayer(false)
 	, FirstQuestID(-1)
 {
-	static ConstructorHelpers::FClassFinder<APlayerCharacter> PlayerPawnBPClass(TEXT("/Game/ThirdPerson/Blueprints/Character/Player/BP_PlayCharacter.BP_PlayCharacter_C"));
-	if (PlayerPawnBPClass.Succeeded())
-		DefaultPawnClass = PlayerPawnBPClass.Class;
+	DefaultPawnClass = APlayerCharacter::StaticClass();
 
 	PlayerControllerClass = ABaseStagePlayerController::StaticClass();
 }

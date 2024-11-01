@@ -6,6 +6,7 @@
 #include "Curves/CurveFloat.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "../../Character/Player/PlayerCharacter.h"
 
 
 // Sets default values
@@ -74,6 +75,10 @@ void ABaseDoorActor::Interact(AActor* PlayerCharacter)
 				DoorTimeline->Play();
 
 			CheckingObjective();
+
+			APlayerCharacter* Player = Cast<APlayerCharacter>(PlayerCharacter);
+			if (Player)
+				Player->SetRespawnLocation(GetActorLocation());
 
 			bIsOpened = true;
 		}

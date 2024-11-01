@@ -25,4 +25,5 @@ private:
 
 protected:
 	virtual void UsePotion() override;
+	virtual void Died() override;
 };
