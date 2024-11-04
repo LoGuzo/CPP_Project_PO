@@ -8,6 +8,7 @@
 #include "../../Widget/Etc/TimerWidget.h"
 #include "../../Widget/Etc/QuestClearWidget.h"
 #include "../../Widget/Etc/RespawnWidget.h"
+#include "../../Widget/Etc/StageClearWidget.h"
 #include "../../Widget/PopUp/AccessAlertWidget.h"
 #include "../../Widget/InGame/CharInfo/BossHpMainWidget.h"
 #include "../../Widget/InGame/CharInfo/CharInfoWidget.h"
@@ -48,6 +49,10 @@ UMyHUDWidget::UMyHUDWidget(const FObjectInitializer& ObjectInitializer)
 	static ConstructorHelpers::FClassFinder<UUserWidget>MenuMain(TEXT("/Game/ThirdPerson/Blueprints/Widget/InGame/Menu/WBP_MenuMain.WBP_MenuMain_C"));
 	if (MenuMain.Succeeded())
 		MenuMainWidget = MenuMain.Class;
+
+	static ConstructorHelpers::FClassFinder<UUserWidget>StageClear(TEXT("/Game/ThirdPerson/Blueprints/Widget/Etc/WBP_StageClear.WBP_StageClear_C"));
+	if (StageClear.Succeeded())
+		StageClearWidget = StageClear.Class;
 }
 
 void UMyHUDWidget::NativeConstruct()
@@ -85,6 +90,9 @@ void UMyHUDWidget::SetUpWidget()
 
 			if (MenuMainWidget)
 				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UMenuMainWidget>(this, TEXT("Menu"), MenuMainWidget);
+
+			if (StageClearWidget)
+				WidgetManager->CreateAndAddWidget<UMyHUDWidget, UStageClearWidget>(this, TEXT("StageClear"), StageClearWidget);
 		}
 	}
 }

@@ -41,4 +41,5 @@ protected:
 
 protected:
 	class ULevelSequencePlayer* GetPlaySequence(int32 const& _SequenceID);
+	void AddRemoveWidget(FString const& WidgetName);
 };

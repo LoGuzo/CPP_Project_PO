@@ -24,6 +24,13 @@ ULevelSequencePlayer* ABaseTriggerBox::GetPlaySequence(int32 const& _SequenceID)
 	return nullptr;
 }
 
+void ABaseTriggerBox::AddRemoveWidget(FString const& WidgetName)
+{
+	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
+	if (GameMode)
+		GameMode->AddRemoveControllerWidget(WidgetName);
+}
+
 void ABaseTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
 	if (HasAuthority())

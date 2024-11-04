@@ -29,6 +29,7 @@ private:
 	TSubclassOf<class UQuestClearWidget> QuestClearWidget;
 	TSubclassOf<class URespawnWidget> RespawnWidget;
 	TSubclassOf<class UMenuMainWidget> MenuMainWidget;
+	TSubclassOf<class UStageClearWidget> StageClearWidget;
 
 private:
 	UPROPERTY(meta = (BindWidget))

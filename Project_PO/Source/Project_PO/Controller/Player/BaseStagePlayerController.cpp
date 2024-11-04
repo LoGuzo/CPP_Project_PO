@@ -6,6 +6,8 @@
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "../../Character/Player/PlayerCharacter.h"
 #include "../../Manager/BaseGameInstance.h"
 #include "../../Manager/ObjectPoolManager.h"
 #include "../../Manager/WidgetManager.h"
@@ -80,6 +82,16 @@ void ABaseStagePlayerController::SetupClassType()
 		UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());
 		if (GameInstance)
 			SetClassType(GameInstance->GetClassType());
+	}
+}
+
+void ABaseStagePlayerController::StopMovement()
+{
+	if (IsLocalController())
+	{
+		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetPawn());
+		if (PlayerCharacter)
+			PlayerCharacter->GetCharacterMovement()->StopMovementImmediately();
 	}
 }
 
@@ -166,7 +178,7 @@ void ABaseStagePlayerController::PlaySequence(ULevelSequencePlayer* SequencePlay
 	if (!Sequence)
 	{
 		Sequence = SequencePlayer;
-
+		StopMovement();
 		ShowHideWidget(TEXT("HUD"));
 		Sequence->OnFinished.AddDynamic(this, &ABaseStagePlayerController::SequenceFinished);
 		Sequence->Play();

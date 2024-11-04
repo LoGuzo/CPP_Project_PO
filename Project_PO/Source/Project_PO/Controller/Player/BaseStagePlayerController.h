@@ -39,6 +39,8 @@ private:
 
 	void SetupClassType();
 
+	void StopMovement();
+
 public:
 	void SetUpDamageWidget(E_DamageType const& Type, FVector const& Location, int32 const& Damage);
 	void SetUpTimerWidget(float const& RemainingTime);

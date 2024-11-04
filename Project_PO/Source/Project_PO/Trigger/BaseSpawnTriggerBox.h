@@ -49,6 +49,4 @@ protected:
 
 protected:
 	void SetUpTimer(float const& Time);
-
-	void AddRemoveWidget(FString const& WidgetName);
 };

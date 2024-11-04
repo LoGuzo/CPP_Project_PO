@@ -2,6 +2,8 @@
 
 
 #include "BasePlayerAnimInstance.h"
+#include "Animation/AnimNotifies/AnimNotify_PlaySound.h"
+#include "Animation/AnimNotifies/AnimNotify.h"
 #include "KismetAnimationLibrary.h"
 #include "../Character/Player/PlayerCharacter.h"
 #include "../Component/QuickSlotComponent/PotionQuickSlotComponent.h"
@@ -47,4 +49,3 @@ void UBasePlayerAnimInstance::AnimNotify_PotionEnd()
 		Player->SetIsUseQuick(false);
 	}
 }
-

@@ -14,6 +14,7 @@ AStageClearTriggerBox::AStageClearTriggerBox()
 void AStageClearTriggerBox::SetUpTrigger()
 {
 	SetStateAllPlayer(true);
+	AddRemoveWidget(TEXT("StageClear"));
 }
 
 void AStageClearTriggerBox::SetLevelSequence()

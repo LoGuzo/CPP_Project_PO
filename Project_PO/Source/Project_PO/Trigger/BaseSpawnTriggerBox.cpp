@@ -47,13 +47,6 @@ void ABaseSpawnTriggerBox::SetUpTimer(float const& Time)
 		GameMode->SetUpTimerWidget(Time);
 }
 
-void ABaseSpawnTriggerBox::AddRemoveWidget(FString const& WidgetName)
-{
-	ABaseStageGameMode* GameMode = Cast<ABaseStageGameMode>(GetWorld()->GetAuthGameMode());
-	if (GameMode)
-		GameMode->AddRemoveControllerWidget(WidgetName);
-}
-
 void ABaseSpawnTriggerBox::SetReturnHome()
 {
 	if (HasAuthority())

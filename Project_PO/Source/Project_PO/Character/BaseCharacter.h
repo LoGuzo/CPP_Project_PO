@@ -38,13 +38,13 @@ protected:
 	TMap<FString, int32 > SkillMontageMap;
 
 public:
-	template<typename T>
+	template<typename T = UStatComponent>
 	T* GetStatComponent()
 	{
 		return Cast<T>(StatComponent);
 	}
 
-	template<typename T>
+	template<typename T = USkillComponent>
 	T* GetSkillComponent()
 	{
 		return Cast<T>(SkillComponent);
