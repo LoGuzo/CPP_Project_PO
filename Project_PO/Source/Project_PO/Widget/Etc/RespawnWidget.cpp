@@ -69,6 +69,9 @@ void URespawnWidget::NativeDestruct()
 		PlayerController->SetInputMode(InputMode);
 		PlayerController->SetShowMouseCursor(false);
 	}
+
+	if (Btn_Respawn)
+		Btn_Respawn->OnClicked.RemoveDynamic(this, &URespawnWidget::ClickedRespawnBtn);
 }
 
 void URespawnWidget::UpdateTimerUI(FString TimerText)

@@ -73,10 +73,12 @@ void UPlayerStatComponent::TakedExp(float const& TakedExp)
 	float CurExp = Exp;
 	CurExp += TakedExp;
 
-	if (Exp >= MaxExp)
+	if (CurExp >= MaxExp)
 	{
-		Level += 1;
-		SetLevel(Level);
+		int32 CurLevel = Level;
+		CurLevel += 1;
+		SetLevel(CurLevel);
+		return;
 	}
 
 	SetExp(CurExp);

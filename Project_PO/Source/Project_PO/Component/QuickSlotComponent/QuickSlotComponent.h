@@ -24,5 +24,5 @@ public:
 	virtual void UseSlot() {};
 
 public:
-	FSlot GetSlot() { return Slot; }
+	virtual FSlot GetSlot() { return Slot; }
 };

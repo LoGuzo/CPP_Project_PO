@@ -171,7 +171,7 @@ void AEnemyCharacter::MeleeAttackCheck(float const& Range, float const& Coeffici
 			}
 		}
 	}
-	DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
+	//DrawDebugCapsule(GetWorld(), Center, HalfHeight, AttackRadius, Rotation, DrawColor, false, 2.f);
 }
 
 void AEnemyCharacter::ScopeAttackCheck(float const& Range, float const& Coefficient)
@@ -215,7 +215,7 @@ void AEnemyCharacter::ScopeAttackCheck(float const& Range, float const& Coeffici
 			}
 		}
 	}
-	DrawDebugSphere(GetWorld(), Center, AttackRadius, 16, DrawColor, false, 2.f);
+	//DrawDebugSphere(GetWorld(), Center, AttackRadius, 16, DrawColor, false, 2.f);
 }
 
 void AEnemyCharacter::AttackSkill(AActor* _Target, int32 const& SkillID)

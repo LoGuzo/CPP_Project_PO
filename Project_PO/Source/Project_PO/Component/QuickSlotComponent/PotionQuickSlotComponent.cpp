@@ -64,6 +64,13 @@ void UPotionQuickSlotComponent::UseSlot()
 	}
 }
 
+FSlot UPotionQuickSlotComponent::GetSlot()
+{
+	UpdateQuickSlotAmount();
+
+	return Slot;
+}
+
 void UPotionQuickSlotComponent::SetupQuickSlotWidget()
 {
 	UBaseGameInstance* GameInstance = Cast<UBaseGameInstance>(GetWorld()->GetGameInstance());

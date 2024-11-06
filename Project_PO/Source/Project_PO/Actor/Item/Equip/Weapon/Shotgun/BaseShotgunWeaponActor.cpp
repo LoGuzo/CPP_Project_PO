@@ -74,7 +74,9 @@ void ABaseShotgunWeaponActor::Fire()
             );
 
             if (bObstacleHit)
-                DrawDebugLine(GetWorld(), Start, ObstacleHitResult.ImpactPoint, FColor::Red, false, 1.f, 0, 1.0f);
+            {
+                //DrawDebugLine(GetWorld(), Start, ObstacleHitResult.ImpactPoint, FColor::Red, false, 1.f, 0, 1.0f);
+            }
             else
             {
                 UGameplayStatics::ApplyPointDamage(
@@ -84,7 +86,7 @@ void ABaseShotgunWeaponActor::Fire()
                     OwnerCharacter->GetController(),
                     this, UDamageType::StaticClass()
                 );
-                DrawDebugLine(GetWorld(), Start, AttackHitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
+                //DrawDebugLine(GetWorld(), Start, AttackHitResult.ImpactPoint, FColor::Green, false, 5.f, 0, 1.0f);
             }
         }
     }

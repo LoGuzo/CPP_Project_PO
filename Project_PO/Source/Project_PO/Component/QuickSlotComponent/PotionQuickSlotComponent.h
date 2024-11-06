@@ -34,7 +34,7 @@ public:
 public:
 	virtual void RegisterQuickSlot(int32 const& _SlotIndex, UBaseActorComponent* ActorComponent) override;
 	virtual void UseSlot() override;
-
+	virtual FSlot GetSlot() override;
 public:
 	void SetInventoryComponent(class UInventoryComponent* _InventoryComponent) { InventoryComponent = _InventoryComponent; }
 

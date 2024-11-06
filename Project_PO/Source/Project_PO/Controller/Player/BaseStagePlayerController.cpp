@@ -17,7 +17,7 @@
 #include "../../Widget/HUD/MyHUDWidget.h"
 
 ABaseStagePlayerController::ABaseStagePlayerController()
-	: ClassType(E_ClassType::E_Boy)
+	: ClassType(E_ClassType::E_Girl)
 {
 	static ConstructorHelpers::FClassFinder<UUserWidget>MainHUD(TEXT("/Game/ThirdPerson/Blueprints/Widget/HUD/WBP_HUDWidget.WBP_HUDWidget_C"));
 	if (MainHUD.Succeeded())
